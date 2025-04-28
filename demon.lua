@@ -8,9 +8,9 @@ ScreenGui.Parent = game.CoreGui
 
 local MainContainer = Instance.new("Frame")
 MainContainer.Size = UDim2.new(1, 0, 1, 0)
-MainContainer.Position = UDim2.new(-1, 0, 0, 0) -- بداية خارج الشاشة يسار
+MainContainer.Position = UDim2.new(-1, 0, 0, 0)
 MainContainer.BackgroundTransparency = 1
-MainContainer.Visible = false
+MainContainer.Visible = true
 MainContainer.Parent = ScreenGui
 
 local ToggleButton = Instance.new("ImageButton")
@@ -80,11 +80,39 @@ ContentBackground.ScaleType = Enum.ScaleType.Crop
 ContentBackground.ZIndex = 0
 ContentBackground.Parent = ContentFrame
 
-local MainSection = Instance.new("Frame")
-MainSection.Size = UDim2.new(1, 0, 1, 0)
-MainSection.BackgroundTransparency = 1
-MainSection.ZIndex = 1
-MainSection.Parent = ContentFrame
+-- Sections
+local Sections = {}
+local sectionNames = {"القائمة الرئيسية", "اللاعب", "التخريب", "السكن", "السكربتات"}
+
+for i, name in ipairs(sectionNames) do
+	local button = Instance.new("TextButton")
+	button.Size = UDim2.new(1, -20, 0, 40)
+	button.Position = UDim2.new(0, 10, 0, (i - 1) * 50 + 10)
+	button.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
+	button.TextColor3 = Color3.fromRGB(255, 255, 255)
+	button.Font = Enum.Font.SourceSansBold
+	button.TextSize = 20
+	button.Text = name
+	button.Parent = SideMenu
+
+	local sectionFrame = Instance.new("Frame")
+	sectionFrame.Size = UDim2.new(1, 0, 1, 0)
+	sectionFrame.BackgroundTransparency = 1
+	sectionFrame.Visible = false
+	sectionFrame.ZIndex = 2
+	sectionFrame.Parent = ContentFrame
+	Sections[name] = sectionFrame
+
+	button.MouseButton1Click:Connect(function()
+		for _, frame in pairs(Sections) do
+			frame.Visible = false
+		end
+		sectionFrame.Visible = true
+	end)
+end
+
+-- محتوى "القائمة الرئيسية" فقط (التليجرام + المطور)
+local MainSection = Sections["القائمة الرئيسية"]
 
 local TelegramIcon = Instance.new("ImageLabel")
 TelegramIcon.Size = UDim2.new(0, 70, 0, 70)
@@ -115,24 +143,24 @@ DevInfo.TextSize = 18
 DevInfo.TextXAlignment = Enum.TextXAlignment.Left
 DevInfo.Parent = MainSection
 
--- Sections
-local sectionNames = {"القائمة الرئيسية", "اللاعب", "التخريب", "السكن", "السكربتات"}
+-- ميزة تطشير الأبواب داخل قسم التخريب
+local DestructionSection = Sections["التخريب"]
 
-for i, name in ipairs(sectionNames) do
-	local button = Instance.new("TextButton")
-	button.Size = UDim2.new(1, -20, 0, 40)
-	button.Position = UDim2.new(0, 10, 0, (i - 1) * 50 + 10)
-	button.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
-	button.TextColor3 = Color3.fromRGB(255, 255, 255)
-	button.Font = Enum.Font.SourceSansBold
-	button.TextSize = 20
-	button.Text = name
-	button.Parent = SideMenu
+local doorBreakButton = Instance.new("TextButton")
+doorBreakButton.Size = UDim2.new(0, 200, 0, 40) -- عرض أكبر وارتفاع أنحف
+doorBreakButton.Position = UDim2.new(0, 50, 0, 100)
+doorBreakButton.BackgroundColor3 = Color3.fromRGB(100, 170, 255) -- أزرق فاتح
+doorBreakButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+doorBreakButton.Font = Enum.Font.GothamBold -- خط احترافي
+doorBreakButton.TextSize = 24 -- حجم نص أكبر
+doorBreakButton.Text = "تطشير الأبواب"
+doorBreakButton.BorderSizePixel = 2
+doorBreakButton.BorderColor3 = Color3.fromRGB(70, 130, 180)
+doorBreakButton.Parent = DestructionSection
 
-	button.MouseButton1Click:Connect(function()
-		MainSection.Visible = (name == "القائمة الرئيسية")
-	end)
-end
+doorBreakButton.MouseButton1Click:Connect(function()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/muskarnu/Demon-Hub/5f9e7e91c008845aad2a3c0cf6e0b418da74e5d2/bring%20part.lua"))()
+end)
 
 -- Open/Close Animation
 local open = false
