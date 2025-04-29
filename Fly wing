@@ -1,0 +1,75 @@
+local gui = Instance.new("ScreenGui", game.Players.LocalPlayer:WaitForChild("PlayerGui"))
+gui.Name = "EvGui"
+
+-- واجهة السكربت
+local mainFrame = Instance.new("Frame", gui)
+mainFrame.Size = UDim2.new(0, 300, 0, 200)
+mainFrame.Position = UDim2.new(0.5, -150, 0.5, -100)
+mainFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 128) -- أزرق نيلي
+mainFrame.Visible = false
+mainFrame.Name = "MainFrame"
+
+-- زر الفتح/الإغلاق
+local toggleButton = Instance.new("ImageButton", gui)
+toggleButton.Size = UDim2.new(0, 50, 0, 50)
+toggleButton.Position = UDim2.new(0, 10, 0.5, -25)
+toggleButton.Image = "rbxassetid://98348655360215"
+toggleButton.BackgroundTransparency = 1
+toggleButton.Name = "ToggleBtn"
+
+-- حركة الزر الصغيرة
+local UIS = game:GetService("UserInputService")
+local dragging, dragInput, dragStart, startPos
+
+local function update(input)
+	local delta = input.Position - dragStart
+	toggleButton.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X,
+		startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+end
+
+toggleButton.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 then
+		dragging = true
+		dragStart = input.Position
+		startPos = toggleButton.Position
+
+		input.Changed:Connect(function()
+			if input.UserInputState == Enum.UserInputState.End then
+				dragging = false
+			end
+		end)
+	end
+end)
+
+toggleButton.InputChanged:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseMovement then
+		dragInput = input
+	end
+end)
+
+UIS.InputChanged:Connect(function(input)
+	if input == dragInput and dragging then
+		update(input)
+	end
+end)
+
+-- الضغط على زر التبديل
+toggleButton.MouseButton1Click:Connect(function()
+	mainFrame.Visible = not mainFrame.Visible
+end)
+
+-- مثال زر داخل الواجهة
+local exampleBtn = Instance.new("TextButton", mainFrame)
+exampleBtn.Size = UDim2.new(0, 100, 0, 30)
+exampleBtn.Position = UDim2.new(0, 10, 0, 10)
+exampleBtn.Text = "زر تجريبي"
+exampleBtn.BackgroundColor3 = Color3.fromRGB(0, 0, 160)
+
+-- الحقوق
+local credit = Instance.new("TextLabel", gui)
+credit.Size = UDim2.new(0, 200, 0, 25)
+credit.Position = UDim2.new(1, -210, 1, -35)
+credit.Text = "Script by Ev_Rami"
+credit.TextColor3 = Color3.new(1,1,1)
+credit.BackgroundTransparency = 1
+credit.TextScaled = true
