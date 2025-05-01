@@ -2,7 +2,7 @@ local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
 
 local gui = Instance.new("ScreenGui", game.CoreGui)
-gui.Name = "FXZ_UI"
+gui.Name = "EV_GUI"
 gui.ResetOnSpawn = false
 
 -- الواجهة
@@ -78,7 +78,7 @@ local TelegramLink = Instance.new("TextLabel")
 TelegramLink.Size = UDim2.new(0, 400, 0, 40)
 TelegramLink.Position = UDim2.new(0, 100, 0, 30)
 TelegramLink.BackgroundTransparency = 1
-TelegramLink.Text = "رابط التليجرام: https://t.me/R_amI11"
+TelegramLink.Text = "رابط التليجرام: @R_amI11"
 TelegramLink.TextColor3 = Color3.fromRGB(0, 170, 255)
 TelegramLink.Font = Enum.Font.SourceSansBold
 TelegramLink.TextSize = 22
@@ -89,28 +89,14 @@ local DevInfo = Instance.new("TextLabel")
 DevInfo.Size = UDim2.new(0, 400, 0, 30)
 DevInfo.Position = UDim2.new(0, 100, 0, 70)
 DevInfo.BackgroundTransparency = 1
-DevInfo.Text = "المطور: FXZ_Rami | @Sajwaad"
+DevInfo.Text = "المطور: Ev_Rami | @Sajwaad"
 DevInfo.TextColor3 = Color3.fromRGB(255, 255, 255)
 DevInfo.Font = Enum.Font.SourceSans
 DevInfo.TextSize = 18
 DevInfo.TextXAlignment = Enum.TextXAlignment.Left
 DevInfo.Parent = SectionFrames["القائمة الرئيسية"]
 
--- زر "نسخ الشخصية"
-local CopyBtn = Instance.new("TextButton")
-CopyBtn.Size = UDim2.new(0, 200, 0, 50)
-CopyBtn.Position = UDim2.new(0, 20, 0, 20)
-CopyBtn.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
-CopyBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-CopyBtn.Font = Enum.Font.SourceSansBold
-CopyBtn.TextSize = 18
-CopyBtn.Text = "نسخ الشخصية"
-CopyBtn.Parent = SectionFrames["السكن"]
-CopyBtn.MouseButton1Click:Connect(function()
-	loadstring(game:HttpGet("https://raw.githubusercontent.com/Luarmor123/YHUB-Community/refs/heads/main/BrookhavenCopyAvatar.lua"))()
-end)
-
--- زر "طيران"
+-- قسم اللاعب: زر "طيران"
 local FlyBtn = Instance.new("TextButton")
 FlyBtn.Size = UDim2.new(0, 200, 0, 50)
 FlyBtn.Position = UDim2.new(0, 20, 0, 20)
@@ -124,7 +110,21 @@ FlyBtn.MouseButton1Click:Connect(function()
 	loadstring(game:HttpGet("https://raw.githubusercontent.com/muskarnu/Demon-Hub/6250a0d953480e13caea7ffcd6679dd22b29df5b/Fly"))()
 end)
 
--- زر "تفجير الأبواب"
+-- قسم السكن: زر "نسخ الشخصية"
+local CopyBtn = Instance.new("TextButton")
+CopyBtn.Size = UDim2.new(0, 200, 0, 50)
+CopyBtn.Position = UDim2.new(0, 20, 0, 20)
+CopyBtn.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
+CopyBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+CopyBtn.Font = Enum.Font.SourceSansBold
+CopyBtn.TextSize = 18
+CopyBtn.Text = "نسخ الشخصية"
+CopyBtn.Parent = SectionFrames["السكن"]
+CopyBtn.MouseButton1Click:Connect(function()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/Luarmor123/YHUB-Community/refs/heads/main/BrookhavenCopyAvatar.lua"))()
+end)
+
+-- قسم التخريب: زر "تفجير الأبواب"
 local DoorBtn = Instance.new("TextButton")
 DoorBtn.Size = UDim2.new(0, 200, 0, 50)
 DoorBtn.Position = UDim2.new(0, 20, 0, 20)
@@ -138,7 +138,21 @@ DoorBtn.MouseButton1Click:Connect(function()
 	loadstring(game:HttpGet("https://raw.githubusercontent.com/muskarnu/Demon-Hub/5f9e7e91c008845aad2a3c0cf6e0b418da74e5d2/bring%20part.lua"))()
 end)
 
--- زر "تعزيز الفريمات"
+-- قسم التخريب: زر "تحكم بلاق السيرفر"
+local LagControlBtn = Instance.new("TextButton")
+LagControlBtn.Size = UDim2.new(0, 200, 0, 50)
+LagControlBtn.Position = UDim2.new(0, 20, 0, 80) -- تحته بمسافة
+LagControlBtn.BackgroundColor3 = Color3.fromRGB(255, 150, 0)
+LagControlBtn.TextColor3 = Color3.fromRGB(0, 0, 0)
+LagControlBtn.Font = Enum.Font.SourceSansBold
+LagControlBtn.TextSize = 18
+LagControlBtn.Text = "تحكم بلاق السيرفر"
+LagControlBtn.Parent = SectionFrames["التخريب"]
+LagControlBtn.MouseButton1Click:Connect(function()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/muskarnu/Demon-Hub/6871e63c88cb35875240a4acfe065b0ab633004b/Ddos"))()
+end)
+
+-- قسم السكربتات: زر "تعزيز الفريمات"
 local FPSBtn = Instance.new("TextButton")
 FPSBtn.Size = UDim2.new(0, 200, 0, 50)
 FPSBtn.Position = UDim2.new(0, 20, 0, 20)
@@ -159,7 +173,7 @@ toggleButton.Size = UDim2.new(0, 40, 0, 40)
 toggleButton.Position = UDim2.new(0, 20, 0.5, -20)
 toggleButton.Image = "rbxassetid://127852236522608"
 toggleButton.BackgroundTransparency = 1
-toggleButton.ZIndex = 999999 -- فوق الكل
+toggleButton.ZIndex = 999999
 toggleButton.Parent = gui
 
 -- سحب الزر بحرية
@@ -186,7 +200,7 @@ UserInputService.InputChanged:Connect(function(input)
 	end
 end)
 
--- زر فتح/إغلاق الواجهة
+-- فتح/اغلاق الواجهة
 local open = false
 local openTween = TweenService:Create(mainContainer, TweenInfo.new(0.4), {Position = UDim2.new(0, 0, 0, 0)})
 local closeTween = TweenService:Create(mainContainer, TweenInfo.new(0.4), {Position = UDim2.new(-1, 0, 0, 0)})
