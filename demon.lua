@@ -162,6 +162,76 @@ teleportBtn.MouseButton1Click:Connect(function()
         end
     end
 end)
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local Workspace = game:GetService("Workspace")
+local CoreGui = game:GetService("CoreGui")
+
+-- نفترض ان قسم اللاعب موجود ومخزن داخل متغير اسمه PlayerTab
+local PlayerTab = CoreGui:WaitForChild("اللاعب") -- غيّره لاسم قسم اللاعب الصحيح
+
+-- إنشاء زر Anti-Bang
+local AntiBangButton = Instance.new("TextButton")
+AntiBangButton.Size = UDim2.new(0, 150, 0, 50)
+AntiBangButton.Position = UDim2.new(0, 20, 0, 160) -- تحت زر النقل المستمر (عدلت Y)
+AntiBangButton.BackgroundColor3 = Color3.fromRGB(80, 80, 80) -- رصاصي غامق شوي
+AntiBangButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+AntiBangButton.Text = "Anti-Bang [OFF]"
+AntiBangButton.Font = Enum.Font.SourceSansBold
+AntiBangButton.TextSize = 20
+AntiBangButton.Parent = PlayerTab -- ضفناه لقسم اللاعب مباشرةً
+
+-- وظيفة للسحب والتحريك
+local dragging = false
+local dragInput, dragStart, startPos
+AntiBangButton.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = true
+        dragStart = input.Position
+        startPos = AntiBangButton.Position
+    end
+end)
+
+AntiBangButton.InputChanged:Connect(function(input)
+    if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+        local delta = input.Position - dragStart
+        AntiBangButton.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    end
+end)
+
+AntiBangButton.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = false
+    end
+end)
+
+-- حماية السقوط
+local running = false
+local DST = _G.FPDH or (Workspace.FallenPartsDestroyHeight + 5)
+
+AntiBangButton.MouseButton1Click:Connect(function()
+    running = not running
+    AntiBangButton.Text = running and "Anti-Bang [ON]" or "Anti-Bang [OFF]"
+    if running then
+        task.spawn(function()
+            while running do
+                if not LocalPlayer.Character or not LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                    task.wait(1)
+                    continue
+                end
+                local root = LocalPlayer.Character.HumanoidRootPart
+                local o_pos = root.CFrame
+                Workspace.FallenPartsDestroyHeight = -9e99
+                root.AssemblyLinearVelocity = Vector3.new(0, -9e4, 0)
+                task.wait(1)
+                root.AssemblyLinearVelocity = Vector3.new()
+                root.CFrame = o_pos
+                Workspace.FallenPartsDestroyHeight = DST
+                task.wait(0.5)
+            end
+        end)
+    end
+end)
 -- قسم السكن: زر "نسخ الشخصية"
 local CopyBtn = Instance.new("TextButton")
 CopyBtn.Size = UDim2.new(0, 200, 0, 50)
