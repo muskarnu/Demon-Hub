@@ -1,0 +1,65 @@
+local Workspace = game:GetService("Workspace")
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local CoreGui = game:GetService("CoreGui")
+local UserInputService = game:GetService("UserInputService")
+
+-- إنشاء ScreenGui
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "AntiBangGui"
+ScreenGui.Parent = CoreGui
+
+-- إنشاء Frame (واجهة)
+local MainFrame = Instance.new("Frame")
+MainFrame.Size = UDim2.new(0, 200, 0, 100)
+MainFrame.Position = UDim2.new(0, 20, 0, 100)
+MainFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+MainFrame.BorderSizePixel = 0
+MainFrame.Active = true
+MainFrame.Draggable = true
+MainFrame.Parent = ScreenGui
+
+-- إنشاء زر داخل الواجهة
+local ToggleButton = Instance.new("TextButton")
+ToggleButton.Size = UDim2.new(0, 180, 0, 50)
+ToggleButton.Position = UDim2.new(0, 10, 0, 25)
+ToggleButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+ToggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+ToggleButton.Text = "مضادRami [OFF]"
+ToggleButton.Font = Enum.Font.SourceSansBold
+ToggleButton.TextSize = 20
+ToggleButton.Parent = MainFrame
+
+-- إعداد السكربت
+local running = false
+
+if not _G.FPDH then
+    _G.FPDH = Workspace.FallenPartsDestroyHeight + 5
+end
+
+local DST = _G.FPDH
+
+-- تفعيل الزر
+ToggleButton.MouseButton1Click:Connect(function()
+    running = not running
+    ToggleButton.Text = running and "مضادRami [ON]" or "Anti-Bang [OFF]"
+    if running then
+        task.spawn(function()
+            while running do
+                if not LocalPlayer.Character or not LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                    task.wait(1)
+                    continue
+                end
+                local root = LocalPlayer.Character.HumanoidRootPart
+                local o_pos = root.CFrame
+                Workspace.FallenPartsDestroyHeight = -9e99
+                root.AssemblyLinearVelocity = Vector3.new(0, -9e4, 0)
+                task.wait(1)
+                root.AssemblyLinearVelocity = Vector3.new()
+                root.CFrame = o_pos
+                Workspace.FallenPartsDestroyHeight = DST
+                task.wait(0.5)
+            end
+        end)
+    end
+end)
