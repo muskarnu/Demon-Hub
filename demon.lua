@@ -109,13 +109,12 @@ FlyBtn.Parent = SectionFrames["اللاعب"]
 FlyBtn.MouseButton1Click:Connect(function()
 	loadstring(game:HttpGet("https://raw.githubusercontent.com/muskarnu/Demon-Hub/ded891eae3a34fdede62fee7161bb048fa803f93/Fly"))()
 end)
--- زر النقل المستمر داخل Ev_gui -> اللاعب
-
-local playerSection = game.Players.LocalPlayer.PlayerGui:WaitForChild("Ev_gui"):WaitForChild("اللاعب")
+-- قسم اللاعب: زر "النقل المستمر"
+local playerSection = SectionFrames["اللاعب"]
 
 local teleportBtn = Instance.new("TextButton")
-teleportBtn.Size = UDim2.new(0, 200, 0, 50) -- حجم مستطيل
-teleportBtn.Position = UDim2.new(0, 10, 0, 120) -- تحت زر الطيران (عدّل الرقم لو أردت ترتيب دقيق)
+teleportBtn.Size = UDim2.new(0, 200, 0, 50)
+teleportBtn.Position = UDim2.new(0, 10, 0, 120)
 teleportBtn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 teleportBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 teleportBtn.Font = Enum.Font.SourceSansBold
@@ -126,7 +125,7 @@ teleportBtn.Parent = playerSection
 local toggled = false
 local running = false
 local originalPosition = nil
-local teleportDistance = 12^12 -- المسافة الضخمة
+local teleportDistance = 12^12 -- مسافة كبيرة
 
 teleportBtn.MouseButton1Click:Connect(function()
     local player = game.Players.LocalPlayer
