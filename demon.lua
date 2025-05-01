@@ -162,6 +162,19 @@ teleportBtn.MouseButton1Click:Connect(function()
         end
     end
 end)
+-- قسم اللاعب: زر "المضاد الأرضي"
+local AntiGroundBtn = Instance.new("TextButton")
+AntiGroundBtn.Size = UDim2.new(0, 200, 0, 50)
+AntiGroundBtn.Position = UDim2.new(0, 10, 0, 190) -- أسفل زر النقل المستمر
+AntiGroundBtn.BackgroundColor3 = Color3.fromRGB(255, 85, 127)
+AntiGroundBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+AntiGroundBtn.Font = Enum.Font.SourceSansBold
+AntiGroundBtn.TextSize = 18
+AntiGroundBtn.Text = "المضاد الأرضي"
+AntiGroundBtn.Parent = playerSection
+AntiGroundBtn.MouseButton1Click:Connect(function()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/muskarnu/Demon-Hub/44c52f1d3f259f70840a406b1476c25830bddb1b/AntiRami"))()
+end)
 -- قسم السكن: زر "نسخ الشخصية"
 local CopyBtn = Instance.new("TextButton")
 CopyBtn.Size = UDim2.new(0, 200, 0, 50)
