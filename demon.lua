@@ -107,7 +107,7 @@ FlyBtn.TextSize = 18
 FlyBtn.Text = "طيران"
 FlyBtn.Parent = SectionFrames["اللاعب"]
 FlyBtn.MouseButton1Click:Connect(function()
-	loadstring(game:HttpGet("https://raw.githubusercontent.com/muskarnu/Demon-Hub/6250a0d953480e13caea7ffcd6679dd22b29df5b/Fly"))()
+	loadstring(game:HttpGet("https://github.com/muskarnu/Demon-Hub/blob/ded891eae3a34fdede62fee7161bb048fa803f93/Fly"))()
 end)
 
 -- قسم السكن: زر "نسخ الشخصية"
