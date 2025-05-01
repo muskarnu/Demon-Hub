@@ -119,7 +119,7 @@ teleportBtn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 teleportBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 teleportBtn.Font = Enum.Font.SourceSansBold
 teleportBtn.TextSize = 24
-teleportBtn.Text = "النقل المستمر (OFF)"
+teleportBtn.Text = "مضاد جوي (OFF)"
 teleportBtn.Parent = playerSection
 
 local toggled = false
@@ -138,7 +138,7 @@ teleportBtn.MouseButton1Click:Connect(function()
             running = true
             originalPosition = humanoidRootPart.CFrame
 
-            teleportBtn.Text = "النقل المستمر (ON)"
+            teleportBtn.Text = "مضاد جوي (ON)"
             teleportBtn.BackgroundColor3 = Color3.fromRGB(0, 170, 0)
 
             task.spawn(function()
