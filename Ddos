@@ -1,0 +1,102 @@
+local player = game.Players.LocalPlayer
+local backpack = player:WaitForChild("Backpack")
+local character = player.Character or player.CharacterAdded:Wait()
+
+-- إنشاء الواجهة
+local gui = Instance.new("ScreenGui")
+gui.Name = "DuplicationGUI"
+gui.Parent = player.PlayerGui
+
+local openButton = Instance.new("TextButton")
+openButton.Size = UDim2.new(0, 150, 0, 40)
+openButton.Position = UDim2.new(0, 10, 0, 10)
+openButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+openButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+openButton.Text = "فتح السكربت"
+openButton.Parent = gui
+
+local mainFrame = Instance.new("Frame")
+mainFrame.Size = UDim2.new(0, 400, 0, 300)
+mainFrame.Position = UDim2.new(0, 10, 0, 60)
+mainFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+mainFrame.Visible = false
+mainFrame.Parent = gui
+
+local quantityBox = Instance.new("TextBox")
+quantityBox.Size = UDim2.new(1, -20, 0, 40)
+quantityBox.Position = UDim2.new(0, 10, 0, 10)
+quantityBox.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+quantityBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+quantityBox.PlaceholderText = "اكتب كمية التدبيل مثلاً 100"
+quantityBox.Text = ""
+quantityBox.Parent = mainFrame
+
+local duplicateFireXButton = Instance.new("TextButton")
+duplicateFireXButton.Size = UDim2.new(0.48, 0, 0, 40)
+duplicateFireXButton.Position = UDim2.new(0, 10, 0, 60)
+duplicateFireXButton.BackgroundColor3 = Color3.fromRGB(150, 0, 0)
+duplicateFireXButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+duplicateFireXButton.Text = "دبل Fire X"
+duplicateFireXButton.Parent = mainFrame
+
+local duplicateIphoneButton = Instance.new("TextButton")
+duplicateIphoneButton.Size = UDim2.new(0.48, 0, 0, 40)
+duplicateIphoneButton.Position = UDim2.new(0.5, 0, 0, 60)
+duplicateIphoneButton.BackgroundColor3 = Color3.fromRGB(0, 0, 150)
+duplicateIphoneButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+duplicateIphoneButton.Text = "دبل Iphone"
+duplicateIphoneButton.Parent = mainFrame
+
+local equipAllButton = Instance.new("TextButton")
+equipAllButton.Size = UDim2.new(1, -20, 0, 40)
+equipAllButton.Position = UDim2.new(0, 10, 0, 120)
+equipAllButton.BackgroundColor3 = Color3.fromRGB(0, 100, 0)
+equipAllButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+equipAllButton.Text = "Equip All الأدوات"
+equipAllButton.Parent = mainFrame
+
+-- فتح/غلق النافذة
+openButton.MouseButton1Click:Connect(function()
+    mainFrame.Visible = not mainFrame.Visible
+end)
+
+-- وظيفة التدبيل
+local function duplicateTool(toolName, times)
+    -- محاولة العثور على الأداة في الحقيبة أو الشخصية
+    local tool = backpack:FindFirstChild(toolName) or character:FindFirstChild(toolName)
+    
+    if tool then
+        for i = 1, times - 1 do
+            local clone = tool:Clone()
+            clone.Parent = backpack
+        end
+    else
+        warn("لم يتم العثور على الأداة: " .. toolName)
+    end
+end
+
+duplicateFireXButton.MouseButton1Click:Connect(function()
+    local times = tonumber(quantityBox.Text)
+    if times and times > 0 then
+        duplicateTool("Fire X", times)
+    else
+        warn("كمية غير صحيحة")
+    end
+end)
+
+duplicateIphoneButton.MouseButton1Click:Connect(function()
+    local times = tonumber(quantityBox.Text)
+    if times and times > 0 then
+        duplicateTool("Iphone", times)
+    else
+        warn("كمية غير صحيحة")
+    end
+end)
+
+equipAllButton.MouseButton1Click:Connect(function()
+    for _, tool in pairs(backpack:GetChildren()) do
+        if tool:IsA("Tool") then
+            tool.Parent = character
+        end
+    end
+end)
