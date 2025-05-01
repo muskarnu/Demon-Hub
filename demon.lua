@@ -109,7 +109,60 @@ FlyBtn.Parent = SectionFrames["اللاعب"]
 FlyBtn.MouseButton1Click:Connect(function()
 	loadstring(game:HttpGet("https://raw.githubusercontent.com/muskarnu/Demon-Hub/ded891eae3a34fdede62fee7161bb048fa803f93/Fly"))()
 end)
+-- زر النقل المستمر داخل Ev_gui -> اللاعب
 
+local playerSection = game.Players.LocalPlayer.PlayerGui:WaitForChild("Ev_gui"):WaitForChild("اللاعب")
+
+local teleportBtn = Instance.new("TextButton")
+teleportBtn.Size = UDim2.new(0, 200, 0, 50) -- حجم مستطيل
+teleportBtn.Position = UDim2.new(0, 10, 0, 120) -- تحت زر الطيران (عدّل الرقم لو أردت ترتيب دقيق)
+teleportBtn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+teleportBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+teleportBtn.Font = Enum.Font.SourceSansBold
+teleportBtn.TextSize = 24
+teleportBtn.Text = "النقل المستمر (OFF)"
+teleportBtn.Parent = playerSection
+
+local toggled = false
+local running = false
+local originalPosition = nil
+local teleportDistance = 12^12 -- المسافة الضخمة
+
+teleportBtn.MouseButton1Click:Connect(function()
+    local player = game.Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+    local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
+
+    if humanoidRootPart then
+        if not toggled then
+            toggled = true
+            running = true
+            originalPosition = humanoidRootPart.CFrame
+
+            teleportBtn.Text = "النقل المستمر (ON)"
+            teleportBtn.BackgroundColor3 = Color3.fromRGB(0, 170, 0)
+
+            task.spawn(function()
+                while running do
+                    humanoidRootPart.CFrame = originalPosition * CFrame.new(teleportDistance, 0, 0)
+                    task.wait(0.01)
+                    humanoidRootPart.CFrame = originalPosition
+                    task.wait(0.01)
+                end
+            end)
+        else
+            toggled = false
+            running = false
+
+            if originalPosition then
+                humanoidRootPart.CFrame = originalPosition
+            end
+
+            teleportBtn.Text = "النقل المستمر (OFF)"
+            teleportBtn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+        end
+    end
+end)
 -- قسم السكن: زر "نسخ الشخصية"
 local CopyBtn = Instance.new("TextButton")
 CopyBtn.Size = UDim2.new(0, 200, 0, 50)
