@@ -173,7 +173,7 @@ DexBtn.BackgroundColor3 = Color3.fromRGB(170, 85, 255)
 DexBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 DexBtn.Font = Enum.Font.SourceSansBold
 DexBtn.TextSize = 18
-DexBtn.Text = "فتح Dex Explorer"
+DexBtn.Text = "ملفات السيرفر"
 DexBtn.Parent = SectionFrames["السكربتات"]
 DexBtn.MouseButton1Click:Connect(function()
 	loadstring(game:HttpGet("https://raw.githubusercontent.com/peyton2465/Dex/master/out.lua"))()
