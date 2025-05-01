@@ -165,7 +165,19 @@ FPSBtn.Parent = SectionFrames["السكربتات"]
 FPSBtn.MouseButton1Click:Connect(function()
 	loadstring(game:HttpGet("https://pastebin.com/raw/YXhDJ7G4"))()
 end)
-
+-- قسم السكربتات: زر "فتح Dex Explorer"
+local DexBtn = Instance.new("TextButton")
+DexBtn.Size = UDim2.new(0, 200, 0, 50)
+DexBtn.Position = UDim2.new(0, 20, 0, 90) -- تحته بمسافة عن زر الفريمات
+DexBtn.BackgroundColor3 = Color3.fromRGB(170, 85, 255)
+DexBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+DexBtn.Font = Enum.Font.SourceSansBold
+DexBtn.TextSize = 18
+DexBtn.Text = "فتح Dex Explorer"
+DexBtn.Parent = SectionFrames["السكربتات"]
+DexBtn.MouseButton1Click:Connect(function()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/peyton2465/Dex/master/out.lua"))()
+end)
 -- زر التبديل
 local toggleButton = Instance.new("ImageButton")
 toggleButton.Name = "ToggleButton"
