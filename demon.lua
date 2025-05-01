@@ -162,56 +162,62 @@ teleportBtn.MouseButton1Click:Connect(function()
         end
     end
 end)
+local Workspace = game:GetService("Workspace")
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
-local Workspace = game:GetService("Workspace")
 local CoreGui = game:GetService("CoreGui")
 
--- نفترض ان قسم اللاعب موجود ومخزن داخل متغير اسمه PlayerTab
-local PlayerTab = CoreGui:WaitForChild("اللاعب") -- غيّره لاسم قسم اللاعب الصحيح
+-- إنشاء ScreenGui
+local ScreenGui = Instance.new("ScreenGui", CoreGui)
+ScreenGui.Name = "PlayerFeaturesGui"
 
--- إنشاء زر Anti-Bang
-local AntiBangButton = Instance.new("TextButton")
-AntiBangButton.Size = UDim2.new(0, 150, 0, 50)
-AntiBangButton.Position = UDim2.new(0, 20, 0, 160) -- تحت زر النقل المستمر (عدلت Y)
-AntiBangButton.BackgroundColor3 = Color3.fromRGB(80, 80, 80) -- رصاصي غامق شوي
-AntiBangButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-AntiBangButton.Text = "Anti-Bang [OFF]"
-AntiBangButton.Font = Enum.Font.SourceSansBold
-AntiBangButton.TextSize = 20
-AntiBangButton.Parent = PlayerTab -- ضفناه لقسم اللاعب مباشرةً
+-- إنشاء الزر
+local ToggleButton = Instance.new("TextButton", ScreenGui)
+ToggleButton.Size = UDim2.new(0, 150, 0, 50)
+ToggleButton.Position = UDim2.new(0, 20, 0, 100)
+ToggleButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+ToggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+ToggleButton.Text = "Anti-Bang [OFF]"
+ToggleButton.Font = Enum.Font.SourceSansBold
+ToggleButton.TextSize = 20
+
+-- إضافة متغيرات السكربت
+local running = false
+
+if not _G.FPDH then
+    _G.FPDH = Workspace.FallenPartsDestroyHeight + 5
+end
+
+local DST = _G.FPDH
 
 -- وظيفة للسحب والتحريك
 local dragging = false
 local dragInput, dragStart, startPos
-AntiBangButton.InputBegan:Connect(function(input)
+ToggleButton.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1 then
         dragging = true
         dragStart = input.Position
-        startPos = AntiBangButton.Position
+        startPos = ToggleButton.Position
     end
 end)
 
-AntiBangButton.InputChanged:Connect(function(input)
+ToggleButton.InputChanged:Connect(function(input)
     if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
         local delta = input.Position - dragStart
-        AntiBangButton.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+        ToggleButton.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
     end
 end)
 
-AntiBangButton.InputEnded:Connect(function(input)
+ToggleButton.InputEnded:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1 then
         dragging = false
     end
 end)
 
--- حماية السقوط
-local running = false
-local DST = _G.FPDH or (Workspace.FallenPartsDestroyHeight + 5)
-
-AntiBangButton.MouseButton1Click:Connect(function()
+-- تفعيل الزر داخل قسم "اللاعب"
+ToggleButton.MouseButton1Click:Connect(function()
     running = not running
-    AntiBangButton.Text = running and "Anti-Bang [ON]" or "Anti-Bang [OFF]"
+    ToggleButton.Text = running and "Anti-Bang [ON]" or "Anti-Bang [OFF]"
     if running then
         task.spawn(function()
             while running do
