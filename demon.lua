@@ -109,7 +109,7 @@ FlyBtn.Parent = SectionFrames["اللاعب"]
 FlyBtn.MouseButton1Click:Connect(function()
 	loadstring(game:HttpGet("https://raw.githubusercontent.com/muskarnu/Demon-Hub/ded891eae3a34fdede62fee7161bb048fa803f93/Fly"))()
 end)
--- قسم اللاعب: زر "النقل المستمر"
+-- قسم اللاعب: زر "المضاد الجوي"
 local playerSection = SectionFrames["اللاعب"]
 
 local teleportBtn = Instance.new("TextButton")
@@ -119,7 +119,7 @@ teleportBtn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 teleportBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 teleportBtn.Font = Enum.Font.SourceSansBold
 teleportBtn.TextSize = 24
-teleportBtn.Text = "مضاد جوي (OFF)"
+teleportBtn.Text = "المضاد الجوي (OFF)"
 teleportBtn.Parent = playerSection
 
 local toggled = false
@@ -138,7 +138,7 @@ teleportBtn.MouseButton1Click:Connect(function()
             running = true
             originalPosition = humanoidRootPart.CFrame
 
-            teleportBtn.Text = "مضاد جوي (ON)"
+            teleportBtn.Text = "المضاد الجوي (ON)"
             teleportBtn.BackgroundColor3 = Color3.fromRGB(0, 170, 0)
 
             task.spawn(function()
@@ -157,7 +157,7 @@ teleportBtn.MouseButton1Click:Connect(function()
                 humanoidRootPart.CFrame = originalPosition
             end
 
-            teleportBtn.Text = "النقل المستمر (OFF)"
+            teleportBtn.Text = "المضاد الجوي (OFF)"
             teleportBtn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
         end
     end
