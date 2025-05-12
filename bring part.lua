@@ -41,7 +41,7 @@ Box.BorderSizePixel = 2
 Box.Position = UDim2.new(0.1, 0, 0.25, 0)
 Box.Size = UDim2.new(0.8, 0, 0.35, 0)
 Box.FontFace = Font.new("rbxasset://fonts/families/SourceSansSemibold.json", Enum.FontWeight.Bold, Enum.FontStyle.Normal)
-Box.PlaceholderText = "Player here"
+Box.PlaceholderText = "اكتب الاستهداف"
 Box.Text = ""
 Box.TextColor3 = Color3.fromRGB(255, 255, 255)
 Box.TextScaled = true
@@ -73,7 +73,7 @@ Button.BorderSizePixel = 2
 Button.Position = UDim2.new(0.18, 0, 0.65, 0)
 Button.Size = UDim2.new(0.63, 0, 0.28, 0)
 Button.Font = Enum.Font.Nunito
-Button.Text = "Bring | Off"
+Button.Text = "Bring | مطفي"
 Button.TextColor3 = Color3.fromRGB(255, 255, 255)
 Button.TextScaled = true
 Button.TextWrapped = true
@@ -168,7 +168,7 @@ local DescendantAddedConnection
 local function toggleBlackHole()
 	blackHoleActive = not blackHoleActive
 	if blackHoleActive then
-		Button.Text = "Bring | On"
+		Button.Text = "Bring | شغال"
 		for _, v in ipairs(Workspace:GetDescendants()) do
 			ForcePart(v)
 		end
@@ -187,7 +187,7 @@ local function toggleBlackHole()
 			end
 		end)
 	else
-		Button.Text = "Bring | Off"
+		Button.Text = "Bring | مطفي"
 		if DescendantAddedConnection then
 			DescendantAddedConnection:Disconnect()
 		end
