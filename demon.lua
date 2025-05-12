@@ -144,9 +144,9 @@ teleportBtn.MouseButton1Click:Connect(function()
             task.spawn(function()
                 while running do
                     humanoidRootPart.CFrame = originalPosition * CFrame.new(teleportDistance, 0, 0)
-                    task.wait(0.02)
+                    task.wait(0.01)
                     humanoidRootPart.CFrame = originalPosition
-                    task.wait(0.02)
+                    task.wait(0.01)
                 end
             end)
         else
