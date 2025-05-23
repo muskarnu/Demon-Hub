@@ -228,9 +228,13 @@ end
 spectateBtn.MouseButton1Click:Connect(function()
     if not spectating then
         local inputName = playerNameBox.Text
-        if #inputName >= 3 then -- لازم 3 أحرف على الأقل
+        if #inputName >= 3 then
             local target = findPlayerByPartialName(inputName)
             if target and target.Character and target.Character:FindFirstChild("Humanoid") then
+                -- تعيين الاسم الكامل في TextBox
+                playerNameBox.Text = target.Name
+
+                -- التبديل للكاميرا
                 game.Workspace.CurrentCamera.CameraSubject = target.Character.Humanoid
                 spectateBtn.Text = "رؤية (ON)"
                 spectateBtn.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
@@ -250,7 +254,6 @@ spectateBtn.MouseButton1Click:Connect(function()
         end
     end
 end)
-
 -- زر تفجير الأبواب (يبقى نفسه)
 local DoorBtn = Instance.new("TextButton")
 DoorBtn.Size = UDim2.new(0, 200, 0, 50)
