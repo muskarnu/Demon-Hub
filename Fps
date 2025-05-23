@@ -1,0 +1,89 @@
+-- FPS Booster + عداد FPS في أعلى اليسار
+
+local RunService = game:GetService("RunService")
+local Lighting = game:GetService("Lighting")
+local Players = game:GetService("Players")
+
+-- تحسين الأداء --
+
+-- تعطيل الظلال
+Lighting.GlobalShadows = false
+
+-- تقليل الإضاءة المحيطة
+Lighting.Ambient = Color3.fromRGB(128, 128, 128)
+Lighting.OutdoorAmbient = Color3.fromRGB(128, 128, 128)
+
+-- إزالة تأثيرات الإضاءة
+for _,v in pairs(Lighting:GetChildren()) do
+    if v:IsA("SunRaysEffect") or v:IsA("BloomEffect") or v:IsA("BlurEffect") or v:IsA("ColorCorrectionEffect") then
+        v:Destroy()
+    end
+end
+
+-- تعطيل Textures و Decals
+for _,v in pairs(workspace:GetDescendants()) do
+    if v:IsA("Texture") or v:IsA("Decal") then
+        v.Transparency = 1
+    end
+end
+
+-- تعطيل ParticleEmitters و Trails
+for _,v in pairs(workspace:GetDescendants()) do
+    if v:IsA("ParticleEmitter") or v:IsA("Trail") then
+        v.Enabled = false
+    end
+end
+
+-- حذف كل الإضاءات
+for _,v in pairs(workspace:GetDescendants()) do
+    if v:IsA("PointLight") or v:IsA("SurfaceLight") or v:IsA("SpotLight") then
+        v:Destroy()
+    end
+end
+
+-- تعطيل Terrain Effects
+if workspace:FindFirstChildOfClass("Terrain") then
+    workspace.Terrain.WaterWaveSize = 0
+    workspace.Terrain.WaterWaveSpeed = 0
+    workspace.Terrain.WaterReflectance = 0
+    workspace.Terrain.WaterTransparency = 1
+end
+
+-- تقليل جودة العرض
+settings().Rendering.QualityLevel = Enum.QualityLevel.Level01
+
+-- عرض رسالة تنبيه
+Players.LocalPlayer:WaitForChild("PlayerGui"):SetCore("SendNotification", {
+    Title = "FPS Booster";
+    Text = "تم تحسين الأداء وإلغاء الأضواء!";
+    Duration = 3;
+})
+
+-- عداد FPS --
+
+local screenGui = Instance.new("ScreenGui")
+screenGui.Parent = Players.LocalPlayer:WaitForChild("PlayerGui")
+screenGui.ResetOnSpawn = false
+
+local fpsLabel = Instance.new("TextLabel")
+fpsLabel.Size = UDim2.new(0, 120, 0, 40)
+fpsLabel.Position = UDim2.new(0, 5, 0, 5) -- أعلى اليسار
+fpsLabel.BackgroundTransparency = 0.5
+fpsLabel.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+fpsLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+fpsLabel.Font = Enum.Font.SourceSansBold
+fpsLabel.TextSize = 24
+fpsLabel.Text = "FPS: 0"
+fpsLabel.Parent = screenGui
+
+local fps = 0
+local lastTime = tick()
+
+RunService.Heartbeat:Connect(function()
+    fps = fps + 1
+    if tick() - lastTime >= 1 then
+        fpsLabel.Text = "FPS: "..fps
+        fps = 0
+        lastTime = tick()
+    end
+end)
