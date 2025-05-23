@@ -191,7 +191,6 @@ end)
 
 local sabotageSection = SectionFrames["التخريب"]
 
--- حقل كتابة اسم اللاعب
 local playerNameBox = Instance.new("TextBox")
 playerNameBox.Size = UDim2.new(0, 140, 0, 40)
 playerNameBox.Position = UDim2.new(0, 20, 0, 20)
@@ -217,17 +216,30 @@ spectateBtn.Parent = sabotageSection
 local spectating = false
 local localPlayer = game.Players.LocalPlayer
 
+local function findPlayerByPartialName(partialName)
+    for _, player in ipairs(game.Players:GetPlayers()) do
+        if string.sub(string.lower(player.Name), 1, #partialName) == string.lower(partialName) then
+            return player
+        end
+    end
+    return nil
+end
+
 spectateBtn.MouseButton1Click:Connect(function()
     if not spectating then
-        local playerName = playerNameBox.Text
-        local target = game.Players:FindFirstChild(playerName)
-        if target and target.Character and target.Character:FindFirstChild("Humanoid") then
-            game.Workspace.CurrentCamera.CameraSubject = target.Character.Humanoid
-            spectateBtn.Text = "رؤية (ON)"
-            spectateBtn.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
-            spectating = true
+        local inputName = playerNameBox.Text
+        if #inputName >= 3 then -- لازم 3 أحرف على الأقل
+            local target = findPlayerByPartialName(inputName)
+            if target and target.Character and target.Character:FindFirstChild("Humanoid") then
+                game.Workspace.CurrentCamera.CameraSubject = target.Character.Humanoid
+                spectateBtn.Text = "رؤية (ON)"
+                spectateBtn.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+                spectating = true
+            else
+                warn("لاعب غير موجود أو بدون شخصية")
+            end
         else
-            warn("لاعب غير موجود أو بدون شخصية")
+            warn("اكتب 3 أحرف على الأقل")
         end
     else
         if localPlayer.Character and localPlayer.Character:FindFirstChild("Humanoid") then
