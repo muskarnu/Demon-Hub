@@ -285,8 +285,16 @@ LagControlBtn.MouseButton1Click:Connect(function()
 end)
 
 -- قسم السكربتات: زر "تعزيز الفريمات"
--- FPS Booster + تعطيل الأضواء والإفكتات
-
+local FPSBtn = Instance.new("TextButton")
+FPSBtn.Size = UDim2.new(0, 200, 0, 50)
+FPSBtn.Position = UDim2.new(0, 20, 0, 20)
+FPSBtn.BackgroundColor3 = Color3.fromRGB(255, 255, 0)
+FPSBtn.TextColor3 = Color3.fromRGB(0, 0, 0)
+FPSBtn.Font = Enum.Font.SourceSansBold
+FPSBtn.TextSize = 18
+FPSBtn.Text = "تعزيز الفريمات"
+FPSBtn.Parent = SectionFrames["السكربتات"]
+FPSBtn.MouseButton1Click:Connect(function()
 -- تعطيل الظلال
 game:GetService("Lighting").GlobalShadows = false
 
