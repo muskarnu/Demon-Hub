@@ -339,10 +339,23 @@ createButton("المضاد الأرضي", Color3.fromRGB(255, 85, 127), Color3.f
     loadstring(game:HttpGet("https://raw.githubusercontent.com/muskarnu/Demon-Hub/44c52f1d3f259f70840a406b1476c25830bddb1b/AntiRami"))()
 end)
 
--- زر "اختراق الجدران"
 createButton("اختراق الجدران", Color3.fromRGB(70, 130, 180), Color3.fromRGB(255, 255, 255), 18, 4, function()
-    -- اكتب هنا الكود الخاص باختراق الجدران
-    print("اختراق الجدران مفعّل")
+    local player = game.Players.LocalPlayer
+
+    local function enableNoclip()
+        game:GetService("RunService").Stepped:Connect(function()
+            if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+                for _, part in pairs(player.Character:GetDescendants()) do
+                    if part:IsA("BasePart") and part.CanCollide == true then
+                        part.CanCollide = false
+                    end
+                end
+            end
+        end)
+    end
+
+    enableNoclip()
+    print("Noclip مفعّل")
 end)
 
 createButton("مضاد الجلوس", Color3.fromRGB(255, 140, 0), Color3.fromRGB(255, 255, 255), 18, 5, function()
