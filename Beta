@@ -345,9 +345,29 @@ createButton("اختراق الجدران", Color3.fromRGB(70, 130, 180), Color3
     print("اختراق الجدران مفعّل")
 end)
 
--- زر "مضاد الجلوس"
 createButton("مضاد الجلوس", Color3.fromRGB(255, 140, 0), Color3.fromRGB(255, 255, 255), 18, 5, function()
-    -- اكتب هنا كود مضاد الجلوس
+    local player = game.Players.LocalPlayer
+
+    local function antiSit(humanoid)
+        humanoid:GetPropertyChangedSignal("Sit"):Connect(function()
+            if humanoid.Sit then
+                humanoid.Sit = false
+            end
+        end)
+    end
+
+    if player.Character then
+        local humanoid = player.Character:FindFirstChildOfClass("Humanoid")
+        if humanoid then
+            antiSit(humanoid)
+        end
+    end
+
+    player.CharacterAdded:Connect(function(character)
+        local humanoid = character:WaitForChild("Humanoid")
+        antiSit(humanoid)
+    end)
+
     print("مضاد الجلوس مفعّل")
 end)
 local sabotageSection = SectionFrames["التخريب"]
