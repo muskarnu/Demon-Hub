@@ -164,13 +164,6 @@ teleportBtn.MouseButton1Click:Connect(function()
 end
 local playerSection = SectionFrames["اللاعب"]
 
--- حذف أي محتويات قديمة لو حاب
-for _, child in pairs(playerSection:GetChildren()) do
-    if child:IsA("GuiObject") then
-        child:Destroy()
-    end
-end
-
 -- إنشاء ScrollFrame للحاوية
 local scrollFrame = Instance.new("ScrollingFrame")
 scrollFrame.Size = UDim2.new(1, 0, 1, 0)
