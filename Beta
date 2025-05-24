@@ -250,46 +250,105 @@ teleportBtn.MouseButton1Click:Connect(function()
 end)
 -- زر "المضاد الأرضي"
 local AntiGroundBtn = Instance.new("TextButton")
-AntiGroundBtn.Size = UDim2.new(1, -20, 0, 50)
-AntiGroundBtn.BackgroundColor3 = Color3.fromRGB(255, 85, 127)
-AntiGroundBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-AntiGroundBtn.Font = Enum.Font.SourceSansBold
-AntiGroundBtn.TextSize = 18
-AntiGroundBtn.Text = "المضاد الأرضي"
-AntiGroundBtn.Parent = scrollFrame
-AntiGroundBtn.LayoutOrder = 3
-AntiGroundBtn.MouseButton1Click:Connect(function()
+-- قسم اللاعب: إنشاء الحاوية الأساسية
+local playerSection = SectionFrames["اللاعب"]
+
+-- إنشاء ScrollFrame للحاوية
+local scrollFrame = Instance.new("ScrollingFrame")
+scrollFrame.Size = UDim2.new(1, 0, 1, 0)
+scrollFrame.CanvasSize = UDim2.new(0, 0, 0, 300)
+scrollFrame.ScrollBarThickness = 8
+scrollFrame.BackgroundTransparency = 1
+scrollFrame.Parent = playerSection
+
+-- ترتيب العناصر داخل ScrollFrame
+local uiListLayout = Instance.new("UIListLayout")
+uiListLayout.Padding = UDim.new(0, 10)
+uiListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+uiListLayout.Parent = scrollFrame
+
+-- دالة لتحديث CanvasSize تلقائيًا
+local function updateCanvasSize()
+    scrollFrame.CanvasSize = UDim2.new(0, 0, 0, uiListLayout.AbsoluteContentSize.Y + 10)
+end
+uiListLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(updateCanvasSize)
+
+-- دالة جاهزة لإنشاء زر بسهولة
+local function createButton(text, color, textColor, textSize, order, callback)
+    local button = Instance.new("TextButton")
+    button.Size = UDim2.new(1, -20, 0, 50)
+    button.BackgroundColor3 = color
+    button.TextColor3 = textColor
+    button.Font = Enum.Font.SourceSansBold
+    button.TextSize = textSize
+    button.Text = text
+    button.LayoutOrder = order
+    button.Parent = scrollFrame
+    button.MouseButton1Click:Connect(callback)
+    return button
+end
+
+-- زر "طيران"
+createButton("طيران", Color3.fromRGB(100, 255, 100), Color3.fromRGB(0, 0, 0), 18, 1, function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/muskarnu/Demon-Hub/ded891eae3a34fdede62fee7161bb048fa803f93/Fly"))()
+end)
+
+-- زر "المضاد الجوي"
+local toggled = false
+local running = false
+local originalPosition = nil
+local teleportDistance = 12^12
+local teleportBtn = createButton("المضاد الجوي (OFF)", Color3.fromRGB(50, 50, 50), Color3.fromRGB(255, 255, 255), 24, 2, function()
+    local player = game.Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+    local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
+
+    if humanoidRootPart then
+        if not toggled then
+            toggled = true
+            running = true
+            originalPosition = humanoidRootPart.CFrame
+
+            teleportBtn.Text = "المضاد الجوي (ON)"
+            teleportBtn.BackgroundColor3 = Color3.fromRGB(0, 170, 0)
+
+            task.spawn(function()
+                while running do
+                    humanoidRootPart.CFrame = originalPosition * CFrame.new(teleportDistance, 0, 0)
+                    task.wait(0.01)
+                    humanoidRootPart.CFrame = originalPosition
+                    task.wait(0.01)
+                end
+            end)
+        else
+            toggled = false
+            running = false
+
+            if originalPosition then
+                humanoidRootPart.CFrame = originalPosition
+            end
+
+            teleportBtn.Text = "المضاد الجوي (OFF)"
+            teleportBtn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+        end
+    end
+end)
+
+-- زر "المضاد الأرضي"
+createButton("المضاد الأرضي", Color3.fromRGB(255, 85, 127), Color3.fromRGB(255, 255, 255), 18, 3, function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/muskarnu/Demon-Hub/44c52f1d3f259f70840a406b1476c25830bddb1b/AntiRami"))()
 end)
 
--- زر "اختراق الجدران" أيقونة جديدة
-local WallHackBtn = Instance.new("TextButton")
-WallHackBtn.Size = UDim2.new(1, -20, 0, 50)
-WallHackBtn.BackgroundColor3 = Color3.fromRGB(70, 130, 180)
-WallHackBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-WallHackBtn.Font = Enum.Font.SourceSansBold
-WallHackBtn.TextSize = 18
-WallHackBtn.Text = "اختراق الجدران"
-WallHackBtn.Parent = scrollFrame
-WallHackBtn.LayoutOrder = 4
-WallHackBtn.MouseButton1Click:Connect(function()
-    -- هنا تضيف كود الاختراق أو رابط تحميل السكربت
-    print("اختراق الجدران مفعّل") 
+-- زر "اختراق الجدران"
+createButton("اختراق الجدران", Color3.fromRGB(70, 130, 180), Color3.fromRGB(255, 255, 255), 18, 4, function()
+    -- اكتب هنا الكود الخاص باختراق الجدران
+    print("اختراق الجدران مفعّل")
 end)
 
--- زر "مضاد الجلوس" أيقونة جديدة
-local AntiSitBtn = Instance.new("TextButton")
-AntiSitBtn.Size = UDim2.new(1, -20, 0, 50)
-AntiSitBtn.BackgroundColor3 = Color3.fromRGB(255, 140, 0)
-AntiSitBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-AntiSitBtn.Font = Enum.Font.SourceSansBold
-AntiSitBtn.TextSize = 18
-AntiSitBtn.Text = "مضاد الجلوس"
-AntiSitBtn.Parent = scrollFrame
-AntiSitBtn.LayoutOrder = 5
-AntiSitBtn.MouseButton1Click:Connect(function()
-    -- هنا تضيف كود مضاد الجلوس أو رابط تحميل السكربت
-    print("مضاد الجلوس مفعّل") 
+-- زر "مضاد الجلوس"
+createButton("مضاد الجلوس", Color3.fromRGB(255, 140, 0), Color3.fromRGB(255, 255, 255), 18, 5, function()
+    -- اكتب هنا كود مضاد الجلوس
+    print("مضاد الجلوس مفعّل")
 end)
 local sabotageSection = SectionFrames["التخريب"]
 
