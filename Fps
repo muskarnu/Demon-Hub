@@ -1,73 +1,57 @@
--- FPS Booster + عداد FPS في أعلى اليسار
-
+-- خدمات اللعبة
 local RunService = game:GetService("RunService")
 local Lighting = game:GetService("Lighting")
 local Players = game:GetService("Players")
 
--- تحسين الأداء --
+local player = Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
 
--- تعطيل الظلال
+-- 1. تخفيف الإضاءة والظلال
 Lighting.GlobalShadows = false
+Lighting.FogEnd = 9e9
+Lighting.Brightness = 1
+Lighting.ClockTime = 14
+Lighting.OutdoorAmbient = Color3.fromRGB(128,128,128)
+Lighting.ExposureCompensation = 0
 
--- تقليل الإضاءة المحيطة
-Lighting.Ambient = Color3.fromRGB(128, 128, 128)
-Lighting.OutdoorAmbient = Color3.fromRGB(128, 128, 128)
-
--- إزالة تأثيرات الإضاءة
-for _,v in pairs(Lighting:GetChildren()) do
-    if v:IsA("SunRaysEffect") or v:IsA("BloomEffect") or v:IsA("BlurEffect") or v:IsA("ColorCorrectionEffect") then
-        v:Destroy()
+-- إيقاف جميع الأضواء في العالم
+for _, light in pairs(workspace:GetDescendants()) do
+    if light:IsA("Light") then
+        light.Enabled = false
     end
 end
 
--- تعطيل Textures و Decals
-for _,v in pairs(workspace:GetDescendants()) do
-    if v:IsA("Texture") or v:IsA("Decal") then
-        v.Transparency = 1
-    end
+-- 2. تعطيل تأثيرات ما بعد المعالجة
+if Lighting:FindFirstChildOfClass("BloomEffect") then
+    Lighting:FindFirstChildOfClass("BloomEffect").Enabled = false
+end
+if Lighting:FindFirstChildOfClass("SunRaysEffect") then
+    Lighting:FindFirstChildOfClass("SunRaysEffect").Enabled = false
+end
+if Lighting:FindFirstChildOfClass("ColorCorrectionEffect") then
+    Lighting:FindFirstChildOfClass("ColorCorrectionEffect").Enabled = false
+end
+if Lighting:FindFirstChildOfClass("DepthOfFieldEffect") then
+    Lighting:FindFirstChildOfClass("DepthOfFieldEffect").Enabled = false
+end
+if Lighting:FindFirstChildOfClass("BlurEffect") then
+    Lighting:FindFirstChildOfClass("BlurEffect").Enabled = false
 end
 
--- تعطيل ParticleEmitters و Trails
-for _,v in pairs(workspace:GetDescendants()) do
-    if v:IsA("ParticleEmitter") or v:IsA("Trail") then
-        v.Enabled = false
-    end
-end
+-- 3. تقليل دقة الظلال
+pcall(function()
+    settings().Rendering.QualityLevel = "Level01"
+end)
 
--- حذف كل الإضاءات
-for _,v in pairs(workspace:GetDescendants()) do
-    if v:IsA("PointLight") or v:IsA("SurfaceLight") or v:IsA("SpotLight") then
-        v:Destroy()
-    end
-end
-
--- تعطيل Terrain Effects
-if workspace:FindFirstChildOfClass("Terrain") then
-    workspace.Terrain.WaterWaveSize = 0
-    workspace.Terrain.WaterWaveSpeed = 0
-    workspace.Terrain.WaterReflectance = 0
-    workspace.Terrain.WaterTransparency = 1
-end
-
--- تقليل جودة العرض
-settings().Rendering.QualityLevel = Enum.QualityLevel.Level01
-
--- عرض رسالة تنبيه
-Players.LocalPlayer:WaitForChild("PlayerGui"):SetCore("SendNotification", {
-    Title = "FPS Booster";
-    Text = "تم تحسين الأداء وإلغاء الأضواء!";
-    Duration = 3;
-})
-
--- عداد FPS --
-
+-- 4. إضافة واجهة عداد FPS
 local screenGui = Instance.new("ScreenGui")
-screenGui.Parent = Players.LocalPlayer:WaitForChild("PlayerGui")
+screenGui.Name = "FPSCounter"
 screenGui.ResetOnSpawn = false
+screenGui.Parent = playerGui
 
 local fpsLabel = Instance.new("TextLabel")
 fpsLabel.Size = UDim2.new(0, 120, 0, 40)
-fpsLabel.Position = UDim2.new(0, 5, 0, 5) -- أعلى اليسار
+fpsLabel.Position = UDim2.new(0, 5, 0, 5)
 fpsLabel.BackgroundTransparency = 0.5
 fpsLabel.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 fpsLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -82,7 +66,7 @@ local lastTime = tick()
 RunService.Heartbeat:Connect(function()
     fps = fps + 1
     if tick() - lastTime >= 1 then
-        fpsLabel.Text = "FPS: "..fps
+        fpsLabel.Text = "FPS: " .. fps
         fps = 0
         lastTime = tick()
     end
