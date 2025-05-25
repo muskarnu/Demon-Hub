@@ -7,11 +7,15 @@ gui.ResetOnSpawn = false
 
 -- الواجهة
 local mainContainer = Instance.new("Frame")
-mainContainer.Size = UDim2.new(1, 0, 1, 0)
-mainContainer.Position = UDim2.new(-1, 0, 0, 0)
+mainContainer.Size = UDim2.new(0.75, 0, 0.75, 0)
+mainContainer.Position = UDim2.new(0.125, 0, 0.125, 0)
 mainContainer.BackgroundTransparency = 1
 mainContainer.Visible = false
 mainContainer.Parent = gui
+
+local mainCorner = Instance.new("UICorner")
+mainCorner.CornerRadius = UDim.new(0, 12)
+mainCorner.Parent = mainContainer
 
 local sideMenu = Instance.new("Frame")
 sideMenu.Size = UDim2.new(0, 200, 1, 0)
@@ -20,11 +24,19 @@ sideMenu.BorderSizePixel = 2
 sideMenu.BorderColor3 = Color3.fromRGB(255, 0, 0)
 sideMenu.Parent = mainContainer
 
+local sideCorner = Instance.new("UICorner")
+sideCorner.CornerRadius = UDim.new(0, 12)
+sideCorner.Parent = sideMenu
+
 local contentFrame = Instance.new("Frame")
 contentFrame.Size = UDim2.new(1, -200, 1, 0)
 contentFrame.Position = UDim2.new(0, 200, 0, 0)
 contentFrame.BackgroundTransparency = 1
 contentFrame.Parent = mainContainer
+
+local contentCorner = Instance.new("UICorner")
+contentCorner.CornerRadius = UDim.new(0, 12)
+contentCorner.Parent = contentFrame
 
 local contentBg = Instance.new("ImageLabel")
 contentBg.Size = UDim2.new(1, 0, 1, 0)
@@ -34,6 +46,10 @@ contentBg.ImageTransparency = 0.15
 contentBg.ScaleType = Enum.ScaleType.Crop
 contentBg.ZIndex = 0
 contentBg.Parent = contentFrame
+
+local bgCorner = Instance.new("UICorner")
+bgCorner.CornerRadius = UDim.new(0, 12)
+bgCorner.Parent = contentBg 
 
 local sectionNames = {"القائمة الرئيسية", "اللاعب", "التخريب", "السكن", "السكربتات"}
 local SectionFrames = {}
