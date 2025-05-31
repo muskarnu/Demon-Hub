@@ -106,7 +106,7 @@ end)
 if not getgenv().Network then
 	getgenv().Network = {
 		BaseParts = {},
-		Velocity = Vector3.new(14.46, 14.46, 14.46)
+		Velocity = Vector3.new(24.46, 24.46, 24.46)
 	}
 
 	Network.RetainPart = function(Part)
@@ -150,13 +150,13 @@ local function ForcePart(v)
 		end
 		v.CanCollide = false
 		local Torque = Instance.new("Torque", v)
-		Torque.Torque = Vector3.new(100000, 100000, 100000)
+		Torque.Torque = Vector3.new(9900000, 9900000, 9900000)
 		local AlignPosition = Instance.new("AlignPosition", v)
 		local Attachment2 = Instance.new("Attachment", v)
 		Torque.Attachment0 = Attachment2
 		AlignPosition.MaxForce = math.huge
 		AlignPosition.MaxVelocity = math.huge
-		AlignPosition.Responsiveness = 200
+		AlignPosition.Responsiveness = 400
 		AlignPosition.Attachment0 = Attachment2
 		AlignPosition.Attachment1 = Attachment1
 	end
