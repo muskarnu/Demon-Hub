@@ -124,56 +124,60 @@ FlyBtn.MouseButton1Click:Connect(function()
 end)
 -- قسم اللاعب: زر "المضاد الجوي"
 local playerSection = SectionFrames["اللاعب"]
+local teleportBtn = Instance.new("TextButton")  
+teleportBtn.Size = UDim2.new(0, 200, 0, 50)  
+teleportBtn.Position = UDim2.new(0, 10, 0, 120)  
+teleportBtn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)  
+teleportBtn.TextColor3 = Color3.fromRGB(255, 255, 255)  
+teleportBtn.Font = Enum.Font.SourceSansBold  
+teleportBtn.TextSize = 24  
+teleportBtn.Text = "المضاد الجوي (OFF)"  
+teleportBtn.Parent = playerSection  
 
-local teleportBtn = Instance.new("TextButton")
-teleportBtn.Size = UDim2.new(0, 200, 0, 50)
-teleportBtn.Position = UDim2.new(0, 10, 0, 120)
-teleportBtn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-teleportBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-teleportBtn.Font = Enum.Font.SourceSansBold
-teleportBtn.TextSize = 24
-teleportBtn.Text = "المضاد الجوي (OFF)"
-teleportBtn.Parent = playerSection
+local toggled = false  
+local running = false  
+local originalPosition = nil  
+local teleportDistance = 12^12 -- مسافة كبيرة  
 
-local toggled = false
-local running = false
-local originalPosition = nil
-local teleportDistance = 12^12 -- مسافة كبيرة
+teleportBtn.MouseButton1Click:Connect(function()  
+    local player = game.Players.LocalPlayer  
+    local character = player.Character or player.CharacterAdded:Wait()  
+    local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")  
 
-teleportBtn.MouseButton1Click:Connect(function()
-    local player = game.Players.LocalPlayer
-    local character = player.Character or player.CharacterAdded:Wait()
-    local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
+    if humanoidRootPart then  
+        if not toggled then  
+            toggled = true  
+            running = true  
+            originalPosition = humanoidRootPart.CFrame  
 
-    if humanoidRootPart then
-        if not toggled then
-            toggled = true
-            running = true
-            originalPosition = humanoidRootPart.CFrame
+            teleportBtn.Text = "المضاد الجوي (ON)"  
+            teleportBtn.BackgroundColor3 = Color3.fromRGB(0, 170, 0)  
 
-            teleportBtn.Text = "المضاد الجوي (ON)"
-            teleportBtn.BackgroundColor3 = Color3.fromRGB(0, 170, 0)
-
-            task.spawn(function()
-                while running do
-                    humanoidRootPart.CFrame = originalPosition * CFrame.new(teleportDistance, 0, 0)
+            task.spawn(function()  
+                while running do  
+                    -- التنقل إلى مكانين بعيدين
+                    humanoidRootPart.CFrame = originalPosition * CFrame.new(teleportDistance, 0, 0)  -- الأول
                     task.wait(0.01)
-                    humanoidRootPart.CFrame = originalPosition
+                    humanoidRootPart.CFrame = originalPosition * CFrame.new(0, teleportDistance, 0)  -- الثاني
                     task.wait(0.01)
-                end
-            end)
-        else
-            toggled = false
-            running = false
 
-            if originalPosition then
-                humanoidRootPart.CFrame = originalPosition
-            end
+                    -- العودة إلى الموقع الأصلي
+                    humanoidRootPart.CFrame = originalPosition  
+                    task.wait(0.01)
+                end  
+            end)  
+        else  
+            toggled = false  
+            running = false  
 
-            teleportBtn.Text = "المضاد الجوي (OFF)"
-            teleportBtn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-        end
-    end
+            if originalPosition then  
+                humanoidRootPart.CFrame = originalPosition  
+            end  
+
+            teleportBtn.Text = "المضاد الجوي (OFF)"  
+            teleportBtn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)  
+        end  
+    end  
 end)
 -- قسم اللاعب: زر "المضاد الأرضي"
 local AntiGroundBtn = Instance.new("TextButton")
