@@ -283,7 +283,20 @@ LagControlBtn.Parent = sabotageSection
 LagControlBtn.MouseButton1Click:Connect(function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/muskarnu/Demon-Hub/6871e63c88cb35875240a4acfe065b0ab633004b/Ddos"))()
 end)
+-- زر دوران الأبواب
+local DoorAuraBtn = Instance.new("TextButton")
+DoorAuraBtn.Size = UDim2.new(0, 200, 0, 50)
+DoorAuraBtn.Position = UDim2.new(0, 20, 0, 200)
+DoorAuraBtn.BackgroundColor3 = Color3.fromRGB(255, 150, 0)
+DoorAuraBtn.TextColor3 = Color3.fromRGB(0, 0, 0)
+DoorAuraBtn.Font = Enum.Font.SourceSansBold
+DoorAuraBtn.TextSize = 18
+DoorAuraBtn.Text = "دوران الأبواب"
+DoorAuraBtn.Parent = sabotageSection
 
+DoorAuraBtn.MouseButton1Click:Connect(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/muskarnu/Demon-Hub/693ef1a4a05913564bf083279059606cf52d8c03/Doors%20aura"))()
+end)
 -- قسم السكربتات: زر "تعزيز الفريمات"
 local FPSBtn = Instance.new("TextButton")
 FPSBtn.Size = UDim2.new(0, 200, 0, 50)
