@@ -1,7 +1,7 @@
 loadstring(game:HttpGet("https://raw.githubusercontent.com/muskarnu/Demon-Hub/main/Beta"))()
 local args = {
 	"RolePlayName",
-	"سكربتDemonHub"
+	"سكربتDemonHubV0.2"
 }
 game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1RPNam1eTex1t"):FireServer(unpack(args))
 local args = {
