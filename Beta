@@ -334,10 +334,10 @@ DexBtn.BackgroundColor3 = Color3.fromRGB(170, 85, 255)
 DexBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 DexBtn.Font = Enum.Font.SourceSansBold
 DexBtn.TextSize = 18
-DexBtn.Text = "ملفات السيرفر"
+DexBtn.Text = "اداة المطورين"
 DexBtn.Parent = SectionFrames["السكربتات"]
 DexBtn.MouseButton1Click:Connect(function()
-	loadstring(game:HttpGet("https://raw.githubusercontent.com/peyton2465/Dex/master/out.lua"))()
+	loadstring(game:HttpGet("https://github.com/muskarnu/Demon-Hub/raw/c389402ca6c92e6c3ace28a4758f99a4726cf98c/dex.lua.txt"))()
 end)
 -- زر التبديل
 local toggleButton = Instance.new("ImageButton")
