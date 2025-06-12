@@ -1,43 +1,5 @@
 -- Gui to Lua
--- Version: 3.2
-
--- Instances:
-
-local Gui = Instance.new("ScreenGui")
-local Main = Instance.new("Frame")
-local Box = Instance.new("TextBox")
-local UITextSizeConstraint = Instance.new("UITextSizeConstraint")
-local Label = Instance.new("TextLabel")
-local UITextSizeConstraint_2 = Instance.new("UITextSizeConstraint")
-local Button = Instance.new("TextButton")
-local UITextSizeConstraint_3 = Instance.new("UITextSizeConstraint")
-local ToggleButton = Instance.new("ImageButton")
-
--- Properties:
-
-Gui.Name = "Gui"
-Gui.Parent = gethui()
-Gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-
-Main.Name = "Main"
-Main.Parent = Gui
-Main.BackgroundColor3 = Color3.fromRGB(120, 0, 0)
-Main.BorderColor3 = Color3.fromRGB(120, 0, 0)
-Main.BorderSizePixel = 0
-Main.Position = UDim2.new(0.335, 0, 0.542, 0)
-Main.Size = UDim2.new(0.240, 0, 0.167, 0)
-Main.Active = true
-Main.Draggable = true
-
-Box.Name = "Box"
-Box.Parent = Main
-Box.BackgroundColor3 = Color3.fromRGB(95, 95, 95)
-Box.BorderSizePixel = 0
-Box.Position = UDim2.new(0.098, 0, 0.219, 0)
-Box.Size = UDim2.new(0.801, 0, 0.365, 0)
-Box.Font = Enum.Font.SourceSansSemibold
-Box.PlaceholderText = "Player here"
-Box.Text = ""
+Label.Font = Enum.Font.Nunito
 Box.TextColor3 = Color3.fromRGB(255, 255, 255)
 Box.TextScaled = true
 Box.TextWrapped = true
@@ -47,11 +9,12 @@ UITextSizeConstraint.MaxTextSize = 31
 
 Label.Name = "Label"
 Label.Parent = Main
-Label.BackgroundColor3 = Color3.fromRGB(95, 95, 95)
-Label.BorderSizePixel = 0
-Label.Size = UDim2.new(1, 0, 0.161, 0)
-Label.Font = Enum.Font.Nunito
-Label.Text = "Sajwaad|المطورRami"
+Label.BackgroundColor3 = Color3.fromRGB(139, 0, 0)
+Label.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Label.BorderSizePixel = 2
+Label.Size = UDim2.new(1, 0, 0.16, 0)
+Label.FontFace = Font.new("rbxasset://fonts/families/Nunito.json", Enum.FontWeight.Bold, Enum.FontStyle.Normal)
+Label.Text = "المطور: Rami | BY @Sajwaad"
 Label.TextColor3 = Color3.fromRGB(255, 255, 255)
 Label.TextScaled = true
 Label.TextWrapped = true
@@ -61,32 +24,19 @@ UITextSizeConstraint_2.MaxTextSize = 21
 
 Button.Name = "Button"
 Button.Parent = Main
-Button.BackgroundColor3 = Color3.fromRGB(95, 95, 95)
-Button.BorderSizePixel = 0
-Button.Position = UDim2.new(0.183, 0, 0.657, 0)
-Button.Size = UDim2.new(0.629, 0, 0.277, 0)
+Button.BackgroundColor3 = Color3.fromRGB(139, 0, 0)
+Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Button.BorderSizePixel = 2
+Button.Position = UDim2.new(0.18, 0, 0.65, 0)
+Button.Size = UDim2.new(0.63, 0, 0.28, 0)
 Button.Font = Enum.Font.Nunito
-Button.Text = " مغناطيس| Off"
+Button.Text = "Bring | مطفي"
 Button.TextColor3 = Color3.fromRGB(255, 255, 255)
 Button.TextScaled = true
 Button.TextWrapped = true
 
 UITextSizeConstraint_3.Parent = Button
 UITextSizeConstraint_3.MaxTextSize = 28
-
--- Toggle Button
-ToggleButton.Name = "ToggleButton"
-ToggleButton.Parent = Gui
-ToggleButton.BackgroundTransparency = 0.3
-ToggleButton.BackgroundColor3 = Color3.fromRGB(139, 0, 0)
-ToggleButton.BorderSizePixel = 0
-ToggleButton.Position = UDim2.new(0.01, 0, 0.45, 0)
-ToggleButton.Size = UDim2.new(0.05, 0, 0.09, 0)
-ToggleButton.Image = "rbxassetid://107728948792167"
-ToggleButton.Active = true
-ToggleButton.Draggable = true
-
--- Scripts:
 
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
@@ -157,7 +107,7 @@ end
 local function toggleBlackHole()
     blackHoleActive = not blackHoleActive
     if blackHoleActive then
-        Button.Text = "مغناطيس | On"
+        Button.Text = "bring | شغال"
         for _, v in ipairs(Workspace:GetDescendants()) do
             ForcePart(v)
         end
@@ -170,7 +120,7 @@ local function toggleBlackHole()
             end
         end)
     else
-        Button.Text = "مغناطيس | Off"
+        Button.Text = "bring | مطفي"
         if DescendantAddedConnection then DescendantAddedConnection:Disconnect() end
     end
 end
