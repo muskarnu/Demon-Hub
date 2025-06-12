@@ -282,7 +282,7 @@ DoorBtn.Text = "تفجير الأبواب"
 DoorBtn.Parent = sabotageSection
 
 DoorBtn.MouseButton1Click:Connect(function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/muskarnu/Demon-Hub/5f9e7e91c008845aad2a3c0cf6e0b418da74e5d2/bring%20part.lua"))()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/muskarnu/Demon-Hub/e24841b37050dd24cea8d7323b21c47411747271/bring%20part.lua"))()
 end)
 
 -- زر تحكم بلاق السيرفر
