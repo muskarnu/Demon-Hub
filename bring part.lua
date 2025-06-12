@@ -66,7 +66,7 @@ Button.BorderSizePixel = 0
 Button.Position = UDim2.new(0.183, 0, 0.657, 0)
 Button.Size = UDim2.new(0.629, 0, 0.277, 0)
 Button.Font = Enum.Font.Nunito
-Button.Text = "Bring | Off"
+Button.Text = " مغناطيس| Off"
 Button.TextColor3 = Color3.fromRGB(255, 255, 255)
 Button.TextScaled = true
 Button.TextWrapped = true
@@ -157,7 +157,7 @@ end
 local function toggleBlackHole()
     blackHoleActive = not blackHoleActive
     if blackHoleActive then
-        Button.Text = "Bring Parts | On"
+        Button.Text = "مغناطيس | On"
         for _, v in ipairs(Workspace:GetDescendants()) do
             ForcePart(v)
         end
@@ -170,7 +170,7 @@ local function toggleBlackHole()
             end
         end)
     else
-        Button.Text = "Bring Parts | Off"
+        Button.Text = "مغناطيس | Off"
         if DescendantAddedConnection then DescendantAddedConnection:Disconnect() end
     end
 end
