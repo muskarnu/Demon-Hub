@@ -1,4 +1,4 @@
-loadstring(game:HttpGet("https://raw.githubusercontent.com/muskarnu/Demon-Hub/main/Beta"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/muskarnu/Demon-Hub/main/Main"))()
 local args = {
 	"RolePlayName",
 	"سكربتDemonHubV0.2"
