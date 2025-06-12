@@ -1,31 +1,62 @@
--- Gui to Lua
-Label.Font = Enum.Font.Nunito
+-- Gui to Lua - إصدار كامل مع زر Toggle وBring Parts
+
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+local Workspace = game:GetService("Workspace")
+local LocalPlayer = Players.LocalPlayer
+
+-- GUI
+local Gui = Instance.new("ScreenGui")
+Gui.Name = "Gui"
+Gui.Parent = gethui and gethui() or game.CoreGui
+Gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+local Main = Instance.new("Frame")
+Main.Name = "Main"
+Main.Parent = Gui
+Main.BackgroundColor3 = Color3.fromRGB(120, 0, 0)
+Main.BorderColor3 = Color3.fromRGB(120, 0, 0)
+Main.BorderSizePixel = 0
+Main.Position = UDim2.new(0.33, 0, 0.54, 0)
+Main.Size = UDim2.new(0.24, 0, 0.17, 0)
+Main.Active = true
+Main.Draggable = true
+
+local Box = Instance.new("TextBox")
+Box.Name = "Box"
+Box.Parent = Main
+Box.BackgroundColor3 = Color3.fromRGB(95, 95, 95)
+Box.BorderSizePixel = 0
+Box.Position = UDim2.new(0.1, 0, 0.22, 0)
+Box.Size = UDim2.new(0.8, 0, 0.37, 0)
+Box.Font = Enum.Font.SourceSansBold
+Box.PlaceholderText = "Player here"
+Box.Text = ""
 Box.TextColor3 = Color3.fromRGB(255, 255, 255)
 Box.TextScaled = true
 Box.TextWrapped = true
-
-UITextSizeConstraint.Parent = Box
+local UITextSizeConstraint = Instance.new("UITextSizeConstraint", Box)
 UITextSizeConstraint.MaxTextSize = 31
 
+local Label = Instance.new("TextLabel")
 Label.Name = "Label"
 Label.Parent = Main
 Label.BackgroundColor3 = Color3.fromRGB(139, 0, 0)
-Label.BorderColor3 = Color3.fromRGB(0, 0, 0)
 Label.BorderSizePixel = 2
 Label.Size = UDim2.new(1, 0, 0.16, 0)
-Label.FontFace = Font.new("rbxasset://fonts/families/Nunito.json", Enum.FontWeight.Bold, Enum.FontStyle.Normal)
+Label.Font = Enum.Font.Nunito
 Label.Text = "المطور: Rami | BY @Sajwaad"
 Label.TextColor3 = Color3.fromRGB(255, 255, 255)
 Label.TextScaled = true
 Label.TextWrapped = true
-
-UITextSizeConstraint_2.Parent = Label
+local UITextSizeConstraint_2 = Instance.new("UITextSizeConstraint", Label)
 UITextSizeConstraint_2.MaxTextSize = 21
 
+local Button = Instance.new("TextButton")
 Button.Name = "Button"
 Button.Parent = Main
 Button.BackgroundColor3 = Color3.fromRGB(139, 0, 0)
-Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 Button.BorderSizePixel = 2
 Button.Position = UDim2.new(0.18, 0, 0.65, 0)
 Button.Size = UDim2.new(0.63, 0, 0.28, 0)
@@ -34,15 +65,22 @@ Button.Text = "Bring | مطفي"
 Button.TextColor3 = Color3.fromRGB(255, 255, 255)
 Button.TextScaled = true
 Button.TextWrapped = true
-
-UITextSizeConstraint_3.Parent = Button
+local UITextSizeConstraint_3 = Instance.new("UITextSizeConstraint", Button)
 UITextSizeConstraint_3.MaxTextSize = 28
 
-local Players = game:GetService("Players")
-local RunService = game:GetService("RunService")
-local LocalPlayer = Players.LocalPlayer
-local Workspace = game:GetService("Workspace")
+local ToggleButton = Instance.new("ImageButton")
+ToggleButton.Name = "ToggleButton"
+ToggleButton.Parent = Gui
+ToggleButton.BackgroundTransparency = 0.3
+ToggleButton.BackgroundColor3 = Color3.fromRGB(139, 0, 0)
+ToggleButton.BorderSizePixel = 0
+ToggleButton.Position = UDim2.new(0.01, 0, 0.45, 0)
+ToggleButton.Size = UDim2.new(0.05, 0, 0.09, 0)
+ToggleButton.Image = "rbxassetid://107728948792167"
+ToggleButton.Active = true
+ToggleButton.Draggable = true
 
+-- Bring Parts System
 local character
 local humanoidRootPart
 local player = nil
@@ -56,29 +94,27 @@ Part.Anchored = true
 Part.CanCollide = false
 Part.Transparency = 1
 
-if not getgenv().Network then
-    getgenv().Network = {
-        BaseParts = {},
-        Velocity = Vector3.new(14.4626, 14.4626, 14.4626)
-    }
+getgenv().Network = getgenv().Network or {
+    BaseParts = {},
+    Velocity = Vector3.new(14.46, 14.46, 14.46)
+}
 
-    Network.RetainPart = function(Part)
-        if Part:IsA("BasePart") and Part:IsDescendantOf(Workspace) then
-            table.insert(Network.BaseParts, Part)
-            Part.CustomPhysicalProperties = PhysicalProperties.new(0,0,0,0,0)
-            Part.CanCollide = false
+local function RetainPart(Part)
+    if Part:IsA("BasePart") and Part:IsDescendantOf(Workspace) then
+        table.insert(Network.BaseParts, Part)
+        Part.CustomPhysicalProperties = PhysicalProperties.new(0,0,0,0,0)
+        Part.CanCollide = false
+    end
+end
+
+RunService.Heartbeat:Connect(function()
+    sethiddenproperty(LocalPlayer, "SimulationRadius", math.huge)
+    for _, Part in pairs(Network.BaseParts) do
+        if Part:IsDescendantOf(Workspace) then
+            Part.Velocity = Network.Velocity
         end
     end
-
-    RunService.Heartbeat:Connect(function()
-        sethiddenproperty(LocalPlayer, "SimulationRadius", math.huge)
-        for _, Part in pairs(Network.BaseParts) do
-            if Part:IsDescendantOf(Workspace) then
-                Part.Velocity = Network.Velocity
-            end
-        end
-    end)
-end
+end)
 
 local function ForcePart(v)
     if v:IsA("BasePart") and not v.Anchored and not v.Parent:FindFirstChildOfClass("Humanoid") and not v.Parent:FindFirstChild("Head") and v.Name ~= "Handle" then
@@ -87,9 +123,9 @@ local function ForcePart(v)
                 x:Destroy()
             end
         end
-        if v:FindFirstChild("Attachment") then v:FindFirstChild("Attachment"):Destroy() end
-        if v:FindFirstChild("AlignPosition") then v:FindFirstChild("AlignPosition"):Destroy() end
-        if v:FindFirstChild("Torque") then v:FindFirstChild("Torque"):Destroy() end
+        for _, name in pairs({"Attachment", "AlignPosition", "Torque"}) do
+            if v:FindFirstChild(name) then v:FindFirstChild(name):Destroy() end
+        end
         v.CanCollide = false
         local Torque = Instance.new("Torque", v)
         Torque.Torque = Vector3.new(100000, 100000, 100000)
@@ -107,7 +143,7 @@ end
 local function toggleBlackHole()
     blackHoleActive = not blackHoleActive
     if blackHoleActive then
-        Button.Text = "bring | شغال"
+        Button.Text = "Bring | شغال"
         for _, v in ipairs(Workspace:GetDescendants()) do
             ForcePart(v)
         end
@@ -120,7 +156,7 @@ local function toggleBlackHole()
             end
         end)
     else
-        Button.Text = "bring | مطفي"
+        Button.Text = "Bring | مطفي"
         if DescendantAddedConnection then DescendantAddedConnection:Disconnect() end
     end
 end
