@@ -1,7 +1,7 @@
-loadstring(game:HttpGet("https://raw.githubusercontent.com/muskarnu/Demon-Hub/main/Main"))()
+
 local args = {
 	"RolePlayName",
-	"سكربتDemonHubV0.2"
+	"ديمون قد رحل"
 }
 game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1RPNam1eTex1t"):FireServer(unpack(args))
 local args = {
@@ -11,7 +11,7 @@ local args = {
 game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1RPNam1eColo1r"):FireServer(unpack(args))
 local args = {
 	"RolePlayBio",
-	"\216\179\217\131\216\177\216\168\216\170 \216\167\217\132\217\133\216\183\217\136\216\177Rami"
+	"اعطيتك تاجي ماذا ستفعل به؟"
 }
 game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1RPNam1eTex1t"):FireServer(unpack(args))
 local args = {
