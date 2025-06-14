@@ -160,25 +160,50 @@ local sectionNames = {"القائمة الرئيسية", "السكربتات", "
 -- محتويات الأقسام
 local sectionContents = {
 	["القائمة الرئيسية"] = function()
+	local texts = {
+		"Ev_Rami",
+		"حسابي روب: Sajwaad",
+		"سكربت DemonHubV0.3"
+	}
+
+	for i, text in ipairs(texts) do
 		local label = Instance.new("TextLabel")
-		label.Text = "اهلا بك في القائمة الرئيسية"
-		label.Size = UDim2.new(0, 300, 0, 50)
-		label.Position = UDim2.new(0, 10, 0, 10)
+		label.Text = text
+		label.Size = UDim2.new(0, 300, 0, 40)
+		label.Position = UDim2.new(0, 10, 0, (i-1)*45 + 10)
 		label.BackgroundColor3 = Color3.fromRGB(230, 230, 230)
 		label.TextColor3 = Color3.new(0, 0, 0)
+		label.Font = Enum.Font.SourceSansBold
+		label.TextSize = 22
 		label.Parent = contentFrame
-	end,
+	end
+end,
 
 	["السكربتات"] = function()
-		local btn = Instance.new("TextButton")
-		btn.Text = "تشغيل سكربت 🔥"
-		btn.Size = UDim2.new(0, 200, 0, 40)
-		btn.Position = UDim2.new(0, 10, 0, 10)
-		btn.BackgroundColor3 = Color3.fromRGB(0, 200, 0)
-		btn.TextColor3 = Color3.new(1, 1, 1)
-		btn.Parent = contentFrame
-	end,
+	local scripts = {
+		{Title = "vr7", Script = 'loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-VR7-35232"))()'},
+		{Title = "Martin", Script = 'loadstring(game:HttpGet("https://rawscripts.net/raw/Brookhaven-RP-MARTIN-IRAQ-31476"))()'},
+		{Title = "Sander X", Script = 'loadstring(game:HttpGet("https://rawscripts.net/raw/Brookhaven-RP-Sander-x-22769"))()'},
+		{Title = "تجربة", Script = '-- سكربت تجريبي لا يفعل شيئاً'},
+		{Title = "تجربة", Script = '-- سكربت تجريبي آخر'}
+	}
 
+	for i, data in ipairs(scripts) do
+		local btn = Instance.new("TextButton")
+		btn.Text = data.Title
+		btn.Size = UDim2.new(0, 260, 0, 35)
+		btn.Position = UDim2.new(0, 10, 0, (i-1)*40 + 10)
+		btn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+		btn.TextColor3 = Color3.new(1, 1, 1)
+		btn.Font = Enum.Font.SourceSansBold
+		btn.TextSize = 20
+		btn.Parent = contentFrame
+
+		btn.MouseButton1Click:Connect(function()
+			loadstring(data.Script)()
+		end)
+	end
+end,
 	["اللاعب"] = function()
 		local info = Instance.new("TextLabel")
 		info.Text = "معلومات اللاعب هنا"
