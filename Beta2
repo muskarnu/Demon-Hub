@@ -370,15 +370,204 @@ end
 
 end,
 	["التخريب"] = function()
-		local troll = Instance.new("TextButton")
-		troll.Text = "زر تخريب"
-		troll.Size = UDim2.new(0, 200, 0, 40)
-		troll.Position = UDim2.new(0, 10, 0, 10)
-		troll.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
-		troll.TextColor3 = Color3.new(1, 1, 1)
-		troll.Parent = contentFrame
-	end,
+    contentFrame:ClearAllChildren()
 
+    local player = game.Players.LocalPlayer
+    local selectedPlayer = nil
+
+    -- مربع البحث عن اللاعب
+    local searchBox = Instance.new("TextBox")
+    searchBox.PlaceholderText = "اكتب اسم اللاعب أو جزء منه"
+    searchBox.Size = UDim2.new(0, 300, 0, 35)
+    searchBox.Position = UDim2.new(0, 10, 0, 10)
+    searchBox.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    searchBox.TextColor3 = Color3.fromRGB(0, 0, 0)
+    searchBox.ClearTextOnFocus = false
+    searchBox.Parent = contentFrame
+
+    -- قائمة الاقتراحات
+    local suggestionFrame = Instance.new("Frame")
+    suggestionFrame.Size = UDim2.new(0, 300, 0, 120)
+    suggestionFrame.Position = UDim2.new(0, 10, 0, 50)
+    suggestionFrame.BackgroundColor3 = Color3.fromRGB(240, 240, 240)
+    suggestionFrame.BorderSizePixel = 1
+    suggestionFrame.Parent = contentFrame
+    suggestionFrame.Visible = false
+
+    local uiListLayout = Instance.new("UIListLayout")
+    uiListLayout.Parent = suggestionFrame
+    uiListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+
+    -- دالة تحديث قائمة الاقتراحات
+    local function updateSuggestions(text)
+        suggestionFrame:ClearAllChildren()
+        uiListLayout.Parent = suggestionFrame
+
+        if #text < 2 then
+            suggestionFrame.Visible = false
+            selectedPlayer = nil
+            return
+        end
+
+        local found = false
+        for _, plr in pairs(game.Players:GetPlayers()) do
+            if string.find(plr.Name:lower(), text:lower()) then
+                found = true
+                local btn = Instance.new("TextButton")
+                btn.Size = UDim2.new(1, 0, 0, 30)
+                btn.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+                btn.TextColor3 = Color3.new(0, 0, 0)
+                btn.Font = Enum.Font.SourceSans
+                btn.TextSize = 18
+                btn.Text = plr.Name
+                btn.Parent = suggestionFrame
+
+                btn.MouseButton1Click:Connect(function()
+                    searchBox.Text = plr.Name
+                    selectedPlayer = plr
+                    suggestionFrame.Visible = false
+                end)
+            end
+        end
+        suggestionFrame.Visible = found
+        if not found then
+            selectedPlayer = nil
+        end
+    end
+
+    searchBox.Changed:Connect(function(prop)
+        if prop == "Text" then
+            updateSuggestions(searchBox.Text)
+        end
+    end)
+
+    -- التحقق من صحة اللاعب المحدد (لو ضغط على زر بدون اختيار لاعب حقيقي)
+    local function validSelectedPlayer()
+        if selectedPlayer and game.Players:FindFirstChild(selectedPlayer.Name) then
+            return selectedPlayer
+        else
+            warn("لم يتم تحديد لاعب صالح!")
+            return nil
+        end
+    end
+
+    -- إنشاء الأزرار مع تفعيل / تعطيل (Toggle)
+    local function createToggleButton(text, positionY, onActivate, onDeactivate)
+        local btn = Instance.new("TextButton")
+        btn.Size = UDim2.new(0, 200, 0, 40)
+        btn.Position = UDim2.new(0, 10, 0, positionY)
+        btn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+        btn.TextColor3 = Color3.new(1, 1, 1)
+        btn.Font = Enum.Font.SourceSansBold
+        btn.TextSize = 22
+        btn.Text = text .. " OFF"
+        btn.Parent = contentFrame
+
+        local enabled = false
+        local connection = nil
+
+        btn.MouseButton1Click:Connect(function()
+            enabled = not enabled
+            if enabled then
+                btn.Text = text .. " ON"
+                local plr = validSelectedPlayer()
+                if plr then
+                    connection = onActivate(plr)
+                else
+                    enabled = false
+                    btn.Text = text .. " OFF"
+                end
+            else
+                btn.Text = text .. " OFF"
+                if connection then
+                    if type(connection) == "function" then
+                        connection()
+                    elseif typeof(connection.Disconnect) == "function" then
+                        connection:Disconnect()
+                    end
+                    connection = nil
+                end
+                if onDeactivate then
+                    local plr = validSelectedPlayer()
+                    if plr then
+                        onDeactivate(plr)
+                    end
+                end
+            end
+        end)
+    end
+
+    -- زر مراقبة Spectate
+    createToggleButton("مراقبة", 180,
+        function(target)
+            local camera = workspace.CurrentCamera
+            local function onRender()
+                if target.Character and target.Character:FindFirstChild("HumanoidRootPart") then
+                    camera.CameraSubject = target.Character.Humanoid
+                end
+            end
+            local conn = game:GetService("RunService").RenderStepped:Connect(onRender)
+            return conn
+        end,
+        function(target)
+            workspace.CurrentCamera.CameraSubject = player.Character and player.Character:FindFirstChild("Humanoid") or nil
+        end
+    )
+
+    -- زر التنقل التلقائي للاعب
+    createToggleButton("تنقل تلقائي", 230,
+        function(target)
+            local RunService = game:GetService("RunService")
+            local character = player.Character or player.CharacterAdded:Wait()
+            local humanoid = character:WaitForChild("Humanoid")
+            local conn
+
+            local function onUpdate()
+                if target.Character and target.Character:FindFirstChild("HumanoidRootPart") then
+                    humanoid:MoveTo(target.Character.HumanoidRootPart.Position)
+                end
+            end
+
+            conn = RunService.Heartbeat:Connect(onUpdate)
+            return conn
+        end,
+        function(target)
+            -- عند إيقاف الزر توقف الحركة
+            local character = player.Character or player.CharacterAdded:Wait()
+            local humanoid = character:WaitForChild("Humanoid")
+            humanoid:MoveTo(character.HumanoidRootPart.Position)
+        end
+    )
+
+    -- زر التعلق والاندفاع خلف اللاعب
+    createToggleButton("التعلق والاندفاع", 280,
+        function(target)
+            local RunService = game:GetService("RunService")
+            local character = player.Character or player.CharacterAdded:Wait()
+            local humanoid = character:WaitForChild("Humanoid")
+            local hrp = character:WaitForChild("HumanoidRootPart")
+            local conn
+
+            local function onUpdate()
+                if target.Character and target.Character:FindFirstChild("HumanoidRootPart") then
+                    local targetPos = target.Character.HumanoidRootPart.Position
+                    local behindPos = targetPos - target.Character.HumanoidRootPart.CFrame.LookVector * 3
+
+                    -- التعلق خلف اللاعب مع الدفع قليلاً
+                    hrp.CFrame = CFrame.new(behindPos.X, behindPos.Y, behindPos.Z) * CFrame.Angles(0, target.Character.HumanoidRootPart.CFrame.Y - hrp.CFrame.Y, 0)
+                    humanoid:MoveTo(behindPos)
+                end
+            end
+
+            conn = RunService.Heartbeat:Connect(onUpdate)
+            return conn
+        end,
+        function(target)
+            -- عند إيقاف الزر ارجع اللاعب لموقعه الطبيعي
+        end
+    )
+
+end,
 	["السكن"] = function()
 		local skin = Instance.new("TextLabel")
 		skin.Text = "السكنات الخاصة بك"
