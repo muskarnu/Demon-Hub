@@ -205,7 +205,7 @@ end,
 			loadstring(data.Script)()  
 		end)  
 	end
-end
+end,
 	["اللاعب"] = function()
     -- مسح محتويات contentFrame القديمة
     contentFrame:ClearAllChildren()
