@@ -170,15 +170,56 @@ local sectionContents = {
 	end,
 
 	["السكربتات"] = function()
-		local btn = Instance.new("TextButton")
-		btn.Text = "تشغيل سكربت 🔥"
-		btn.Size = UDim2.new(0, 200, 0, 40)
-		btn.Position = UDim2.new(0, 10, 0, 10)
-		btn.BackgroundColor3 = Color3.fromRGB(0, 200, 0)
-		btn.TextColor3 = Color3.new(1, 1, 1)
-		btn.Parent = contentFrame
-	end,
+	-- نصوص الأزرار (تقدر تعدلها هنا)
+	local buttonNames = {
+		"VR7",
+		"MARTIN",
+		"Archon",
+		"تجربه",
+		"تجربه"
+	}
 
+	local buttonHeight = 40
+	local buttonSpacing = 10
+
+	for i, buttonName in ipairs(buttonNames) do
+		-- الزر الأساسي
+		local scriptButton = Instance.new("TextButton")
+		scriptButton.Size = UDim2.new(0, 270, 0, buttonHeight)
+		scriptButton.Position = UDim2.new(0, 20, 0, (i - 1) * (buttonHeight + buttonSpacing) + 20)
+		scriptButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+		scriptButton.Text = "" -- لا نكتب النص هنا
+		scriptButton.BorderSizePixel = 2
+		scriptButton.BorderColor3 = Color3.new(1, 1, 1)
+		scriptButton.Parent = contentFrame
+
+		-- نص فوق الزر
+		local buttonLabel = Instance.new("TextLabel")
+		buttonLabel.Size = UDim2.new(1, 0, 1, 0)
+		buttonLabel.Position = UDim2.new(0, 0, 0, 0)
+		buttonLabel.BackgroundTransparency = 1
+		buttonLabel.Text = buttonName
+		buttonLabel.TextColor3 = Color3.new(1, 1, 1)
+		buttonLabel.Font = Enum.Font.SourceSansBold
+		buttonLabel.TextScaled = true
+		buttonLabel.Parent = scriptButton
+
+		-- حدث الضغط
+		scriptButton.MouseButton1Click:Connect(function()
+			if i == 1 then
+				loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-VR7-35232"))()
+			elseif i == 2 then
+				loadstring(game:HttpGet("https://rawscripts.net/raw/Brookhaven-RP-MARTIN-IRAQ-31476"))()
+			elseif i == 3 then
+				Archon
+			elseif i == 4 then
+				
+			elseif i == 5 then
+				-- هاك خفي
+			end
+		end)
+	end
+end
 	["اللاعب"] = function()
 		local info = Instance.new("TextLabel")
 		info.Text = "معلومات اللاعب هنا"
