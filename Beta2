@@ -186,7 +186,7 @@ end,
 		{Title = "Sander X", Script = 'loadstring(game:HttpGet("https://rawscripts.net/raw/Brookhaven-RP-Sander-x-22769"))()'},
 		{Title = "مضاد للجلوس", Script = 'loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Anti-sit-script-38345"))()'},
 		{Title = "سكربت ابواب", Script = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/muskarnu/Demon-Hub/main/DemonXpart"))()'},
-		{Title = "اداة مطورين", Script = 'مطورين'},
+		{Title = "اداة مطورين", Script = 'loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Dex-Fixed-Bugs-42099"))()'},
 		{Title = "زيادة فريمات", Script = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/muskarnu/Demon-Hub/main/Fps"))()'} -- الزر السابع
 	}
 
