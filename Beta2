@@ -180,14 +180,14 @@ local sectionContents = {
 end,
 
 	["السكربتات"] = function()
-	["السكربتات"] = function()
 	local scripts = {
 		{Title = "vr7", Script = 'loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-VR7-35232"))()'},
 		{Title = "Martin", Script = 'loadstring(game:HttpGet("https://rawscripts.net/raw/Brookhaven-RP-MARTIN-IRAQ-31476"))()'},
 		{Title = "Sander X", Script = 'loadstring(game:HttpGet("https://rawscripts.net/raw/Brookhaven-RP-Sander-x-22769"))()'},
 		{Title = "مضاد للجلوس", Script = 'loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Anti-sit-script-38345"))()'},
 		{Title = "سكربت ابواب", Script = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/muskarnu/Demon-Hub/main/DemonXpart"))()'},
-		{Title = "اداة مطورين", Script = 'print("هذا سكربت تجريبي غير حقيقي")'} -- زر التجربة
+		{Title = "اداة مطورين", Script = 'مطورين'},
+		{Title = "زيادة فريمات", Script = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/muskarnu/Demon-Hub/main/Fps"))()'} -- الزر السابع
 	}
 
 	for i, data in ipairs(scripts) do  
