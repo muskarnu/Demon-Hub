@@ -569,14 +569,30 @@ end,
 
 end,
 	["السكن"] = function()
-		local skin = Instance.new("TextLabel")
-		skin.Text = "السكنات الخاصة بك"
-		skin.Size = UDim2.new(0, 200, 0, 40)
-		skin.Position = UDim2.new(0, 10, 0, 10)
-		skin.BackgroundColor3 = Color3.fromRGB(230, 230, 230)
-		skin.TextColor3 = Color3.new(0, 0, 0)
-		skin.Parent = contentFrame
-	end,
+    contentFrame:ClearAllChildren()
+
+    local titleLabel = Instance.new("TextLabel")
+    titleLabel.Text = "نسخ سكنات"
+    titleLabel.Size = UDim2.new(0, 200, 0, 40)
+    titleLabel.Position = UDim2.new(0, 10, 0, 10)
+    titleLabel.BackgroundColor3 = Color3.fromRGB(230, 230, 230)
+    titleLabel.TextColor3 = Color3.new(0, 0, 0)
+    titleLabel.Parent = contentFrame
+
+    local button = Instance.new("TextButton")
+    button.Text = "نسخ سكنات"
+    button.Size = UDim2.new(0, 260, 0, 35)
+    button.Position = UDim2.new(0, 10, 0, 60)
+    button.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    button.TextColor3 = Color3.new(1, 1, 1)
+    button.Font = Enum.Font.SourceSansBold
+    button.TextSize = 20
+    button.Parent = contentFrame
+
+    button.MouseButton1Click:Connect(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Luarmor123/YHUB-Community/refs/heads/main/BrookhavenCopyAvatar.lua"))()
+    end)
+end,
 
 	["الحماية"] = function()
 		local shield = Instance.new("TextLabel")
