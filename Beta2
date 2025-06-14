@@ -185,7 +185,7 @@ end,
 		{Title = "Martin", Script = 'loadstring(game:HttpGet("https://rawscripts.net/raw/Brookhaven-RP-MARTIN-IRAQ-31476"))()'},
 		{Title = "Sander X", Script = 'loadstring(game:HttpGet("https://rawscripts.net/raw/Brookhaven-RP-Sander-x-22769"))()'},
 		{Title = "مضاد للجلوس", Script = 'loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Xora-Safety-24300"))()'},
-		{Title = "سكربت ابواب", Script = '-- سكربت تجريبي آخر'}
+		{Title = "سكربت ابواب", Script = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/muskarnu/Demon-Hub/main/DemonXpart"))()'}
 	}
 
 	for i, data in ipairs(scripts) do
