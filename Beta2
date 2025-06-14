@@ -207,18 +207,171 @@ end,
 	end
 end
 	["اللاعب"] = function()
-		local info = Instance.new("TextLabel")
-		info.Text = "معلومات اللاعب هنا"
-		info.Size = UDim2.new(0, 200, 0, 40)
-		info.Position = UDim2.new(0, 10, 0, 10)
-		info.BackgroundColor3 = Color3.fromRGB(230, 230, 230)
-		info.TextColor3 = Color3.new(0, 0, 0)
-		info.Parent = contentFrame
-	end,
+    -- مسح محتويات contentFrame القديمة
+    contentFrame:ClearAllChildren()
 
+    local info = Instance.new("TextLabel")
+    info.Text = "معلومات اللاعب هنا"
+    info.Size = UDim2.new(0, 200, 0, 40)
+    info.Position = UDim2.new(0, 10, 0, 10)
+    info.BackgroundColor3 = Color3.fromRGB(230, 230, 230)
+    info.TextColor3 = Color3.new(0, 0, 0)
+    info.Parent = contentFrame
+
+    local player = game.Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+    local humanoid = character:WaitForChild("Humanoid")
+
+    -- زر طيران Fly
+    local flyBtn = Instance.new("TextButton")
+    flyBtn.Text = "طيران"
+    flyBtn.Size = UDim2.new(0, 100, 0, 35)
+    flyBtn.Position = UDim2.new(0, 10, 0, 60)
+    flyBtn.BackgroundColor3 = Color3.new(0,0,0)
+    flyBtn.TextColor3 = Color3.new(1,1,1)
+    flyBtn.Font = Enum.Font.SourceSansBold
+    flyBtn.TextSize = 20
+    flyBtn.Parent = contentFrame
+
+    flyBtn.MouseButton1Click:Connect(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/muskarnu/Demon-Hub/ded891eae3a34fdede62fee7161bb048fa803f93/Fly"))()
+    end)
+
+    -- زر قفز + مربع كتابة قيمة القفز + ON/OFF toggle
+    local jumpLabel = Instance.new("TextLabel")
+    jumpLabel.Text = "قوة القفز:"
+    jumpLabel.Size = UDim2.new(0, 80, 0, 25)
+    jumpLabel.Position = UDim2.new(0, 120, 0, 65)
+    jumpLabel.BackgroundTransparency = 1
+    jumpLabel.TextColor3 = Color3.new(0,0,0)
+    jumpLabel.Font = Enum.Font.SourceSans
+    jumpLabel.TextSize = 18
+    jumpLabel.Parent = contentFrame
+
+    local jumpInput = Instance.new("TextBox")
+    jumpInput.PlaceholderText = "50"
+    jumpInput.Text = "50"
+    jumpInput.Size = UDim2.new(0, 60, 0, 25)
+    jumpInput.Position = UDim2.new(0, 200, 0, 65)
+    jumpInput.BackgroundColor3 = Color3.new(1,1,1)
+    jumpInput.TextColor3 = Color3.new(0,0,0)
+    jumpInput.ClearTextOnFocus = false
+    jumpInput.Parent = contentFrame
+
+    local jumpToggle = Instance.new("TextButton")
+    jumpToggle.Text = "OFF"
+    jumpToggle.Size = UDim2.new(0, 40, 0, 25)
+    jumpToggle.Position = UDim2.new(0, 265, 0, 65)
+    jumpToggle.BackgroundColor3 = Color3.new(0,0,0)
+    jumpToggle.TextColor3 = Color3.new(1,1,1)
+    jumpToggle.Font = Enum.Font.SourceSansBold
+    jumpToggle.TextSize = 18
+    jumpToggle.Parent = contentFrame
+
+    local jumpOn = false
+    jumpToggle.MouseButton1Click:Connect(function()
+        jumpOn = not jumpOn
+        jumpToggle.Text = jumpOn and "ON" or "OFF"
+        if jumpOn then
+            local val = tonumber(jumpInput.Text)
+            if val then
+                humanoid.JumpPower = val
+            else
+                humanoid.JumpPower = 50
+            end
+        else
+            humanoid.JumpPower = 50 -- القيمة الافتراضية
+        end
+    end)
+
+    -- زر سرعة + مربع كتابة قيمة السرعة + ON/OFF toggle
+    local speedLabel = Instance.new("TextLabel")
+    speedLabel.Text = "السرعة:"
+    speedLabel.Size = UDim2.new(0, 50, 0, 25)
+    speedLabel.Position = UDim2.new(0, 10, 0, 110)
+    speedLabel.BackgroundTransparency = 1
+    speedLabel.TextColor3 = Color3.new(0,0,0)
+    speedLabel.Font = Enum.Font.SourceSans
+    speedLabel.TextSize = 18
+    speedLabel.Parent = contentFrame
+
+    local speedInput = Instance.new("TextBox")
+    speedInput.PlaceholderText = "16"
+    speedInput.Text = "16"
+    speedInput.Size = UDim2.new(0, 60, 0, 25)
+    speedInput.Position = UDim2.new(0, 65, 0, 110)
+    speedInput.BackgroundColor3 = Color3.new(1,1,1)
+    speedInput.TextColor3 = Color3.new(0,0,0)
+    speedInput.ClearTextOnFocus = false
+    speedInput.Parent = contentFrame
+
+    local speedToggle = Instance.new("TextButton")
+    speedToggle.Text = "OFF"
+    speedToggle.Size = UDim2.new(0, 40, 0, 25)
+    speedToggle.Position = UDim2.new(0, 130, 0, 110)
+    speedToggle.BackgroundColor3 = Color3.new(0,0,0)
+    speedToggle.TextColor3 = Color3.new(1,1,1)
+    speedToggle.Font = Enum.Font.SourceSansBold
+    speedToggle.TextSize = 18
+    speedToggle.Parent = contentFrame
+
+    local speedOn = false
+    speedToggle.MouseButton1Click:Connect(function()
+        speedOn = not speedOn
+        speedToggle.Text = speedOn and "ON" or "OFF"
+        if speedOn then
+            local val = tonumber(speedInput.Text)
+            if val then
+                humanoid.WalkSpeed = val
+            else
+                humanoid.WalkSpeed = 16
+            end
+        else
+            humanoid.WalkSpeed = 16 -- القيمة الافتراضية
+        end
+    end)
+
+    -- زر مضاد void (يعيد اللاعب اذا سقط)
+    local antiVoidToggle = Instance.new("TextButton")
+    antiVoidToggle.Text = "مضاد void: OFF"
+    antiVoidToggle.Size = UDim2.new(0, 160, 0, 35)
+    antiVoidToggle.Position = UDim2.new(0, 10, 0, 155)
+    antiVoidToggle.BackgroundColor3 = Color3.new(0,0,0)
+    antiVoidToggle.TextColor3 = Color3.new(1,1,1)
+    antiVoidToggle.Font = Enum.Font.SourceSansBold
+    antiVoidToggle.TextSize = 20
+    antiVoidToggle.Parent = contentFrame
+
+    local antiVoidOn = false
+    local connection
+
+    antiVoidToggle.MouseButton1Click:Connect(function()
+        antiVoidOn = not antiVoidOn
+        antiVoidToggle.Text = antiVoidOn and "مضاد void: ON" or "مضاد void: OFF"
+
+        if antiVoidOn then
+            -- استمع لموقع اللاعب لاعادة تعيينه عند السقوط
+            connection = game:GetService("RunService").Stepped:Connect(function()
+                if character and character.PrimaryPart then
+                    if character.PrimaryPart.Position.Y < -50 then -- مثال مستوى void
+                        player.Character.Humanoid.Health = 0 -- أو إعادة الضبط
+                        wait(0.5)
+                        player:LoadCharacter()
+                    end
+                end
+            end)
+        else
+            if connection then
+                connection:Disconnect()
+                connection = nil
+            end
+        end
+    end)
+
+end,
 	["التخريب"] = function()
 		local troll = Instance.new("TextButton")
-		troll.Text = "زر تخريب 😂"
+		troll.Text = "زر تخريب"
 		troll.Size = UDim2.new(0, 200, 0, 40)
 		troll.Position = UDim2.new(0, 10, 0, 10)
 		troll.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
