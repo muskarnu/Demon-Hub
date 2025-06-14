@@ -593,7 +593,95 @@ end,
         loadstring(game:HttpGet("https://raw.githubusercontent.com/Luarmor123/YHUB-Community/refs/heads/main/BrookhavenCopyAvatar.lua"))()
     end)
 end,
+["اللاعب"] = function()
+	local playerSection = contentFrame
 
+	local info = Instance.new("TextLabel")
+	info.Text = "معلومات اللاعب هنا"
+	info.Size = UDim2.new(0, 200, 0, 40)
+	info.Position = UDim2.new(0, 10, 0, 10)
+	info.BackgroundColor3 = Color3.fromRGB(230, 230, 230)
+	info.TextColor3 = Color3.new(0, 0, 0)
+	info.Font = Enum.Font.SourceSansBold
+	info.TextSize = 20
+	info.Parent = playerSection
+
+	-- زر المضاد الجوي
+	local teleportBtn = Instance.new("TextButton")
+	teleportBtn.Size = UDim2.new(0, 260, 0, 35)
+	teleportBtn.Position = UDim2.new(0, 10, 0, 60)
+	teleportBtn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+	teleportBtn.TextColor3 = Color3.new(1, 1, 1)
+	teleportBtn.Font = Enum.Font.SourceSansBold
+	teleportBtn.TextSize = 20
+	teleportBtn.Text = "المضاد الجوي (OFF)"
+	teleportBtn.Parent = playerSection
+
+	local toggled = false
+	local running = false
+	local originalPosition = nil
+
+	local teleportDistance = 12^12
+	local teleportHeight = 10^12
+
+	teleportBtn.MouseButton1Click:Connect(function()
+		local player = game.Players.LocalPlayer
+		local character = player.Character or player.CharacterAdded:Wait()
+		local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
+
+		if humanoidRootPart then
+			if not toggled then
+				toggled = true
+				running = true
+				originalPosition = humanoidRootPart.CFrame
+
+				teleportBtn.Text = "المضاد الجوي (ON)"
+				teleportBtn.BackgroundColor3 = Color3.fromRGB(0, 170, 0)
+
+				task.spawn(function()
+					while running do
+						humanoidRootPart.CFrame = originalPosition * CFrame.new(teleportDistance, teleportHeight, 0)
+						task.wait(0.01)
+						humanoidRootPart.CFrame = originalPosition * CFrame.new(-teleportDistance, teleportHeight, 0)
+						task.wait(0.01)
+						humanoidRootPart.CFrame = originalPosition * CFrame.new(0, teleportHeight, -teleportDistance)
+						task.wait(0.01)
+						humanoidRootPart.CFrame = originalPosition * CFrame.new(0, teleportHeight, teleportDistance)
+						task.wait(0.01)
+						humanoidRootPart.CFrame = originalPosition
+						task.wait(0.01)
+					end
+				end)
+			else
+				toggled = false
+				running = false
+
+				if originalPosition then
+					humanoidRootPart.CFrame = originalPosition
+				end
+
+				teleportBtn.Text = "المضاد الجوي (OFF)"
+				teleportBtn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+			end
+		end
+	end)
+
+	-- زر مضاد رامي
+	local antiRamiBtn = Instance.new("TextButton")
+	antiRamiBtn.Size = UDim2.new(0, 260, 0, 35)
+	antiRamiBtn.Position = UDim2.new(0, 10, 0, 105)
+	antiRamiBtn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+	antiRamiBtn.TextColor3 = Color3.new(1, 1, 1)
+	antiRamiBtn.Font = Enum.Font.SourceSansBold
+	antiRamiBtn.TextSize = 20
+	antiRamiBtn.Text = "مضاد ارضي"
+	antiRamiBtn.Parent = playerSection
+
+	antiRamiBtn.MouseButton1Click:Connect(function()
+		loadstring(game:HttpGet("https://raw.githubusercontent.com/muskarnu/Demon-Hub/44c52f1d3f259f70840a406b1476c25830bddb1b/AntiRami"))()
+	end)
+
+end,
 	["الحماية"] = function()
 		local shield = Instance.new("TextLabel")
 		shield.Text = "اعدادات الحماية"
