@@ -211,7 +211,7 @@ end,
     contentFrame:ClearAllChildren()
 
     local info = Instance.new("TextLabel")
-    info.Text = "معلومات اللاعب هنا"
+    info.Text = "تفعيلات اللاعب"
     info.Size = UDim2.new(0, 200, 0, 40)
     info.Position = UDim2.new(0, 10, 0, 10)
     info.BackgroundColor3 = Color3.fromRGB(230, 230, 230)
