@@ -186,7 +186,7 @@ end,
 		{Title = "Sander X", Script = 'loadstring(game:HttpGet("https://rawscripts.net/raw/Brookhaven-RP-Sander-x-22769"))()'},
 		{Title = "مضاد للجلوس", Script = 'loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Anti-sit-script-38345"))()'},
 		{Title = "سكربت ابواب", Script = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/muskarnu/Demon-Hub/main/DemonXpart"))()'},
-		{Title = "اداة مطورين", Script = 'مطورين'},
+		{Title = "اداة مطورين", Script = 'loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Dex-Fixed-Bugs-42099"))()'},
 		{Title = "زيادة فريمات", Script = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/muskarnu/Demon-Hub/main/Fps"))()'} -- الزر السابع
 	}
 
@@ -207,38 +207,555 @@ end,
 	end
 end,
 	["اللاعب"] = function()
-		local info = Instance.new("TextLabel")
-		info.Text = "معلومات اللاعب هنا"
-		info.Size = UDim2.new(0, 200, 0, 40)
-		info.Position = UDim2.new(0, 10, 0, 10)
-		info.BackgroundColor3 = Color3.fromRGB(230, 230, 230)
-		info.TextColor3 = Color3.new(0, 0, 0)
-		info.Parent = contentFrame
-	end,
+    -- مسح محتويات contentFrame القديمة
+    contentFrame:ClearAllChildren()
 
+    local info = Instance.new("TextLabel")
+    info.Text = "تفعيلات اللاعب"
+    info.Size = UDim2.new(0, 200, 0, 40)
+    info.Position = UDim2.new(0, 10, 0, 10)
+    info.BackgroundColor3 = Color3.fromRGB(230, 230, 230)
+    info.TextColor3 = Color3.new(0, 0, 0)
+    info.Parent = contentFrame
+
+    local player = game.Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+    local humanoid = character:WaitForChild("Humanoid")
+
+    -- زر طيران Fly
+    local flyBtn = Instance.new("TextButton")
+    flyBtn.Text = "طيران"
+    flyBtn.Size = UDim2.new(0, 100, 0, 35)
+    flyBtn.Position = UDim2.new(0, 10, 0, 60)
+    flyBtn.BackgroundColor3 = Color3.new(0,0,0)
+    flyBtn.TextColor3 = Color3.new(1,1,1)
+    flyBtn.Font = Enum.Font.SourceSansBold
+    flyBtn.TextSize = 20
+    flyBtn.Parent = contentFrame
+
+    flyBtn.MouseButton1Click:Connect(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/muskarnu/Demon-Hub/ded891eae3a34fdede62fee7161bb048fa803f93/Fly"))()
+    end)
+
+    -- زر قفز + مربع كتابة قيمة القفز + ON/OFF toggle
+    local jumpLabel = Instance.new("TextLabel")
+    jumpLabel.Text = "قوة القفز:"
+    jumpLabel.Size = UDim2.new(0, 80, 0, 25)
+    jumpLabel.Position = UDim2.new(0, 120, 0, 65)
+    jumpLabel.BackgroundTransparency = 1
+    jumpLabel.TextColor3 = Color3.new(0,0,0)
+    jumpLabel.Font = Enum.Font.SourceSans
+    jumpLabel.TextSize = 18
+    jumpLabel.Parent = contentFrame
+
+    local jumpInput = Instance.new("TextBox")
+    jumpInput.PlaceholderText = "50"
+    jumpInput.Text = "50"
+    jumpInput.Size = UDim2.new(0, 60, 0, 25)
+    jumpInput.Position = UDim2.new(0, 200, 0, 65)
+    jumpInput.BackgroundColor3 = Color3.new(1,1,1)
+    jumpInput.TextColor3 = Color3.new(0,0,0)
+    jumpInput.ClearTextOnFocus = false
+    jumpInput.Parent = contentFrame
+
+    local jumpToggle = Instance.new("TextButton")
+    jumpToggle.Text = "OFF"
+    jumpToggle.Size = UDim2.new(0, 40, 0, 25)
+    jumpToggle.Position = UDim2.new(0, 265, 0, 65)
+    jumpToggle.BackgroundColor3 = Color3.new(0,0,0)
+    jumpToggle.TextColor3 = Color3.new(1,1,1)
+    jumpToggle.Font = Enum.Font.SourceSansBold
+    jumpToggle.TextSize = 18
+    jumpToggle.Parent = contentFrame
+
+    local jumpOn = false
+    jumpToggle.MouseButton1Click:Connect(function()
+        jumpOn = not jumpOn
+        jumpToggle.Text = jumpOn and "ON" or "OFF"
+        if jumpOn then
+            local val = tonumber(jumpInput.Text)
+            if val then
+                humanoid.JumpPower = val
+            else
+                humanoid.JumpPower = 50
+            end
+        else
+            humanoid.JumpPower = 50 -- القيمة الافتراضية
+        end
+    end)
+
+    -- زر سرعة + مربع كتابة قيمة السرعة + ON/OFF toggle
+    local speedLabel = Instance.new("TextLabel")
+    speedLabel.Text = "السرعة:"
+    speedLabel.Size = UDim2.new(0, 50, 0, 25)
+    speedLabel.Position = UDim2.new(0, 10, 0, 110)
+    speedLabel.BackgroundTransparency = 1
+    speedLabel.TextColor3 = Color3.new(0,0,0)
+    speedLabel.Font = Enum.Font.SourceSans
+    speedLabel.TextSize = 18
+    speedLabel.Parent = contentFrame
+
+    local speedInput = Instance.new("TextBox")
+    speedInput.PlaceholderText = "16"
+    speedInput.Text = "16"
+    speedInput.Size = UDim2.new(0, 60, 0, 25)
+    speedInput.Position = UDim2.new(0, 65, 0, 110)
+    speedInput.BackgroundColor3 = Color3.new(1,1,1)
+    speedInput.TextColor3 = Color3.new(0,0,0)
+    speedInput.ClearTextOnFocus = false
+    speedInput.Parent = contentFrame
+
+    local speedToggle = Instance.new("TextButton")
+    speedToggle.Text = "OFF"
+    speedToggle.Size = UDim2.new(0, 40, 0, 25)
+    speedToggle.Position = UDim2.new(0, 130, 0, 110)
+    speedToggle.BackgroundColor3 = Color3.new(0,0,0)
+    speedToggle.TextColor3 = Color3.new(1,1,1)
+    speedToggle.Font = Enum.Font.SourceSansBold
+    speedToggle.TextSize = 18
+    speedToggle.Parent = contentFrame
+
+    local speedOn = false
+    speedToggle.MouseButton1Click:Connect(function()
+        speedOn = not speedOn
+        speedToggle.Text = speedOn and "ON" or "OFF"
+        if speedOn then
+            local val = tonumber(speedInput.Text)
+            if val then
+                humanoid.WalkSpeed = val
+            else
+                humanoid.WalkSpeed = 16
+            end
+        else
+            humanoid.WalkSpeed = 16 -- القيمة الافتراضية
+        end
+    end)
+
+    -- زر مضاد void (يعيد اللاعب اذا سقط)
+    local antiVoidToggle = Instance.new("TextButton")
+    antiVoidToggle.Text = "مضاد void: OFF"
+    antiVoidToggle.Size = UDim2.new(0, 160, 0, 35)
+    antiVoidToggle.Position = UDim2.new(0, 10, 0, 155)
+    antiVoidToggle.BackgroundColor3 = Color3.new(0,0,0)
+    antiVoidToggle.TextColor3 = Color3.new(1,1,1)
+    antiVoidToggle.Font = Enum.Font.SourceSansBold
+    antiVoidToggle.TextSize = 20
+    antiVoidToggle.Parent = contentFrame
+
+    local antiVoidOn = false
+    local connection
+
+    antiVoidToggle.MouseButton1Click:Connect(function()
+        antiVoidOn = not antiVoidOn
+        antiVoidToggle.Text = antiVoidOn and "مضاد void: ON" or "مضاد void: OFF"
+
+        if antiVoidOn then
+            -- استمع لموقع اللاعب لاعادة تعيينه عند السقوط
+            connection = game:GetService("RunService").Stepped:Connect(function()
+                if character and character.PrimaryPart then
+                    if character.PrimaryPart.Position.Y < -50 then -- مثال مستوى void
+                        player.Character.Humanoid.Health = 0 -- أو إعادة الضبط
+                        wait(0.5)
+                        player:LoadCharacter()
+                    end
+                end
+            end)
+        else
+            if connection then
+                connection:Disconnect()
+                connection = nil
+            end
+        end
+    end)
+
+end,
 	["التخريب"] = function()
-		local troll = Instance.new("TextButton")
-		troll.Text = "زر تخريب 😂"
-		troll.Size = UDim2.new(0, 200, 0, 40)
-		troll.Position = UDim2.new(0, 10, 0, 10)
-		troll.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
-		troll.TextColor3 = Color3.new(1, 1, 1)
-		troll.Parent = contentFrame
-	end,
+    contentFrame:ClearAllChildren()
 
+    local player = game.Players.LocalPlayer
+    local selectedPlayer = nil
+
+    -- مربع البحث عن اللاعب
+    local searchBox = Instance.new("TextBox")
+    searchBox.PlaceholderText = "اكتب اسم اللاعب أو جزء منه"
+    searchBox.Size = UDim2.new(0, 300, 0, 35)
+    searchBox.Position = UDim2.new(0, 10, 0, 10)
+    searchBox.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    searchBox.TextColor3 = Color3.fromRGB(0, 0, 0)
+    searchBox.ClearTextOnFocus = false
+    searchBox.Parent = contentFrame
+
+    -- قائمة الاقتراحات
+    local suggestionFrame = Instance.new("Frame")
+    suggestionFrame.Size = UDim2.new(0, 300, 0, 120)
+    suggestionFrame.Position = UDim2.new(0, 10, 0, 50)
+    suggestionFrame.BackgroundColor3 = Color3.fromRGB(240, 240, 240)
+    suggestionFrame.BorderSizePixel = 1
+    suggestionFrame.Parent = contentFrame
+    suggestionFrame.Visible = false
+
+    local uiListLayout = Instance.new("UIListLayout")
+    uiListLayout.Parent = suggestionFrame
+    uiListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+
+    -- دالة تحديث قائمة الاقتراحات
+    local function updateSuggestions(text)
+        suggestionFrame:ClearAllChildren()
+        uiListLayout.Parent = suggestionFrame
+
+        if #text < 2 then
+            suggestionFrame.Visible = false
+            selectedPlayer = nil
+            return
+        end
+
+        local found = false
+        for _, plr in pairs(game.Players:GetPlayers()) do
+            if string.find(plr.Name:lower(), text:lower()) then
+                found = true
+                local btn = Instance.new("TextButton")
+                btn.Size = UDim2.new(1, 0, 0, 30)
+                btn.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+                btn.TextColor3 = Color3.new(0, 0, 0)
+                btn.Font = Enum.Font.SourceSans
+                btn.TextSize = 18
+                btn.Text = plr.Name
+                btn.Parent = suggestionFrame
+
+                btn.MouseButton1Click:Connect(function()
+                    searchBox.Text = plr.Name
+                    selectedPlayer = plr
+                    suggestionFrame.Visible = false
+                end)
+            end
+        end
+        suggestionFrame.Visible = found
+        if not found then
+            selectedPlayer = nil
+        end
+    end
+
+    searchBox.Changed:Connect(function(prop)
+        if prop == "Text" then
+            updateSuggestions(searchBox.Text)
+        end
+    end)
+
+    -- التحقق من صحة اللاعب المحدد (لو ضغط على زر بدون اختيار لاعب حقيقي)
+    local function validSelectedPlayer()
+        if selectedPlayer and game.Players:FindFirstChild(selectedPlayer.Name) then
+            return selectedPlayer
+        else
+            warn("لم يتم تحديد لاعب صالح!")
+            return nil
+        end
+    end
+
+    -- إنشاء الأزرار مع تفعيل / تعطيل (Toggle)
+    local function createToggleButton(text, positionY, onActivate, onDeactivate)
+        local btn = Instance.new("TextButton")
+        btn.Size = UDim2.new(0, 200, 0, 40)
+        btn.Position = UDim2.new(0, 10, 0, positionY)
+        btn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+        btn.TextColor3 = Color3.new(1, 1, 1)
+        btn.Font = Enum.Font.SourceSansBold
+        btn.TextSize = 22
+        btn.Text = text .. " OFF"
+        btn.Parent = contentFrame
+
+        local enabled = false
+        local connection = nil
+
+        btn.MouseButton1Click:Connect(function()
+            enabled = not enabled
+            if enabled then
+                btn.Text = text .. " ON"
+                local plr = validSelectedPlayer()
+                if plr then
+                    connection = onActivate(plr)
+                else
+                    enabled = false
+                    btn.Text = text .. " OFF"
+                end
+            else
+                btn.Text = text .. " OFF"
+                if connection then
+                    if type(connection) == "function" then
+                        connection()
+                    elseif typeof(connection.Disconnect) == "function" then
+                        connection:Disconnect()
+                    end
+                    connection = nil
+                end
+                if onDeactivate then
+                    local plr = validSelectedPlayer()
+                    if plr then
+                        onDeactivate(plr)
+                    end
+                end
+            end
+        end)
+    end
+
+    -- زر مراقبة Spectate
+    createToggleButton("مراقبة", 180,
+        function(target)
+            local camera = workspace.CurrentCamera
+            local function onRender()
+                if target.Character and target.Character:FindFirstChild("HumanoidRootPart") then
+                    camera.CameraSubject = target.Character.Humanoid
+                end
+            end
+            local conn = game:GetService("RunService").RenderStepped:Connect(onRender)
+            return conn
+        end,
+        function(target)
+            workspace.CurrentCamera.CameraSubject = player.Character and player.Character:FindFirstChild("Humanoid") or nil
+        end
+    )
+
+    -- زر التنقل التلقائي للاعب
+    createToggleButton("تنقل تلقائي", 230,
+        function(target)
+            local RunService = game:GetService("RunService")
+            local character = player.Character or player.CharacterAdded:Wait()
+            local humanoid = character:WaitForChild("Humanoid")
+            local conn
+
+            local function onUpdate()
+                if target.Character and target.Character:FindFirstChild("HumanoidRootPart") then
+                    humanoid:MoveTo(target.Character.HumanoidRootPart.Position)
+                end
+            end
+
+            conn = RunService.Heartbeat:Connect(onUpdate)
+            return conn
+        end,
+        function(target)
+            -- عند إيقاف الزر توقف الحركة
+            local character = player.Character or player.CharacterAdded:Wait()
+            local humanoid = character:WaitForChild("Humanoid")
+            humanoid:MoveTo(character.HumanoidRootPart.Position)
+        end
+    )
+
+    -- زر التعلق والاندفاع خلف اللاعب
+    createToggleButton("التعلق والاندفاع", 280,
+        function(target)
+            local RunService = game:GetService("RunService")
+            local character = player.Character or player.CharacterAdded:Wait()
+            local humanoid = character:WaitForChild("Humanoid")
+            local hrp = character:WaitForChild("HumanoidRootPart")
+            local conn
+
+            local function onUpdate()
+                if target.Character and target.Character:FindFirstChild("HumanoidRootPart") then
+                    local targetPos = target.Character.HumanoidRootPart.Position
+                    local behindPos = targetPos - target.Character.HumanoidRootPart.CFrame.LookVector * 3
+
+                    -- التعلق خلف اللاعب مع الدفع قليلاً
+                    hrp.CFrame = CFrame.new(behindPos.X, behindPos.Y, behindPos.Z) * CFrame.Angles(0, target.Character.HumanoidRootPart.CFrame.Y - hrp.CFrame.Y, 0)
+                    humanoid:MoveTo(behindPos)
+                end
+            end
+
+            conn = RunService.Heartbeat:Connect(onUpdate)
+            return conn
+        end,
+        function(target)
+            -- عند إيقاف الزر ارجع اللاعب لموقعه الطبيعي
+        end
+    )
+
+end,
 	["السكن"] = function()
-		local skin = Instance.new("TextLabel")
-		skin.Text = "السكنات الخاصة بك"
-		skin.Size = UDim2.new(0, 200, 0, 40)
-		skin.Position = UDim2.new(0, 10, 0, 10)
-		skin.BackgroundColor3 = Color3.fromRGB(230, 230, 230)
-		skin.TextColor3 = Color3.new(0, 0, 0)
-		skin.Parent = contentFrame
-	end,
+    contentFrame:ClearAllChildren()
 
+    local titleLabel = Instance.new("TextLabel")
+    titleLabel.Text = "نسخ سكنات"
+    titleLabel.Size = UDim2.new(0, 200, 0, 40)
+    titleLabel.Position = UDim2.new(0, 10, 0, 10)
+    titleLabel.BackgroundColor3 = Color3.fromRGB(230, 230, 230)
+    titleLabel.TextColor3 = Color3.new(0, 0, 0)
+    titleLabel.Parent = contentFrame
+
+    local button = Instance.new("TextButton")
+    button.Text = "نسخ سكنات"
+    button.Size = UDim2.new(0, 260, 0, 35)
+    button.Position = UDim2.new(0, 10, 0, 60)
+    button.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    button.TextColor3 = Color3.new(1, 1, 1)
+    button.Font = Enum.Font.SourceSansBold
+    button.TextSize = 20
+    button.Parent = contentFrame
+
+    button.MouseButton1Click:Connect(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Luarmor123/YHUB-Community/refs/heads/main/BrookhavenCopyAvatar.lua"))()
+    end)
+end,
+-- قسم اللاعب
+sectionContents["اللاعب"] = function()
+    -- مسح محتويات contentFrame القديمة
+    contentFrame:ClearAllChildren()
+
+    -- تعريف اللاعب والشخصية
+    local player = game.Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+    local humanoid = character:WaitForChild("Humanoid")
+
+    -- عنوان القسم
+    local info = Instance.new("TextLabel")
+    info.Text = "تفعيلات اللاعب"
+    info.Size = UDim2.new(0, 200, 0, 35)
+    info.Position = UDim2.new(0, 10, 0, 10)
+    info.BackgroundColor3 = Color3.fromRGB(230, 230, 230)
+    info.TextColor3 = Color3.new(0, 0, 0)
+    info.Font = Enum.Font.SourceSansBold
+    info.TextSize = 20
+    info.Parent = contentFrame
+
+    -- زر طيران
+    local flyBtn = Instance.new("TextButton")
+    flyBtn.Text = "طيران"
+    flyBtn.Size = UDim2.new(0, 100, 0, 30)
+    flyBtn.Position = UDim2.new(0, 10, 0, 55)
+    flyBtn.BackgroundColor3 = Color3.new(0, 0, 0)
+    flyBtn.TextColor3 = Color3.new(1, 1, 1)
+    flyBtn.Font = Enum.Font.SourceSansBold
+    flyBtn.TextSize = 18
+    flyBtn.Parent = contentFrame
+
+    flyBtn.MouseButton1Click:Connect(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/muskarnu/Demon-Hub/ded891eae3a34fdede62fee7161bb048fa803f93/Fly"))()
+    end)
+
+    -- قوة القفز
+    local jumpLabel = Instance.new("TextLabel")
+    jumpLabel.Text = "قوة القفز:"
+    jumpLabel.Size = UDim2.new(0, 80, 0, 25)
+    jumpLabel.Position = UDim2.new(0, 120, 0, 55)
+    jumpLabel.BackgroundTransparency = 1
+    jumpLabel.TextColor3 = Color3.new(0,0,0)
+    jumpLabel.Font = Enum.Font.SourceSans
+    jumpLabel.TextSize = 18
+    jumpLabel.Parent = contentFrame
+
+    local jumpInput = Instance.new("TextBox")
+    jumpInput.PlaceholderText = "50"
+    jumpInput.Text = "50"
+    jumpInput.Size = UDim2.new(0, 60, 0, 25)
+    jumpInput.Position = UDim2.new(0, 200, 0, 55)
+    jumpInput.BackgroundColor3 = Color3.new(1,1,1)
+    jumpInput.TextColor3 = Color3.new(0,0,0)
+    jumpInput.ClearTextOnFocus = false
+    jumpInput.Parent = contentFrame
+
+    local jumpToggle = Instance.new("TextButton")
+    jumpToggle.Text = "OFF"
+    jumpToggle.Size = UDim2.new(0, 50, 0, 25)
+    jumpToggle.Position = UDim2.new(0, 270, 0, 55)
+    jumpToggle.BackgroundColor3 = Color3.new(0,0,0)
+    jumpToggle.TextColor3 = Color3.new(1,1,1)
+    jumpToggle.Font = Enum.Font.SourceSansBold
+    jumpToggle.TextSize = 18
+    jumpToggle.Parent = contentFrame
+
+    local jumpOn = false
+    jumpToggle.MouseButton1Click:Connect(function()
+        jumpOn = not jumpOn
+        jumpToggle.Text = jumpOn and "ON" or "OFF"
+        if jumpOn then
+            local val = tonumber(jumpInput.Text)
+            humanoid.JumpPower = val or 50
+        else
+            humanoid.JumpPower = 50
+        end
+    end)
+
+    -- السرعة
+    local speedLabel = Instance.new("TextLabel")
+    speedLabel.Text = "السرعة:"
+    speedLabel.Size = UDim2.new(0, 80, 0, 25)
+    speedLabel.Position = UDim2.new(0, 10, 0, 95)
+    speedLabel.BackgroundTransparency = 1
+    speedLabel.TextColor3 = Color3.new(0,0,0)
+    speedLabel.Font = Enum.Font.SourceSans
+    speedLabel.TextSize = 18
+    speedLabel.Parent = contentFrame
+
+    local speedInput = Instance.new("TextBox")
+    speedInput.PlaceholderText = "16"
+    speedInput.Text = "16"
+    speedInput.Size = UDim2.new(0, 60, 0, 25)
+    speedInput.Position = UDim2.new(0, 90, 0, 95)
+    speedInput.BackgroundColor3 = Color3.new(1,1,1)
+    speedInput.TextColor3 = Color3.new(0,0,0)
+    speedInput.ClearTextOnFocus = false
+    speedInput.Parent = contentFrame
+
+    local speedToggle = Instance.new("TextButton")
+    speedToggle.Text = "OFF"
+    speedToggle.Size = UDim2.new(0, 50, 0, 25)
+    speedToggle.Position = UDim2.new(0, 160, 0, 95)
+    speedToggle.BackgroundColor3 = Color3.new(0,0,0)
+    speedToggle.TextColor3 = Color3.new(1,1,1)
+    speedToggle.Font = Enum.Font.SourceSansBold
+    speedToggle.TextSize = 18
+    speedToggle.Parent = contentFrame
+
+    local speedOn = false
+    speedToggle.MouseButton1Click:Connect(function()
+        speedOn = not speedOn
+        speedToggle.Text = speedOn and "ON" or "OFF"
+        if speedOn then
+            local val = tonumber(speedInput.Text)
+            humanoid.WalkSpeed = val or 16
+        else
+            humanoid.WalkSpeed = 16
+        end
+    end)
+
+    -- مضاد void
+    local antiVoidToggle = Instance.new("TextButton")
+    antiVoidToggle.Text = "مضاد Void: OFF"
+    antiVoidToggle.Size = UDim2.new(0, 180, 0, 35)
+    antiVoidToggle.Position = UDim2.new(0, 10, 0, 135)
+    antiVoidToggle.BackgroundColor3 = Color3.new(0, 0, 0)
+    antiVoidToggle.TextColor3 = Color3.new(1, 1, 1)
+    antiVoidToggle.Font = Enum.Font.SourceSansBold
+    antiVoidToggle.TextSize = 20
+    antiVoidToggle.Parent = contentFrame
+
+    local antiVoidOn = false
+    local connection
+
+    antiVoidToggle.MouseButton1Click:Connect(function()
+        antiVoidOn = not antiVoidOn
+        antiVoidToggle.Text = antiVoidOn and "مضاد Void: ON" or "مضاد Void: OFF"
+
+        if antiVoidOn then
+            connection = game:GetService("RunService").Stepped:Connect(function()
+                if character and character.PrimaryPart then
+                    if character.PrimaryPart.Position.Y < -50 then
+                        humanoid.Health = 0
+                        wait(0.5)
+                        player:LoadCharacter()
+                        character = player.Character
+                        humanoid = character:WaitForChild("Humanoid")
+                    end
+                end
+            end)
+        else
+            if connection then
+                connection:Disconnect()
+                connection = nil
+            end
+        end
+    end)
+end,
 	["الحماية"] = function()
 		local shield = Instance.new("TextLabel")
-		shield.Text = "اعدادات الحماية"
+		shield.Text = "قريبا"
 		shield.Size = UDim2.new(0, 200, 0, 40)
 		shield.Position = UDim2.new(0, 10, 0, 10)
 		shield.BackgroundColor3 = Color3.fromRGB(230, 230, 230)
