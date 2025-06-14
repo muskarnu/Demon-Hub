@@ -349,15 +349,133 @@ end,
         antiVoidOn = not antiVoidOn
         antiVoidToggle.Text = antiVoidOn and "مضاد void: ON" or "مضاد void: OFF"
 
+sectionContents["اللاعب"] = function()
+    contentFrame:ClearAllChildren()
+
+    local player = game.Players.LocalPlayer
+
+    -- عنوان
+    local info = Instance.new("TextLabel")
+    info.Text = "تفعيلات اللاعب"
+    info.Size = UDim2.new(0, 200, 0, 35)
+    info.Position = UDim2.new(0, 10, 0, 10)
+    info.BackgroundColor3 = Color3.fromRGB(230, 230, 230)
+    info.TextColor3 = Color3.new(0, 0, 0)
+    info.Font = Enum.Font.SourceSansBold
+    info.TextSize = 20
+    info.Parent = contentFrame
+
+    -- زر طيران
+    local flyBtn = Instance.new("TextButton")
+    flyBtn.Text = "طيران"
+    flyBtn.Size = UDim2.new(0, 100, 0, 30)
+    flyBtn.Position = UDim2.new(0, 10, 0, 55)
+    flyBtn.BackgroundColor3 = Color3.new(0, 0, 0)
+    flyBtn.TextColor3 = Color3.new(1, 1, 1)
+    flyBtn.Parent = contentFrame
+    flyBtn.MouseButton1Click:Connect(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/muskarnu/Demon-Hub/ded891eae3a34fdede62fee7161bb048fa803f93/Fly"))()
+    end)
+
+    -- قوة القفز
+    local jumpLabel = Instance.new("TextLabel")
+    jumpLabel.Text = "قوة القفز:"
+    jumpLabel.Size = UDim2.new(0, 80, 0, 25)
+    jumpLabel.Position = UDim2.new(0, 120, 0, 55)
+    jumpLabel.BackgroundTransparency = 1
+    jumpLabel.TextColor3 = Color3.new(0,0,0)
+    jumpLabel.Parent = contentFrame
+
+    local jumpInput = Instance.new("TextBox")
+    jumpInput.Text = "50"
+    jumpInput.Size = UDim2.new(0, 60, 0, 25)
+    jumpInput.Position = UDim2.new(0, 200, 0, 55)
+    jumpInput.Parent = contentFrame
+
+    local jumpToggle = Instance.new("TextButton")
+    jumpToggle.Text = "OFF"
+    jumpToggle.Size = UDim2.new(0, 50, 0, 25)
+    jumpToggle.Position = UDim2.new(0, 270, 0, 55)
+    jumpToggle.Parent = contentFrame
+
+    local jumpOn = false
+    jumpToggle.MouseButton1Click:Connect(function()
+        local character = player.Character
+        if character then
+            local humanoid = character:FindFirstChild("Humanoid")
+            if humanoid then
+                jumpOn = not jumpOn
+                jumpToggle.Text = jumpOn and "ON" or "OFF"
+                if jumpOn then
+                    humanoid.JumpPower = tonumber(jumpInput.Text) or 50
+                else
+                    humanoid.JumpPower = 50
+                end
+            end
+        end
+    end)
+
+    -- السرعة
+    local speedLabel = Instance.new("TextLabel")
+    speedLabel.Text = "السرعة:"
+    speedLabel.Size = UDim2.new(0, 80, 0, 25)
+    speedLabel.Position = UDim2.new(0, 10, 0, 95)
+    speedLabel.Parent = contentFrame
+
+    local speedInput = Instance.new("TextBox")
+    speedInput.Text = "16"
+    speedInput.Size = UDim2.new(0, 60, 0, 25)
+    speedInput.Position = UDim2.new(0, 90, 0, 95)
+    speedInput.Parent = contentFrame
+
+    local speedToggle = Instance.new("TextButton")
+    speedToggle.Text = "OFF"
+    speedToggle.Size = UDim2.new(0, 50, 0, 25)
+    speedToggle.Position = UDim2.new(0, 160, 0, 95)
+    speedToggle.Parent = contentFrame
+
+    local speedOn = false
+    speedToggle.MouseButton1Click:Connect(function()
+        local character = player.Character
+        if character then
+            local humanoid = character:FindFirstChild("Humanoid")
+            if humanoid then
+                speedOn = not speedOn
+                speedToggle.Text = speedOn and "ON" or "OFF"
+                if speedOn then
+                    humanoid.WalkSpeed = tonumber(speedInput.Text) or 16
+                else
+                    humanoid.WalkSpeed = 16
+                end
+            end
+        end
+    end) 
+
+    -- مضاد void
+    local antiVoidToggle = Instance.new("TextButton")
+    antiVoidToggle.Text = "مضاد Void: OFF"
+    antiVoidToggle.Size = UDim2.new(0, 180, 0, 35)
+    antiVoidToggle.Position = UDim2.new(0, 10, 0, 135)
+    antiVoidToggle.Parent = contentFrame
+
+    local antiVoidOn = false
+    local connection
+    antiVoidToggle.MouseButton1Click:Connect(function()
+        local character = player.Character
+        if not character or not character.PrimaryPart then return end
+        local humanoid = character:FindFirstChild("Humanoid")
+        if not humanoid then return end
+
+        antiVoidOn = not antiVoidOn
+        antiVoidToggle.Text = antiVoidOn and "مضاد Void: ON" or "مضاد Void: OFF"
+
         if antiVoidOn then
-            -- استمع لموقع اللاعب لاعادة تعيينه عند السقوط
             connection = game:GetService("RunService").Stepped:Connect(function()
-                if character and character.PrimaryPart then
-                    if character.PrimaryPart.Position.Y < -50 then -- مثال مستوى void
-                        player.Character.Humanoid.Health = 0 -- أو إعادة الضبط
-                        wait(0.5)
-                        player:LoadCharacter()
-                    end
+                local char = player.Character
+                if char and char.PrimaryPart and char.PrimaryPart.Position.Y < -50 then
+                    humanoid.Health = 0
+                    wait(0.5)
+                    player:LoadCharacter()
                 end
             end)
         else
@@ -367,9 +485,8 @@ end,
             end
         end
     end)
-
-end,
-	["التخريب"] = function()
+end
+["التخريب"] = function()
     contentFrame:ClearAllChildren()
 
     local player = game.Players.LocalPlayer
