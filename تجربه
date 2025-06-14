@@ -206,287 +206,8 @@ end,
 		end)  
 	end
 end,
-	["اللاعب"] = function()
-    -- مسح محتويات contentFrame القديمة
-    contentFrame:ClearAllChildren()
 
-    local info = Instance.new("TextLabel")
-    info.Text = "تفعيلات اللاعب"
-    info.Size = UDim2.new(0, 200, 0, 40)
-    info.Position = UDim2.new(0, 10, 0, 10)
-    info.BackgroundColor3 = Color3.fromRGB(230, 230, 230)
-    info.TextColor3 = Color3.new(0, 0, 0)
-    info.Parent = contentFrame
-
-    local player = game.Players.LocalPlayer
-    local character = player.Character or player.CharacterAdded:Wait()
-    local humanoid = character:WaitForChild("Humanoid")
-
-    -- زر طيران Fly
-    local flyBtn = Instance.new("TextButton")
-    flyBtn.Text = "طيران"
-    flyBtn.Size = UDim2.new(0, 100, 0, 35)
-    flyBtn.Position = UDim2.new(0, 10, 0, 60)
-    flyBtn.BackgroundColor3 = Color3.new(0,0,0)
-    flyBtn.TextColor3 = Color3.new(1,1,1)
-    flyBtn.Font = Enum.Font.SourceSansBold
-    flyBtn.TextSize = 20
-    flyBtn.Parent = contentFrame
-
-    flyBtn.MouseButton1Click:Connect(function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/muskarnu/Demon-Hub/ded891eae3a34fdede62fee7161bb048fa803f93/Fly"))()
-    end)
-
-    -- زر قفز + مربع كتابة قيمة القفز + ON/OFF toggle
-    local jumpLabel = Instance.new("TextLabel")
-    jumpLabel.Text = "قوة القفز:"
-    jumpLabel.Size = UDim2.new(0, 80, 0, 25)
-    jumpLabel.Position = UDim2.new(0, 120, 0, 65)
-    jumpLabel.BackgroundTransparency = 1
-    jumpLabel.TextColor3 = Color3.new(0,0,0)
-    jumpLabel.Font = Enum.Font.SourceSans
-    jumpLabel.TextSize = 18
-    jumpLabel.Parent = contentFrame
-
-    local jumpInput = Instance.new("TextBox")
-    jumpInput.PlaceholderText = "50"
-    jumpInput.Text = "50"
-    jumpInput.Size = UDim2.new(0, 60, 0, 25)
-    jumpInput.Position = UDim2.new(0, 200, 0, 65)
-    jumpInput.BackgroundColor3 = Color3.new(1,1,1)
-    jumpInput.TextColor3 = Color3.new(0,0,0)
-    jumpInput.ClearTextOnFocus = false
-    jumpInput.Parent = contentFrame
-
-    local jumpToggle = Instance.new("TextButton")
-    jumpToggle.Text = "OFF"
-    jumpToggle.Size = UDim2.new(0, 40, 0, 25)
-    jumpToggle.Position = UDim2.new(0, 265, 0, 65)
-    jumpToggle.BackgroundColor3 = Color3.new(0,0,0)
-    jumpToggle.TextColor3 = Color3.new(1,1,1)
-    jumpToggle.Font = Enum.Font.SourceSansBold
-    jumpToggle.TextSize = 18
-    jumpToggle.Parent = contentFrame
-
-    local jumpOn = false
-    jumpToggle.MouseButton1Click:Connect(function()
-        jumpOn = not jumpOn
-        jumpToggle.Text = jumpOn and "ON" or "OFF"
-        if jumpOn then
-            local val = tonumber(jumpInput.Text)
-            if val then
-                humanoid.JumpPower = val
-            else
-                humanoid.JumpPower = 50
-            end
-        else
-            humanoid.JumpPower = 50 -- القيمة الافتراضية
-        end
-    end)
-
-    -- زر سرعة + مربع كتابة قيمة السرعة + ON/OFF toggle
-    local speedLabel = Instance.new("TextLabel")
-    speedLabel.Text = "السرعة:"
-    speedLabel.Size = UDim2.new(0, 50, 0, 25)
-    speedLabel.Position = UDim2.new(0, 10, 0, 110)
-    speedLabel.BackgroundTransparency = 1
-    speedLabel.TextColor3 = Color3.new(0,0,0)
-    speedLabel.Font = Enum.Font.SourceSans
-    speedLabel.TextSize = 18
-    speedLabel.Parent = contentFrame
-
-    local speedInput = Instance.new("TextBox")
-    speedInput.PlaceholderText = "16"
-    speedInput.Text = "16"
-    speedInput.Size = UDim2.new(0, 60, 0, 25)
-    speedInput.Position = UDim2.new(0, 65, 0, 110)
-    speedInput.BackgroundColor3 = Color3.new(1,1,1)
-    speedInput.TextColor3 = Color3.new(0,0,0)
-    speedInput.ClearTextOnFocus = false
-    speedInput.Parent = contentFrame
-
-    local speedToggle = Instance.new("TextButton")
-    speedToggle.Text = "OFF"
-    speedToggle.Size = UDim2.new(0, 40, 0, 25)
-    speedToggle.Position = UDim2.new(0, 130, 0, 110)
-    speedToggle.BackgroundColor3 = Color3.new(0,0,0)
-    speedToggle.TextColor3 = Color3.new(1,1,1)
-    speedToggle.Font = Enum.Font.SourceSansBold
-    speedToggle.TextSize = 18
-    speedToggle.Parent = contentFrame
-
-    local speedOn = false
-    speedToggle.MouseButton1Click:Connect(function()
-        speedOn = not speedOn
-        speedToggle.Text = speedOn and "ON" or "OFF"
-        if speedOn then
-            local val = tonumber(speedInput.Text)
-            if val then
-                humanoid.WalkSpeed = val
-            else
-                humanoid.WalkSpeed = 16
-            end
-        else
-            humanoid.WalkSpeed = 16 -- القيمة الافتراضية
-        end
-    end)
-
-    -- زر مضاد void (يعيد اللاعب اذا سقط)
-    local antiVoidToggle = Instance.new("TextButton")
-    antiVoidToggle.Text = "مضاد void: OFF"
-    antiVoidToggle.Size = UDim2.new(0, 160, 0, 35)
-    antiVoidToggle.Position = UDim2.new(0, 10, 0, 155)
-    antiVoidToggle.BackgroundColor3 = Color3.new(0,0,0)
-    antiVoidToggle.TextColor3 = Color3.new(1,1,1)
-    antiVoidToggle.Font = Enum.Font.SourceSansBold
-    antiVoidToggle.TextSize = 20
-    antiVoidToggle.Parent = contentFrame
-
-    local antiVoidOn = false
-    local connection
-
-    antiVoidToggle.MouseButton1Click:Connect(function()
-        antiVoidOn = not antiVoidOn
-        antiVoidToggle.Text = antiVoidOn and "مضاد void: ON" or "مضاد void: OFF"
-
-sectionContents["اللاعب"] = function()
-    contentFrame:ClearAllChildren()
-
-    local player = game.Players.LocalPlayer
-
-    -- عنوان
-    local info = Instance.new("TextLabel")
-    info.Text = "تفعيلات اللاعب"
-    info.Size = UDim2.new(0, 200, 0, 35)
-    info.Position = UDim2.new(0, 10, 0, 10)
-    info.BackgroundColor3 = Color3.fromRGB(230, 230, 230)
-    info.TextColor3 = Color3.new(0, 0, 0)
-    info.Font = Enum.Font.SourceSansBold
-    info.TextSize = 20
-    info.Parent = contentFrame
-
-    -- زر طيران
-    local flyBtn = Instance.new("TextButton")
-    flyBtn.Text = "طيران"
-    flyBtn.Size = UDim2.new(0, 100, 0, 30)
-    flyBtn.Position = UDim2.new(0, 10, 0, 55)
-    flyBtn.BackgroundColor3 = Color3.new(0, 0, 0)
-    flyBtn.TextColor3 = Color3.new(1, 1, 1)
-    flyBtn.Parent = contentFrame
-    flyBtn.MouseButton1Click:Connect(function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/muskarnu/Demon-Hub/ded891eae3a34fdede62fee7161bb048fa803f93/Fly"))()
-    end)
-
-    -- قوة القفز
-    local jumpLabel = Instance.new("TextLabel")
-    jumpLabel.Text = "قوة القفز:"
-    jumpLabel.Size = UDim2.new(0, 80, 0, 25)
-    jumpLabel.Position = UDim2.new(0, 120, 0, 55)
-    jumpLabel.BackgroundTransparency = 1
-    jumpLabel.TextColor3 = Color3.new(0,0,0)
-    jumpLabel.Parent = contentFrame
-
-    local jumpInput = Instance.new("TextBox")
-    jumpInput.Text = "50"
-    jumpInput.Size = UDim2.new(0, 60, 0, 25)
-    jumpInput.Position = UDim2.new(0, 200, 0, 55)
-    jumpInput.Parent = contentFrame
-
-    local jumpToggle = Instance.new("TextButton")
-    jumpToggle.Text = "OFF"
-    jumpToggle.Size = UDim2.new(0, 50, 0, 25)
-    jumpToggle.Position = UDim2.new(0, 270, 0, 55)
-    jumpToggle.Parent = contentFrame
-
-    local jumpOn = false
-    jumpToggle.MouseButton1Click:Connect(function()
-        local character = player.Character
-        if character then
-            local humanoid = character:FindFirstChild("Humanoid")
-            if humanoid then
-                jumpOn = not jumpOn
-                jumpToggle.Text = jumpOn and "ON" or "OFF"
-                if jumpOn then
-                    humanoid.JumpPower = tonumber(jumpInput.Text) or 50
-                else
-                    humanoid.JumpPower = 50
-                end
-            end
-        end
-    end)
-
-    -- السرعة
-    local speedLabel = Instance.new("TextLabel")
-    speedLabel.Text = "السرعة:"
-    speedLabel.Size = UDim2.new(0, 80, 0, 25)
-    speedLabel.Position = UDim2.new(0, 10, 0, 95)
-    speedLabel.Parent = contentFrame
-
-    local speedInput = Instance.new("TextBox")
-    speedInput.Text = "16"
-    speedInput.Size = UDim2.new(0, 60, 0, 25)
-    speedInput.Position = UDim2.new(0, 90, 0, 95)
-    speedInput.Parent = contentFrame
-
-    local speedToggle = Instance.new("TextButton")
-    speedToggle.Text = "OFF"
-    speedToggle.Size = UDim2.new(0, 50, 0, 25)
-    speedToggle.Position = UDim2.new(0, 160, 0, 95)
-    speedToggle.Parent = contentFrame
-
-    local speedOn = false
-    speedToggle.MouseButton1Click:Connect(function()
-        local character = player.Character
-        if character then
-            local humanoid = character:FindFirstChild("Humanoid")
-            if humanoid then
-                speedOn = not speedOn
-                speedToggle.Text = speedOn and "ON" or "OFF"
-                if speedOn then
-                    humanoid.WalkSpeed = tonumber(speedInput.Text) or 16
-                else
-                    humanoid.WalkSpeed = 16
-                end
-            end
-        end
-    end) 
-
-    -- مضاد void
-    local antiVoidToggle = Instance.new("TextButton")
-    antiVoidToggle.Text = "مضاد Void: OFF"
-    antiVoidToggle.Size = UDim2.new(0, 180, 0, 35)
-    antiVoidToggle.Position = UDim2.new(0, 10, 0, 135)
-    antiVoidToggle.Parent = contentFrame
-
-    local antiVoidOn = false
-    local connection
-    antiVoidToggle.MouseButton1Click:Connect(function()
-        local character = player.Character
-        if not character or not character.PrimaryPart then return end
-        local humanoid = character:FindFirstChild("Humanoid")
-        if not humanoid then return end
-
-        antiVoidOn = not antiVoidOn
-        antiVoidToggle.Text = antiVoidOn and "مضاد Void: ON" or "مضاد Void: OFF"
-
-        if antiVoidOn then
-            connection = game:GetService("RunService").Stepped:Connect(function()
-                local char = player.Character
-                if char and char.PrimaryPart and char.PrimaryPart.Position.Y < -50 then
-                    humanoid.Health = 0
-                    wait(0.5)
-                    player:LoadCharacter()
-                end
-            end)
-        else
-            if connection then
-                connection:Disconnect()
-                connection = nil
-            end
-        end
-    end)
-end
-["التخريب"] = function()
+	["التخريب"] = function()
     contentFrame:ClearAllChildren()
 
     local player = game.Players.LocalPlayer
@@ -710,176 +431,109 @@ end,
         loadstring(game:HttpGet("https://raw.githubusercontent.com/Luarmor123/YHUB-Community/refs/heads/main/BrookhavenCopyAvatar.lua"))()
     end)
 end,
--- قسم اللاعب
-sectionContents["اللاعب"] = function()
-    -- مسح محتويات contentFrame القديمة
-    contentFrame:ClearAllChildren()
 
-    -- تعريف اللاعب والشخصية
-    local player = game.Players.LocalPlayer
-    local character = player.Character or player.CharacterAdded:Wait()
-    local humanoid = character:WaitForChild("Humanoid")
-
-    -- عنوان القسم
-    local info = Instance.new("TextLabel")
-    info.Text = "تفعيلات اللاعب"
-    info.Size = UDim2.new(0, 200, 0, 35)
-    info.Position = UDim2.new(0, 10, 0, 10)
-    info.BackgroundColor3 = Color3.fromRGB(230, 230, 230)
-    info.TextColor3 = Color3.new(0, 0, 0)
-    info.Font = Enum.Font.SourceSansBold
-    info.TextSize = 20
-    info.Parent = contentFrame
-
-    -- زر طيران
-    local flyBtn = Instance.new("TextButton")
-    flyBtn.Text = "طيران"
-    flyBtn.Size = UDim2.new(0, 100, 0, 30)
-    flyBtn.Position = UDim2.new(0, 10, 0, 55)
-    flyBtn.BackgroundColor3 = Color3.new(0, 0, 0)
-    flyBtn.TextColor3 = Color3.new(1, 1, 1)
-    flyBtn.Font = Enum.Font.SourceSansBold
-    flyBtn.TextSize = 18
-    flyBtn.Parent = contentFrame
-
-    flyBtn.MouseButton1Click:Connect(function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/muskarnu/Demon-Hub/ded891eae3a34fdede62fee7161bb048fa803f93/Fly"))()
-    end)
-
-    -- قوة القفز
-    local jumpLabel = Instance.new("TextLabel")
-    jumpLabel.Text = "قوة القفز:"
-    jumpLabel.Size = UDim2.new(0, 80, 0, 25)
-    jumpLabel.Position = UDim2.new(0, 120, 0, 55)
-    jumpLabel.BackgroundTransparency = 1
-    jumpLabel.TextColor3 = Color3.new(0,0,0)
-    jumpLabel.Font = Enum.Font.SourceSans
-    jumpLabel.TextSize = 18
-    jumpLabel.Parent = contentFrame
-
-    local jumpInput = Instance.new("TextBox")
-    jumpInput.PlaceholderText = "50"
-    jumpInput.Text = "50"
-    jumpInput.Size = UDim2.new(0, 60, 0, 25)
-    jumpInput.Position = UDim2.new(0, 200, 0, 55)
-    jumpInput.BackgroundColor3 = Color3.new(1,1,1)
-    jumpInput.TextColor3 = Color3.new(0,0,0)
-    jumpInput.ClearTextOnFocus = false
-    jumpInput.Parent = contentFrame
-
-    local jumpToggle = Instance.new("TextButton")
-    jumpToggle.Text = "OFF"
-    jumpToggle.Size = UDim2.new(0, 50, 0, 25)
-    jumpToggle.Position = UDim2.new(0, 270, 0, 55)
-    jumpToggle.BackgroundColor3 = Color3.new(0,0,0)
-    jumpToggle.TextColor3 = Color3.new(1,1,1)
-    jumpToggle.Font = Enum.Font.SourceSansBold
-    jumpToggle.TextSize = 18
-    jumpToggle.Parent = contentFrame
-
-    local jumpOn = false
-    jumpToggle.MouseButton1Click:Connect(function()
-        jumpOn = not jumpOn
-        jumpToggle.Text = jumpOn and "ON" or "OFF"
-        if jumpOn then
-            local val = tonumber(jumpInput.Text)
-            humanoid.JumpPower = val or 50
-        else
-            humanoid.JumpPower = 50
-        end
-    end)
-
-    -- السرعة
-    local speedLabel = Instance.new("TextLabel")
-    speedLabel.Text = "السرعة:"
-    speedLabel.Size = UDim2.new(0, 80, 0, 25)
-    speedLabel.Position = UDim2.new(0, 10, 0, 95)
-    speedLabel.BackgroundTransparency = 1
-    speedLabel.TextColor3 = Color3.new(0,0,0)
-    speedLabel.Font = Enum.Font.SourceSans
-    speedLabel.TextSize = 18
-    speedLabel.Parent = contentFrame
-
-    local speedInput = Instance.new("TextBox")
-    speedInput.PlaceholderText = "16"
-    speedInput.Text = "16"
-    speedInput.Size = UDim2.new(0, 60, 0, 25)
-    speedInput.Position = UDim2.new(0, 90, 0, 95)
-    speedInput.BackgroundColor3 = Color3.new(1,1,1)
-    speedInput.TextColor3 = Color3.new(0,0,0)
-    speedInput.ClearTextOnFocus = false
-    speedInput.Parent = contentFrame
-
-    local speedToggle = Instance.new("TextButton")
-    speedToggle.Text = "OFF"
-    speedToggle.Size = UDim2.new(0, 50, 0, 25)
-    speedToggle.Position = UDim2.new(0, 160, 0, 95)
-    speedToggle.BackgroundColor3 = Color3.new(0,0,0)
-    speedToggle.TextColor3 = Color3.new(1,1,1)
-    speedToggle.Font = Enum.Font.SourceSansBold
-    speedToggle.TextSize = 18
-    speedToggle.Parent = contentFrame
-
-    local speedOn = false
-    speedToggle.MouseButton1Click:Connect(function()
-        speedOn = not speedOn
-        speedToggle.Text = speedOn and "ON" or "OFF"
-        if speedOn then
-            local val = tonumber(speedInput.Text)
-            humanoid.WalkSpeed = val or 16
-        else
-            humanoid.WalkSpeed = 16
-        end
-    end)
-
-    -- مضاد void
-    local antiVoidToggle = Instance.new("TextButton")
-    antiVoidToggle.Text = "مضاد Void: OFF"
-    antiVoidToggle.Size = UDim2.new(0, 180, 0, 35)
-    antiVoidToggle.Position = UDim2.new(0, 10, 0, 135)
-    antiVoidToggle.BackgroundColor3 = Color3.new(0, 0, 0)
-    antiVoidToggle.TextColor3 = Color3.new(1, 1, 1)
-    antiVoidToggle.Font = Enum.Font.SourceSansBold
-    antiVoidToggle.TextSize = 20
-    antiVoidToggle.Parent = contentFrame
-
-    local antiVoidOn = false
-    local connection
-
-    antiVoidToggle.MouseButton1Click:Connect(function()
-        antiVoidOn = not antiVoidOn
-        antiVoidToggle.Text = antiVoidOn and "مضاد Void: ON" or "مضاد Void: OFF"
-
-        if antiVoidOn then
-            connection = game:GetService("RunService").Stepped:Connect(function()
-                if character and character.PrimaryPart then
-                    if character.PrimaryPart.Position.Y < -50 then
-                        humanoid.Health = 0
-                        wait(0.5)
-                        player:LoadCharacter()
-                        character = player.Character
-                        humanoid = character:WaitForChild("Humanoid")
-                    end
-                end
-            end)
-        else
-            if connection then
-                connection:Disconnect()
-                connection = nil
-            end
-        end
-    end)
-end,
 	["الحماية"] = function()
-		local shield = Instance.new("TextLabel")
-		shield.Text = "قريبا"
-		shield.Size = UDim2.new(0, 200, 0, 40)
-		shield.Position = UDim2.new(0, 10, 0, 10)
-		shield.BackgroundColor3 = Color3.fromRGB(230, 230, 230)
-		shield.TextColor3 = Color3.new(0, 0, 0)
-		shield.Parent = contentFrame
-	end,
-}
+	contentFrame:ClearAllChildren()
+
+	local player = game.Players.LocalPlayer
+	local character = player.Character or player.CharacterAdded:Wait()
+	local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+
+	-- المضاد الجوي
+	local teleportBtn = Instance.new("TextButton")
+	teleportBtn.Size = UDim2.new(0, 260, 0, 35)
+	teleportBtn.Position = UDim2.new(0, 10, 0, 10)
+	teleportBtn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+	teleportBtn.TextColor3 = Color3.new(1, 1, 1)
+	teleportBtn.Font = Enum.Font.SourceSansBold
+	teleportBtn.TextSize = 20
+	teleportBtn.Text = "المضاد الجوي (OFF)"
+	teleportBtn.Parent = contentFrame
+
+	local toggledAir, runningAir = false, false
+	local originalPositionAir = nil
+	local teleportDistance, teleportHeight = 12^12, 10^12
+
+	teleportBtn.MouseButton1Click:Connect(function()
+		if not toggledAir then
+			toggledAir, runningAir = true, true
+			originalPositionAir = humanoidRootPart.CFrame
+			teleportBtn.Text = "المضاد الجوي (ON)"
+			teleportBtn.BackgroundColor3 = Color3.fromRGB(0, 170, 0)
+
+			task.spawn(function()
+				while runningAir do
+					humanoidRootPart.CFrame = originalPositionAir * CFrame.new(teleportDistance, teleportHeight, 0)
+					task.wait(0.01)
+					humanoidRootPart.CFrame = originalPositionAir * CFrame.new(-teleportDistance, teleportHeight, 0)
+					task.wait(0.01)
+					humanoidRootPart.CFrame = originalPositionAir * CFrame.new(0, teleportHeight, -teleportDistance)
+					task.wait(0.01)
+					humanoidRootPart.CFrame = originalPositionAir * CFrame.new(0, teleportHeight, teleportDistance)
+					task.wait(0.01)
+					humanoidRootPart.CFrame = originalPositionAir
+					task.wait(0.01)
+				end
+			end)
+		else
+			toggledAir, runningAir = false, false
+			humanoidRootPart.CFrame = originalPositionAir
+			teleportBtn.Text = "المضاد الجوي (OFF)"
+			teleportBtn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+		end
+	end)
+
+	-- المضاد الأرضي
+	local antiRamiBtn = Instance.new("TextButton")
+	antiRamiBtn.Size = UDim2.new(0, 260, 0, 35)
+	antiRamiBtn.Position = UDim2.new(0, 10, 0, 55)
+	antiRamiBtn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+	antiRamiBtn.TextColor3 = Color3.new(1, 1, 1)
+	antiRamiBtn.Font = Enum.Font.SourceSansBold
+	antiRamiBtn.TextSize = 20
+	antiRamiBtn.Text = "مضاد أرضي"
+	antiRamiBtn.Parent = contentFrame
+
+	antiRamiBtn.MouseButton1Click:Connect(function()
+		loadstring(game:HttpGet("https://raw.githubusercontent.com/muskarnu/Demon-Hub/44c52f1d3f259f70840a406b1476c25830bddb1b/AntiRami"))()
+	end)
+
+	-- مضاد Void مع استرجاع الموقع
+	local antiVoidBtn = Instance.new("TextButton")
+	antiVoidBtn.Size = UDim2.new(0, 260, 0, 35)
+	antiVoidBtn.Position = UDim2.new(0, 10, 0, 100)
+	antiVoidBtn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+	antiVoidBtn.TextColor3 = Color3.new(1, 1, 1)
+	antiVoidBtn.Font = Enum.Font.SourceSansBold
+	antiVoidBtn.TextSize = 20
+	antiVoidBtn.Text = "مضاد Void (OFF)"
+	antiVoidBtn.Parent = contentFrame
+
+	local toggledVoid, connectionVoid = false, nil
+	local savedPosition = humanoidRootPart.CFrame
+
+	antiVoidBtn.MouseButton1Click:Connect(function()
+		if not toggledVoid then
+			toggledVoid = true
+			antiVoidBtn.Text = "مضاد Void (ON)"
+			antiVoidBtn.BackgroundColor3 = Color3.fromRGB(0, 170, 0)
+			savedPosition = humanoidRootPart.CFrame
+
+			connectionVoid = game:GetService("RunService").Heartbeat:Connect(function()
+				if humanoidRootPart.Position.Y < -25 then
+					humanoidRootPart.CFrame = savedPosition
+				else
+					savedPosition = humanoidRootPart.CFrame
+				end
+			end)
+		else
+			toggledVoid = false
+			antiVoidBtn.Text = "مضاد Void (OFF)"
+			antiVoidBtn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+			if connectionVoid then connectionVoid:Disconnect() end
+		end
+	end)
+end,
 
 -- أزرار الأقسام
 for i, name in ipairs(sectionNames) do
