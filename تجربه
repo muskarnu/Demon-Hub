@@ -516,3 +516,20 @@ end,
 
 end,
 }
+-- أزرار الأقسام
+for i, name in ipairs(sectionNames) do
+	local button = Instance.new("TextButton")
+	button.Text = name
+	button.Size = UDim2.new(1, -8, 0, 40)
+	button.Position = UDim2.new(0, 4, 0, (i-1)*45)
+	button.BackgroundColor3 = Color3.fromRGB(170, 0, 0)
+	button.TextColor3 = Color3.new(1, 1, 1)
+	button.Parent = sectionsFrame
+
+	button.MouseButton1Click:Connect(function()
+		contentFrame:ClearAllChildren()
+		if sectionContents[name] then
+			sectionContents[name]()
+		end
+	end)
+end
