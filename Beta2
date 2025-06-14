@@ -684,7 +684,7 @@ end,
 end,
 	["الحماية"] = function()
 		local shield = Instance.new("TextLabel")
-		shield.Text = "اعدادات الحماية"
+		shield.Text = "قريبا"
 		shield.Size = UDim2.new(0, 200, 0, 40)
 		shield.Position = UDim2.new(0, 10, 0, 10)
 		shield.BackgroundColor3 = Color3.fromRGB(230, 230, 230)
