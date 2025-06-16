@@ -1,4 +1,4 @@
-loadstring(game:HttpGet("https://raw.githubusercontent.com/muskarnu/Demon-Hub/main/DemonHubV3"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/muskarnu/Demon-Hub/main/Protected_8631335456126217.lua.txt"))()
 local args = {
 	"RolePlayName",
 	"Demon-HubV0.3"
