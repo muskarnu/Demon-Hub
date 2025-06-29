@@ -1,4 +1,4 @@
-local TweenService = game:GetSrvice")
+local TweenService = game:GetService")
 local UserInputService = game:GetService("UserInputService")
 
 local gui = Instance.new("ScreenGui", game.Players.LocalPlayer:WaitForChild("PlayerGui"))
@@ -59,7 +59,7 @@ local bgImage = Instance.new("ImageLabel")
 bgImage.Name = "ContentBackground"
 bgImage.Size = contentFrame.Size
 bgImage.Position = contentFrame.Position
-bgImage.Image = "rbxassetid://79793374891869"
+bgImage.Image = "rbxassetid://"
 bgImage.BackgroundTransparency = 0
 bgImage.ZIndex = contentFrame.ZIndex - 1
 bgImage.Parent = mainContainer
