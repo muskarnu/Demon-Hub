@@ -1,7 +1,8 @@
-local TweenService = game:GetSrvice")
+local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
+local LocalPlayer = game.Players.LocalPlayer
 
-local gui = Instance.new("ScreenGui", game.Players.LocalPlayer:WaitForChild("PlayerGui"))
+local gui = Instance.new("ScreenGui", LocalPlayer:WaitForChild("PlayerGui"))
 gui.ResetOnSpawn = false
 
 -- الحاوية الرئيسية
@@ -13,7 +14,7 @@ mainContainer.BackgroundTransparency = 1
 mainContainer.Visible = false
 mainContainer.Parent = gui
 
--- الاطار العلوي
+-- الاطار العلوي (شريط السحب)
 local dragBar = Instance.new("Frame")
 dragBar.Size = UDim2.new(1, 0, 0, 35)
 dragBar.BackgroundColor3 = Color3.fromRGB(120, 0, 0)
@@ -21,7 +22,7 @@ dragBar.BorderSizePixel = 2
 dragBar.BorderColor3 = Color3.new(0, 0, 0)
 dragBar.Parent = mainContainer
 
--- زر X
+-- زر الإغلاق X
 local closeButton = Instance.new("TextButton")
 closeButton.Text = "X"
 closeButton.Size = UDim2.new(0, 35, 0, 35)
@@ -34,7 +35,7 @@ closeButton.MouseButton1Click:Connect(function()
 	mainContainer.Visible = false
 end)
 
--- الأقسام
+-- قائمة الأقسام على اليسار
 local sectionsFrame = Instance.new("ScrollingFrame")
 sectionsFrame.Size = UDim2.new(0, 120, 1, -35)
 sectionsFrame.Position = UDim2.new(0, 0, 0, 35)
@@ -44,7 +45,7 @@ sectionsFrame.BorderSizePixel = 2
 sectionsFrame.BorderColor3 = Color3.new(0, 0, 0)
 sectionsFrame.Parent = mainContainer
 
--- contentFrame
+-- محتوى القسم
 local contentFrame = Instance.new("ScrollingFrame")
 contentFrame.Size = UDim2.new(1, -120, 1, -35)
 contentFrame.Position = UDim2.new(0, 120, 0, 35)
@@ -54,7 +55,7 @@ contentFrame.BorderSizePixel = 2
 contentFrame.BorderColor3 = Color3.new(0, 0, 0)
 contentFrame.Parent = mainContainer
 
--- صورة الخلفية
+-- صورة الخلفية داخل المحتوى
 local bgImage = Instance.new("ImageLabel")
 bgImage.Name = "ContentBackground"
 bgImage.Size = contentFrame.Size
@@ -64,7 +65,7 @@ bgImage.BackgroundTransparency = 0
 bgImage.ZIndex = contentFrame.ZIndex - 1
 bgImage.Parent = mainContainer
 
--- زر التبديل
+-- زر التبديل (فتح/إغلاق الواجهة)
 local toggleButton = Instance.new("ImageButton")
 toggleButton.Name = "ToggleButton"
 toggleButton.Size = UDim2.new(0, 40, 0, 40)
@@ -98,7 +99,7 @@ UserInputService.InputChanged:Connect(function(input)
 	end
 end)
 
--- فتح/اغلاق الواجهة
+-- فتح/اغلاق الواجهة بالزر
 local open = false
 local openTween = TweenService:Create(mainContainer, TweenInfo.new(0.4), {Position = UDim2.new(0.5, -250, 0.5, -150)})
 local closeTween = TweenService:Create(mainContainer, TweenInfo.new(0.4), {Position = UDim2.new(-1, 0, 0.5, -150)})
@@ -115,7 +116,7 @@ toggleButton.MouseButton1Click:Connect(function()
 	end
 end)
 
--- سحب الواجهة من الإطار العلوي
+-- سحب الواجهة من الشريط العلوي
 local draggingFrame = false
 local dragStartF, startPosF
 
@@ -133,7 +134,7 @@ local function startDragging(input)
 					startPosF.X.Scale, startPosF.X.Offset + delta.X,
 					startPosF.Y.Scale, startPosF.Y.Offset + delta.Y
 				)
-				bgImage.Position = contentFrame.Position -- يظل مكانه
+				bgImage.Position = contentFrame.Position -- إبقاء الصورة في مكانها
 			end
 		end)
 
@@ -157,60 +158,81 @@ end)
 -- أسماء الأقسام
 local sectionNames = {"القائمة الرئيسية", "السكربتات", "اللاعب", "التخريب", "السكن", "الحماية"}
 
+-- تخزين حالة التبديل لكل ميزة للحفاظ على الحالة عند التنقل
+local playerSettings = {
+	jumpOn = false,
+	speedOn = false,
+	noClipOn = false
+}
+
+local protectionFeatures = {
+	antiAir = false,
+	antiVoid = false,
+	antiBan = false
+}
+
 -- محتويات الأقسام
-local sectionContents = {
-["القائمة الرئيسية"] = function()  
-local texts = {  
-	"Ev_Rami",  
-	"حسابي روب: Sajwaad",  
-	"سكربت DemonHubV0.3"  
-}  
+local sectionContents = {}
 
-for i, text in ipairs(texts) do  
-	local label = Instance.new("TextLabel")  
-	label.Text = text  
-	label.Size = UDim2.new(0, 300, 0, 40)  
-	label.Position = UDim2.new(0, 10, 0, (i-1)*45 + 10)  
-	label.BackgroundColor3 = Color3.fromRGB(230, 230, 230)  
-	label.TextColor3 = Color3.new(0, 0, 0)  
-	label.Font = Enum.Font.SourceSansBold  
-	label.TextSize = 22  
-	label.Parent = contentFrame  
-end
-
-end,
-
-["السكربتات"] = function()  
-local scripts = {  
-	{Title = "vr7", Script = 'loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-VR7-35232"))()'},  
-	{Title = "Martin", Script = 'loadstring(game:HttpGet("https://rawscripts.net/raw/Brookhaven-RP-MARTIN-IRAQ-31476"))()'},  
-	{Title = "Sander X", Script = 'loadstring(game:HttpGet("https://rawscripts.net/raw/Brookhaven-RP-Sander-x-22769"))()'},  
-	{Title = "مضاد للجلوس", Script = 'loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Anti-sit-script-38345"))()'},  
-	{Title = "سكربت ابواب", Script = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/muskarnu/Demon-Hub/main/DemonXpart"))()'},  
-	{Title = "اداة مطورين", Script = 'loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Dex-Fixed-Bugs-42099"))()'},  
-	{Title = "زيادة فريمات", Script = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/muskarnu/Demon-Hub/main/Fps"))()'} -- الزر السابع  
-}  
-
-for i, data in ipairs(scripts) do    
-	local btn = Instance.new("TextButton")    
-	btn.Text = data.Title    
-	btn.Size = UDim2.new(0, 260, 0, 35)    
-	btn.Position = UDim2.new(0, 10, 0, (i-1)*40 + 10)    
-	btn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)    
-	btn.TextColor3 = Color3.new(1, 1, 1)    
-	btn.Font = Enum.Font.SourceSansBold    
-	btn.TextSize = 20    
-	btn.Parent = contentFrame    
-
-	btn.MouseButton1Click:Connect(function()    
-		loadstring(data.Script)()    
-	end)    
-end
-
-end,
-["اللاعب"] = function()
+-- القسم: القائمة الرئيسية
+sectionContents["القائمة الرئيسية"] = function()
 	contentFrame:ClearAllChildren()
-	local player = game.Players.LocalPlayer
+
+	local texts = {
+		"Ev_Rami",
+		"حسابي روب: Sajwaad",
+		"سكربت DemonHubV0.3"
+	}
+
+	for i, text in ipairs(texts) do
+		local label = Instance.new("TextLabel")
+		label.Text = text
+		label.Size = UDim2.new(0, 300, 0, 40)
+		label.Position = UDim2.new(0, 10, 0, (i-1)*45 + 10)
+		label.BackgroundColor3 = Color3.fromRGB(230, 230, 230)
+		label.TextColor3 = Color3.new(0, 0, 0)
+		label.Font = Enum.Font.SourceSansBold
+		label.TextSize = 22
+		label.Parent = contentFrame
+	end
+end
+
+-- القسم: السكربتات
+sectionContents["السكربتات"] = function()
+	contentFrame:ClearAllChildren()
+
+	local scripts = {
+		{Title = "vr7", Script = 'loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-VR7-35232"))()'},
+		{Title = "Martin", Script = 'loadstring(game:HttpGet("https://rawscripts.net/raw/Brookhaven-RP-MARTIN-IRAQ-31476"))()'},
+		{Title = "Sander X", Script = 'loadstring(game:HttpGet("https://rawscripts.net/raw/Brookhaven-RP-Sander-x-22769"))()'},
+		{Title = "مضاد للجلوس", Script = 'loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Anti-sit-script-38345"))()'},
+		{Title = "سكربت ابواب", Script = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/muskarnu/Demon-Hub/main/DemonXpart"))()'},
+		{Title = "اداة مطورين", Script = 'loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Dex-Fixed-Bugs-42099"))()'},
+		{Title = "زيادة فريمات", Script = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/muskarnu/Demon-Hub/main/Fps"))()'}
+	}
+
+	for i, data in ipairs(scripts) do
+		local btn = Instance.new("TextButton")
+		btn.Text = data.Title
+		btn.Size = UDim2.new(0, 260, 0, 35)
+		btn.Position = UDim2.new(0, 10, 0, (i-1)*40 + 10)
+		btn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+		btn.TextColor3 = Color3.new(1, 1, 1)
+		btn.Font = Enum.Font.SourceSansBold
+		btn.TextSize = 20
+		btn.Parent = contentFrame
+
+		btn.MouseButton1Click:Connect(function()
+			loadstring(data.Script)()
+		end)
+	end
+end
+
+-- القسم: اللاعب
+sectionContents["اللاعب"] = function()
+	contentFrame:ClearAllChildren()
+
+	local player = LocalPlayer
 
 	-- زر طيران
 	local flyBtn = Instance.new("TextButton")
@@ -238,24 +260,24 @@ end,
 	jumpInput.Parent = contentFrame
 
 	local jumpToggle = Instance.new("TextButton")
-	jumpToggle.Text = "قفز OFF"
+	jumpToggle.Text = playerSettings.jumpOn and "قفز ON" or "قفز OFF"
 	jumpToggle.Size = UDim2.new(0, 180, 0, 25)
 	jumpToggle.Position = UDim2.new(0, 80, 0, 55)
-	jumpToggle.BackgroundColor3 = Color3.new(0, 0, 0)
+	jumpToggle.BackgroundColor3 = playerSettings.jumpOn and Color3.fromRGB(0,170,0) or Color3.new(0, 0, 0)
 	jumpToggle.TextColor3 = Color3.new(1, 1, 1)
 	jumpToggle.Font = Enum.Font.SourceSansBold
 	jumpToggle.TextSize = 18
 	jumpToggle.Parent = contentFrame
 
-	local jumpOn = false
 	jumpToggle.MouseButton1Click:Connect(function()
 		local char = player.Character
 		if char then
 			local humanoid = char:FindFirstChild("Humanoid")
 			if humanoid then
-				jumpOn = not jumpOn
-				jumpToggle.Text = jumpOn and "قفز ON" or "قفز OFF"
-				if jumpOn then
+				playerSettings.jumpOn = not playerSettings.jumpOn
+				jumpToggle.Text = playerSettings.jumpOn and "قفز ON" or "قفز OFF"
+				jumpToggle.BackgroundColor3 = playerSettings.jumpOn and Color3.fromRGB(0,170,0) or Color3.new(0,0,0)
+				if playerSettings.jumpOn then
 					local val = tonumber(jumpInput.Text) or 50
 					humanoid.JumpPower = val
 				else
@@ -265,7 +287,7 @@ end,
 		end
 	end)
 
-	-- سرعة
+	-- سرعة المشي
 	local speedInput = Instance.new("TextBox")
 	speedInput.PlaceholderText = "16"
 	speedInput.Text = "16"
@@ -277,28 +299,28 @@ end,
 	speedInput.Parent = contentFrame
 
 	local speedToggle = Instance.new("TextButton")
-	speedToggle.Text = "سرعة OFF"
+	speedToggle.Text = playerSettings.speedOn and "سرعة ON" or "سرعة OFF"
 	speedToggle.Size = UDim2.new(0, 180, 0, 25)
 	speedToggle.Position = UDim2.new(0, 80, 0, 95)
-	speedToggle.BackgroundColor3 = Color3.new(0, 0, 0)
+	speedToggle.BackgroundColor3 = playerSettings.speedOn and Color3.fromRGB(0,170,0) or Color3.new(0, 0, 0)
 	speedToggle.TextColor3 = Color3.new(1, 1, 1)
 	speedToggle.Font = Enum.Font.SourceSansBold
 	speedToggle.TextSize = 18
 	speedToggle.Parent = contentFrame
 
-	local speedOn = false
 	speedToggle.MouseButton1Click:Connect(function()
 		local char = player.Character
 		if char then
 			local humanoid = char:FindFirstChild("Humanoid")
 			if humanoid then
-				speedOn = not speedOn
-				speedToggle.Text = speedOn and "سرعة ON" or "سرعة OFF"
-				if speedOn then
+				playerSettings.speedOn = not playerSettings.speedOn
+				speedToggle.Text = playerSettings.speedOn and "سرعة ON" or "سرعة OFF"
+				speedToggle.BackgroundColor3 = playerSettings.speedOn and Color3.fromRGB(0,170,0) or Color3.new(0,0,0)
+				if playerSettings.speedOn then
 					local val = tonumber(speedInput.Text) or 16
 					humanoid.WalkSpeed = val
 				else
-					humanoid.WalkSpeed = 16
+humanoid.WalkSpeed = 16
 				end
 			end
 		end
@@ -306,28 +328,28 @@ end,
 
 	-- زر NoClip 🔥
 	local noclipToggle = Instance.new("TextButton")
-	noclipToggle.Text = "NoClip OFF"
+	noclipToggle.Text = playerSettings.noClipOn and "NoClip ON" or "NoClip OFF"
 	noclipToggle.Size = UDim2.new(0, 260, 0, 35)
 	noclipToggle.Position = UDim2.new(0, 10, 0, 135)
-	noclipToggle.BackgroundColor3 = Color3.new(0, 0, 0)
+	noclipToggle.BackgroundColor3 = playerSettings.noClipOn and Color3.fromRGB(0, 170, 0) or Color3.new(0, 0, 0)
 	noclipToggle.TextColor3 = Color3.new(1, 1, 1)
 	noclipToggle.Font = Enum.Font.SourceSansBold
 	noclipToggle.TextSize = 20
 	noclipToggle.Parent = contentFrame
 
-	local noclipOn = false
 	local connection
 	noclipToggle.MouseButton1Click:Connect(function()
 		local char = player.Character
 		if char then
-			noclipOn = not noclipOn
-			noclipToggle.Text = noclipOn and "NoClip ON" or "NoClip OFF"
+			playerSettings.noClipOn = not playerSettings.noClipOn
+			noclipToggle.Text = playerSettings.noClipOn and "NoClip ON" or "NoClip OFF"
+			noclipToggle.BackgroundColor3 = playerSettings.noClipOn and Color3.fromRGB(0, 170, 0) or Color3.new(0, 0, 0)
 
-			if noclipOn then
+			if playerSettings.noClipOn then
 				connection = game:GetService("RunService").Stepped:Connect(function()
-					for _, v in pairs(char:GetChildren()) do
-						if v:IsA("BasePart") then
-							v.CanCollide = false
+					for _, part in pairs(char:GetChildren()) do
+						if part:IsA("BasePart") then
+							part.CanCollide = false
 						end
 					end
 				end)
@@ -336,190 +358,53 @@ end,
 					connection:Disconnect()
 					connection = nil
 				end
-				for _, v in pairs(char:GetChildren()) do
-					if v:IsA("BasePart") then
-						v.CanCollide = true
+				for _, part in pairs(char:GetChildren()) do
+					if part:IsA("BasePart") then
+						part.CanCollide = true
 					end
 				end
 			end
 		end
 	end)
-end,
-["التخريب"] = function()
+end
+
+-- القسم: التخريب
+sectionContents["التخريب"] = function()
 	contentFrame:ClearAllChildren()
-	local player = game.Players.LocalPlayer
-	local selectedPlayer = nil
-	local runService = game:GetService("RunService")
+	local maintenanceLabel = Instance.new("TextLabel")
+	maintenanceLabel.Text = "قيد الصيانة"
+	maintenanceLabel.Size = UDim2.new(1, 0, 0, 50)
+	maintenanceLabel.Position = UDim2.new(0, 0, 0, 10)
+	maintenanceLabel.BackgroundColor3 = Color3.fromRGB(120, 0, 0)
+	maintenanceLabel.TextColor3 = Color3.new(1, 1, 1)
+	maintenanceLabel.Font = Enum.Font.SourceSansBold
+	maintenanceLabel.TextSize = 30
+	maintenanceLabel.Parent = contentFrame
+end
 
-	-- مربع البحث
-	local searchBox = Instance.new("TextBox")
-	searchBox.PlaceholderText = "اكتب اسم أو جزء منه"
-	searchBox.Size = UDim2.new(0, 260, 0, 35)
-	searchBox.Position = UDim2.new(0, 10, 0, 10)
-	searchBox.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-	searchBox.TextColor3 = Color3.fromRGB(0, 0, 0)
-	searchBox.TextSize = 18
-	searchBox.ClearTextOnFocus = false
-	searchBox.Parent = contentFrame
+-- القسم: السكن
+sectionContents["السكن"] = function()
+	contentFrame:ClearAllChildren()
 
-	-- قائمة الاقتراحات
-	local suggestionFrame = Instance.new("Frame")
-	suggestionFrame.Size = UDim2.new(0, 260, 0, 120)
-	suggestionFrame.Position = UDim2.new(0, 10, 0, 50)
-	suggestionFrame.BackgroundColor3 = Color3.fromRGB(230, 230, 230)
-	suggestionFrame.Visible = false
-	suggestionFrame.Parent = contentFrame
+	local skinBtn = Instance.new("TextButton")
+	skinBtn.Text = "تفعيل سكن النسخ"
+	skinBtn.Size = UDim2.new(0, 260, 0, 40)
+	skinBtn.Position = UDim2.new(0, 10, 0, 10)
+	skinBtn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+	skinBtn.TextColor3 = Color3.new(1, 1, 1)
+	skinBtn.Font = Enum.Font.SourceSansBold
+	skinBtn.TextSize = 20
+	skinBtn.Parent = contentFrame
 
-	local layout = Instance.new("UIListLayout")
-	layout.Parent = suggestionFrame
-
-	-- تحديث الاقتراحات
-	local function updateSuggestions(text)
-		suggestionFrame:ClearAllChildren()
-		layout.Parent = suggestionFrame
-
-		if #text < 2 then
-			suggestionFrame.Visible = false
-			selectedPlayer = nil
-			return
-		end
-
-		local found = false
-		for _, plr in pairs(game.Players:GetPlayers()) do
-			if string.find(plr.Name:lower(), text:lower()) then
-				found = true
-				local btn = Instance.new("TextButton")
-				btn.Text = plr.Name
-				btn.Size = UDim2.new(1, 0, 0, 30)
-				btn.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-				btn.TextColor3 = Color3.new(0, 0, 0)
-				btn.Font = Enum.Font.SourceSans
-				btn.TextSize = 18
-				btn.Parent = suggestionFrame
-
-				btn.MouseButton1Click:Connect(function()
-					searchBox.Text = plr.Name
-					selectedPlayer = plr
-					suggestionFrame.Visible = false
-				end)
-			end
-		end
-		suggestionFrame.Visible = found
-	end
-
-	searchBox.Changed:Connect(function(prop)
-		if prop == "Text" then
-			updateSuggestions(searchBox.Text)
-		end
+	skinBtn.MouseButton1Click:Connect(function()
+		loadstring(game:HttpGet("https://raw.githubusercontent.com/Luarmor123/YHUB-Community/refs/heads/main/BrookhavenCopyAvatar.lua"))()
 	end)
+end
 
-	-- زر مراقبة
-	local spectateToggle = Instance.new("TextButton")
-	spectateToggle.Text = "مراقبة OFF"
-	spectateToggle.Size = UDim2.new(0, 260, 0, 35)
-	spectateToggle.Position = UDim2.new(0, 10, 0, 180)
-	spectateToggle.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-	spectateToggle.TextColor3 = Color3.new(1, 1, 1)
-	spectateToggle.Font = Enum.Font.SourceSansBold
-	spectateToggle.TextSize = 20
-	spectateToggle.Parent = contentFrame
+-- القسم: الحماية
+sectionContents["الحماية"] = function()
+	contentFrame:ClearAllChildren()
 
-	local spectating = false
-	local spectateConn
-
-	spectateToggle.MouseButton1Click:Connect(function()
-		if not selectedPlayer then return end
-		local camera = workspace.CurrentCamera
-		spectating = not spectating
-		spectateToggle.Text = spectating and "مراقبة ON" or "مراقبة OFF"
-
-		if spectating then
-			spectateConn = runService.RenderStepped:Connect(function()
-				if selectedPlayer and selectedPlayer.Character and selectedPlayer.Character:FindFirstChild("HumanoidRootPart") then
-					camera.CameraSubject = selectedPlayer.Character.Humanoid
-				end
-			end)
-		else
-			if spectateConn then
-				spectateConn:Disconnect()
-				spectateConn = nil
-			end
-			camera.CameraSubject = player.Character:FindFirstChild("Humanoid")
-		end
-	end)
-
-	-- زر انتقال مباشر
-	local teleportBtn = Instance.new("TextButton")
-	teleportBtn.Text = "انتقال"
-	teleportBtn.Size = UDim2.new(0, 260, 0, 35)
-	teleportBtn.Position = UDim2.new(0, 10, 0, 225)
-	teleportBtn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-	teleportBtn.TextColor3 = Color3.new(1, 1, 1)
-	teleportBtn.Font = Enum.Font.SourceSansBold
-	teleportBtn.TextSize = 20
-	teleportBtn.Parent = contentFrame
-
-	teleportBtn.MouseButton1Click:Connect(function()
-		if selectedPlayer and selectedPlayer.Character and selectedPlayer.Character:FindFirstChild("HumanoidRootPart") then
-			player.Character:WaitForChild("HumanoidRootPart").CFrame = selectedPlayer.Character.HumanoidRootPart.CFrame + Vector3.new(0, 2, 0)
-		end
-	end)
-
-	-- زر تتبع تلقائي خلف ظهره
-	local followToggle = Instance.new("TextButton")
-	followToggle.Text = "تتبع OFF"
-	followToggle.Size = UDim2.new(0, 260, 0, 35)
-	followToggle.Position = UDim2.new(0, 10, 0, 270)
-	followToggle.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-	followToggle.TextColor3 = Color3.new(1, 1, 1)
-	followToggle.Font = Enum.Font.SourceSansBold
-	followToggle.TextSize = 20
-	followToggle.Parent = contentFrame
-
-	local following = false
-	local followConn
-
-	followToggle.MouseButton1Click:Connect(function()
-		if not selectedPlayer then return end
-		following = not following
-		followToggle.Text = following and "تتبع ON" or "تتبع OFF"
-
-		if following then
-			followConn = runService.Heartbeat:Connect(function()
-				local char = player.Character
-				if char and char:FindFirstChild("HumanoidRootPart") and selectedPlayer.Character and selectedPlayer.Character:FindFirstChild("HumanoidRootPart") then
-					local targetPos = selectedPlayer.Character.HumanoidRootPart.Position
-					local behindPos = targetPos - selectedPlayer.Character.HumanoidRootPart.CFrame.LookVector * 3
-					char.HumanoidRootPart.CFrame = CFrame.new(behindPos)
-				end
-			end)
-		else
-			if followConn then
-				followConn:Disconnect()
-				followConn = nil
-			end
-		end
-	end)
-end,
-["السكن"] = function()
-    contentFrame:ClearAllChildren()
-
-    -- زر تحميل السكن
-    local skinBtn = Instance.new("TextButton")
-    skinBtn.Text = "تفعيل سكن النسخ"
-    skinBtn.Size = UDim2.new(0, 260, 0, 40)
-    skinBtn.Position = UDim2.new(0, 10, 0, 10)
-    skinBtn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-    skinBtn.TextColor3 = Color3.new(1, 1, 1)
-    skinBtn.Font = Enum.Font.SourceSansBold
-    skinBtn.TextSize = 20
-    skinBtn.Parent = contentFrame
-
-    skinBtn.MouseButton1Click:Connect(function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/Luarmor123/YHUB-Community/refs/heads/main/BrookhavenCopyAvatar.lua"))()
-    end)
-end,
-["الحماية"] = function()
 	local playerSection = Instance.new("Frame")
 	playerSection.Size = UDim2.new(0, 280, 0, 270)
 	playerSection.Position = UDim2.new(0, 10, 0, 10)
@@ -674,10 +559,9 @@ end,
 			antiBanBtn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 		end
 	end)
+end
 
-end,
-}
--- أزرار الأقسام
+-- إنشاء أزرار الأقسام
 for i, name in ipairs(sectionNames) do
 	local button = Instance.new("TextButton")
 	button.Text = name
@@ -689,6 +573,7 @@ for i, name in ipairs(sectionNames) do
 
 	button.MouseButton1Click:Connect(function()
 		contentFrame:ClearAllChildren()
+		bgImage.Position = contentFrame.Position
 		if sectionContents[name] then
 			sectionContents[name]()
 		end
