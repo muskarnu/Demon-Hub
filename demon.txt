@@ -400,8 +400,12 @@ sectionContents["السكن"] = function()
 		loadstring(game:HttpGet("https://raw.githubusercontent.com/Luarmor123/YHUB-Community/refs/heads/main/BrookhavenCopyAvatar.lua"))()
 	end)
 end
+local protectionStates = {
+    teleportOn = false,
+    antiVoidOn = false,
+    antiBanOn = false,
+}
 
--- القسم: الحماية
 sectionContents["الحماية"] = function()
 	contentFrame:ClearAllChildren()
 
@@ -413,22 +417,19 @@ sectionContents["الحماية"] = function()
 	playerSection.BorderColor3 = Color3.new(0, 0, 0)
 	playerSection.Parent = contentFrame
 
-	-- زر المضاد الجوي
+	-- زر المضاد الجوي  
 	local teleportBtn = Instance.new("TextButton")
 	teleportBtn.Size = UDim2.new(0, 260, 0, 35)
 	teleportBtn.Position = UDim2.new(0, 10, 0, 10)
-	teleportBtn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+	teleportBtn.BackgroundColor3 = protectionStates.teleportOn and Color3.fromRGB(0,170,0) or Color3.fromRGB(0,0,0)
 	teleportBtn.TextColor3 = Color3.new(1, 1, 1)
 	teleportBtn.Font = Enum.Font.SourceSansBold
 	teleportBtn.TextSize = 20
-	teleportBtn.Text = "المضاد الجوي (OFF)"
+	teleportBtn.Text = "المضاد الجوي (" .. (protectionStates.teleportOn and "ON" or "OFF") .. ")"
 	teleportBtn.Parent = playerSection
 
-	local toggled = false
 	local running = false
 	local originalPosition = nil
-	local teleportDistance = 12^12
-	local teleportHeight = 10^12
 
 	teleportBtn.MouseButton1Click:Connect(function()
 		local player = game.Players.LocalPlayer
@@ -436,8 +437,8 @@ sectionContents["الحماية"] = function()
 		local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
 
 		if humanoidRootPart then
-			if not toggled then
-				toggled = true
+			if not protectionStates.teleportOn then
+				protectionStates.teleportOn = true
 				running = true
 				originalPosition = humanoidRootPart.CFrame
 				teleportBtn.Text = "المضاد الجوي (ON)"
@@ -445,20 +446,20 @@ sectionContents["الحماية"] = function()
 
 				task.spawn(function()
 					while running do
-						humanoidRootPart.CFrame = originalPosition * CFrame.new(teleportDistance, teleportHeight, 0)
+						humanoidRootPart.CFrame = originalPosition * CFrame.new(12^12, 10^12, 0)
 						task.wait(0.01)
-						humanoidRootPart.CFrame = originalPosition * CFrame.new(-teleportDistance, teleportHeight, 0)
+						humanoidRootPart.CFrame = originalPosition * CFrame.new(-12^12, 10^12, 0)
 						task.wait(0.01)
-						humanoidRootPart.CFrame = originalPosition * CFrame.new(0, teleportHeight, -teleportDistance)
+						humanoidRootPart.CFrame = originalPosition * CFrame.new(0, 10^12, -12^12)
 						task.wait(0.01)
-						humanoidRootPart.CFrame = originalPosition * CFrame.new(0, teleportHeight, teleportDistance)
+						humanoidRootPart.CFrame = originalPosition * CFrame.new(0, 10^12, 12^12)
 						task.wait(0.01)
 						humanoidRootPart.CFrame = originalPosition
 						task.wait(0.01)
 					end
 				end)
 			else
-				toggled = false
+				protectionStates.teleportOn = false
 				running = false
 				if originalPosition then
 					humanoidRootPart.CFrame = originalPosition
@@ -469,7 +470,7 @@ sectionContents["الحماية"] = function()
 		end
 	end)
 
-	-- زر مضاد رامي
+	-- زر مضاد رامي (ينفذ السكربت عند الضغط فقط)
 	local antiRamiBtn = Instance.new("TextButton")
 	antiRamiBtn.Size = UDim2.new(0, 260, 0, 35)
 	antiRamiBtn.Position = UDim2.new(0, 10, 0, 55)
@@ -477,32 +478,35 @@ sectionContents["الحماية"] = function()
 	antiRamiBtn.TextColor3 = Color3.new(1, 1, 1)
 	antiRamiBtn.Font = Enum.Font.SourceSansBold
 	antiRamiBtn.TextSize = 20
-	antiRamiBtn.Text = "مضاد ارضي"
+	antiRamiBtn.Text = "مضاد رامي"
 	antiRamiBtn.Parent = playerSection
 
 	antiRamiBtn.MouseButton1Click:Connect(function()
 		loadstring(game:HttpGet("https://raw.githubusercontent.com/muskarnu/Demon-Hub/44c52f1d3f259f70840a406b1476c25830bddb1b/AntiRami"))()
 	end)
 
-	-- زر Anti Void
-	local antiVoidToggle = false
+	-- زر Anti Void  
 	local antiVoidBtn = Instance.new("TextButton")
 	antiVoidBtn.Size = UDim2.new(0, 260, 0, 35)
 	antiVoidBtn.Position = UDim2.new(0, 10, 0, 100)
-	antiVoidBtn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+	antiVoidBtn.BackgroundColor3 = protectionStates.antiVoidOn and Color3.fromRGB(0,170,0) or Color3.fromRGB(0,0,0)
 	antiVoidBtn.TextColor3 = Color3.new(1, 1, 1)
 	antiVoidBtn.Font = Enum.Font.SourceSansBold
 	antiVoidBtn.TextSize = 20
-	antiVoidBtn.Text = "Anti Void (OFF)"
+	antiVoidBtn.Text = "Anti Void (" .. (protectionStates.antiVoidOn and "ON" or "OFF") .. ")"
 	antiVoidBtn.Parent = playerSection
 
+	local antiVoidRunning = false
+
 	antiVoidBtn.MouseButton1Click:Connect(function()
-		antiVoidToggle = not antiVoidToggle
-		if antiVoidToggle then
+		protectionStates.antiVoidOn = not protectionStates.antiVoidOn
+		if protectionStates.antiVoidOn then
 			antiVoidBtn.Text = "Anti Void (ON)"
 			antiVoidBtn.BackgroundColor3 = Color3.fromRGB(0, 170, 0)
+			antiVoidRunning = true
+
 			task.spawn(function()
-				while antiVoidToggle do
+				while antiVoidRunning and protectionStates.antiVoidOn do
 					local player = game.Players.LocalPlayer
 					local character = player.Character or player.CharacterAdded:Wait()
 					local hrp = character:FindFirstChild("HumanoidRootPart")
@@ -515,29 +519,29 @@ sectionContents["الحماية"] = function()
 		else
 			antiVoidBtn.Text = "Anti Void (OFF)"
 			antiVoidBtn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+			antiVoidRunning = false
 		end
 	end)
 
-	-- زر مضاد طرد قوي
-	local antiBanToggle = false
+	-- زر مضاد طرد قوي  
 	local antiBanBtn = Instance.new("TextButton")
 	antiBanBtn.Size = UDim2.new(0, 260, 0, 35)
 	antiBanBtn.Position = UDim2.new(0, 10, 0, 145)
-	antiBanBtn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+	antiBanBtn.BackgroundColor3 = protectionStates.antiBanOn and Color3.fromRGB(0,170,0) or Color3.fromRGB(0,0,0)
 	antiBanBtn.TextColor3 = Color3.new(1, 1, 1)
 	antiBanBtn.Font = Enum.Font.SourceSansBold
 	antiBanBtn.TextSize = 20
-	antiBanBtn.Text = "مضاد طرد (OFF)"
+	antiBanBtn.Text = "مضاد طرد (" .. (protectionStates.antiBanOn and "ON" or "OFF") .. ")"
 	antiBanBtn.Parent = playerSection
 
 	antiBanBtn.MouseButton1Click:Connect(function()
-		antiBanToggle = not antiBanToggle
-		if antiBanToggle then
+		protectionStates.antiBanOn = not protectionStates.antiBanOn
+		if protectionStates.antiBanOn then
 			antiBanBtn.Text = "مضاد طرد (ON)"
 			antiBanBtn.BackgroundColor3 = Color3.fromRGB(0, 170, 0)
 
 			game:GetService("Players").LocalPlayer.OnTeleport:Connect(function()
-				if antiBanToggle then
+				if protectionStates.antiBanOn then
 					while wait() do end -- تجميد التبليغ
 				end
 			end)
@@ -559,8 +563,8 @@ sectionContents["الحماية"] = function()
 			antiBanBtn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 		end
 	end)
-end
-
+end	
+				
 -- إنشاء أزرار الأقسام
 for i, name in ipairs(sectionNames) do
 	local button = Instance.new("TextButton")
