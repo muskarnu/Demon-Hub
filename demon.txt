@@ -563,100 +563,61 @@ sectionContents["الحماية"] = function()
 		end
 	end)
 end	
+-- متغير عام لحفظ حالات الأزرار
+local carToggles = {}
+
 sectionContents["السيارات"] = function()
 	contentFrame:ClearAllChildren()
 
-	local toggles = {}
-
 	local cars = {
-		{Title = "شاحنه", Script = function()local args = {
-	"PickingCar",
-	"TowTruck"
-}
-game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1Ca1r"):FireServer(unpack(args))
-
-			print("كود سيارة 1 ينفذ")
+		{Title = "شاحنه", Script = function()
+			local args = {"PickingCar","TowTruck"}
+			game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1Ca1r"):FireServer(unpack(args))
 		end},
 
-		{Title = "سفينة", Script = function()local args = {
-	"PickingBoat",
-	"PirateFree"
-}
-game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1Ca1r"):FireServer(unpack(args))
-
-			print("كود سيارة 2 ينفذ")
+		{Title = "سفينة", Script = function()
+			local args = {"PickingBoat","PirateFree"}
+			game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1Ca1r"):FireServer(unpack(args))
 		end},
 
-		{Title = "باص", Script = function()local args = {
-	"PickingCar",
-	"Bus"
-}
-game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1Ca1r"):FireServer(unpack(args))
-
-			print("كود سيارة 3 ينفذ")
+		{Title = "باص", Script = function()
+			local args = {"PickingCar","Bus"}
+			game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1Ca1r"):FireServer(unpack(args))
 		end},
 
-		{Title = "باص مدرسة", Script = function()local args = {
-	"PickingCar",
-	"SchoolBus"
-}
-game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1Ca1r"):FireServer(unpack(args))
-
-			print("كود سيارة 4 ينفذ")
+		{Title = "باص مدرسة", Script = function()
+			local args = {"PickingCar","SchoolBus"}
+			game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1Ca1r"):FireServer(unpack(args))
 		end},
 
-		{Title = "لامبورجيني", Script = function()local args = {
-	"PickingCar",
-	"Lamborgini"
-}
-game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1Ca1r"):FireServer(unpack(args))
-
-			print("كود سيارة 5 ينفذ")
+		{Title = "لامبورجيني", Script = function()
+			local args = {"PickingCar","Lamborgini"}
+			game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1Ca1r"):FireServer(unpack(args))
 		end},
 
-		{Title = "العز ل الله", Script = function()local args = {
-	"PickingCar",
-	"Escalade"
-}
-game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1Ca1r"):FireServer(unpack(args))
-
-			print("كود سيارة 6 ينفذ")
+		{Title = "العز ل الله", Script = function()
+			local args = {"PickingCar","Escalade"}
+			game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1Ca1r"):FireServer(unpack(args))
 		end},
 
-		{Title = "زبالة", Script = function()local args = {
-	"PickingCar",
-	"GarbageTruck"
-}
-game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1Ca1r"):FireServer(unpack(args))
- 
-			print("كود سيارة 7 ينفذ")
+		{Title = "زبالة", Script = function()
+			local args = {"PickingCar","GarbageTruck"}
+			game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1Ca1r"):FireServer(unpack(args))
 		end},
 
-		{Title = "حربكة", Script = function()local args = {
-	"PickingCar",
-	"NPHarleyDavison"
-}
-game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1Ca1r"):FireServer(unpack(args))
- 
-			print("كود سيارة 8 ينفذ")
+		{Title = "حربكة", Script = function()
+			local args = {"PickingCar","NPHarleyDavison"}
+			game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1Ca1r"):FireServer(unpack(args))
 		end},
 
-		{Title = "بوظه كنافة سحلب", Script = function()local args = {
-	"PickingCar",
-	"FoodTruck"
-}
-game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1Ca1r"):FireServer(unpack(args))
-
-			print("كود سيارة 9 ينفذ")
+		{Title = "بوظه كنافة", Script = function()
+			local args = {"PickingCar","FoodTruck"}
+			game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1Ca1r"):FireServer(unpack(args))
 		end},
 
-		{Title = "اطفاء", Script = function()local args = {
-	"PickingCar",
-	"FireTruck"
-}
-game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1Ca1r"):FireServer(unpack(args))
- 
-			print("كود سيارة 10 ينفذ")
+		{Title = "اطفاء", Script = function()
+			local args = {"PickingCar","FireTruck"}
+			game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1Ca1r"):FireServer(unpack(args))
 		end},
 	}
 
@@ -672,7 +633,6 @@ game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1Ca1r"):Fi
 		btn.Parent = contentFrame
 
 		local toggleBtn = Instance.new("TextButton")
-		toggleBtn.Text = "OFF"
 		toggleBtn.Size = UDim2.new(0, 50, 0, 35)
 		toggleBtn.Position = UDim2.new(0, 220, 0, (i-1)*40 + 10)
 		toggleBtn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
@@ -681,16 +641,23 @@ game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1Ca1r"):Fi
 		toggleBtn.TextSize = 18
 		toggleBtn.Parent = contentFrame
 
-		toggles[i] = false
+		-- استرجاع حالة الزر
+		if carToggles[i] then
+			toggleBtn.Text = "ON"
+			toggleBtn.BackgroundColor3 = Color3.fromRGB(0, 170, 0)
+		else
+			toggleBtn.Text = "OFF"
+			toggleBtn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+		end
 
 		toggleBtn.MouseButton1Click:Connect(function()
-			toggles[i] = not toggles[i]
-			toggleBtn.Text = toggles[i] and "ON" or "OFF"
-			toggleBtn.BackgroundColor3 = toggles[i] and Color3.fromRGB(0, 170, 0) or Color3.fromRGB(0, 0, 0)
+			carToggles[i] = not carToggles[i]
+			toggleBtn.Text = carToggles[i] and "ON" or "OFF"
+			toggleBtn.BackgroundColor3 = carToggles[i] and Color3.fromRGB(0, 170, 0) or Color3.fromRGB(0, 0, 0)
 
-			if toggles[i] then
+			if carToggles[i] then
 				task.spawn(function()
-					while toggles[i] do
+					while carToggles[i] do
 						car.Script()
 						task.wait(0.6)
 					end
@@ -699,6 +666,7 @@ game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1Ca1r"):Fi
 		end)
 	end
 end
+
 sectionContents["السيرفر"] = function()
 	contentFrame:ClearAllChildren()
 
