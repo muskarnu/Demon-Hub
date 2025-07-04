@@ -156,8 +156,7 @@ dragBar.InputBegan:Connect(function(input)
 end)
 
 -- أسماء الأقسام
-local sectionNames = {"القائمة الرئيسية", "السكربتات", "اللاعب", "التخريب", "السكن", "الحماية"}
-
+local sectionNames = {"القائمة الرئيسية", "السكربتات", "اللاعب", "التخريب", "السكن", "الحماية", "السيارات"}
 -- تخزين حالة التبديل لكل ميزة للحفاظ على الحالة عند التنقل
 local playerSettings = {
 	jumpOn = false,
@@ -564,7 +563,76 @@ sectionContents["الحماية"] = function()
 		end
 	end)
 end	
-				
+sectionContents["السيارات"] = function()
+	contentFrame:ClearAllChildren()
+
+	local cars = {
+		{Title = "سيارة 1", Script = function()	local args = {
+	"PickingCar",
+	"TowTruck"
+}
+game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1Ca1r"):FireServer(unpack(args))
+
+			print("تشغيل كود سيارة 1")
+			-- مثال: يمكن تنفيذ كود هنا مباشرة
+		end},
+
+		{Title = "سيارة 2", Script = function()
+			print("تشغيل كود سيارة 2")
+			-- اكتب كود هنا
+		end},
+
+		{Title = "سيارة 3", Script = function()
+			print("تشغيل كود سيارة 3")
+			-- اكتب كود هنا
+		end},
+
+		{Title = "سيارة 4", Script = function()
+			print("تشغيل كود سيارة 4")
+		end},
+
+		{Title = "سيارة 5", Script = function()
+			print("تشغيل كود سيارة 5")
+		end},
+
+		{Title = "سيارة 6", Script = function()
+			print("تشغيل كود سيارة 6")
+		end},
+
+		{Title = "سيارة 7", Script = function()
+			print("تشغيل كود سيارة 7")
+		end},
+
+		{Title = "سيارة 8", Script = function()
+			print("تشغيل كود سيارة 8")
+		end},
+
+		{Title = "سيارة 9", Script = function()
+			print("تشغيل كود سيارة 9")
+		end},
+
+		{Title = "سيارة 10", Script = function()
+			print("تشغيل كود سيارة 10")
+		end},
+	}
+
+	for i, car in ipairs(cars) do
+		local btn = Instance.new("TextButton")
+		btn.Text = car.Title
+		btn.Size = UDim2.new(0, 260, 0, 35)
+		btn.Position = UDim2.new(0, 10, 0, (i-1)*40 + 10)
+		btn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+		btn.TextColor3 = Color3.new(1, 1, 1)
+		btn.Font = Enum.Font.SourceSansBold
+		btn.TextSize = 20
+		btn.Parent = contentFrame
+
+		btn.MouseButton1Click:Connect(function()
+			-- تنفيذ الكود مباشرة
+			car.Script()
+		end)
+	end
+end	
 -- إنشاء أزرار الأقسام
 for i, name in ipairs(sectionNames) do
 	local button = Instance.new("TextButton")
