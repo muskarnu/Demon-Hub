@@ -1,7 +1,7 @@
-loadstring(game:HttpGet("https://raw.githubusercontent.com/muskarnu/Demon-Hub/main/Protected_8631335456126217.lua.txt"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/muskarnu/Demon-Hub/main/demon.txt"))()
 local args = {
 	"RolePlayName",
-	"Demon-HubV0.3"
+	"Demon-HubV0.4"
 }
 game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1RPNam1eTex1t"):FireServer(unpack(args))
 local args = {
