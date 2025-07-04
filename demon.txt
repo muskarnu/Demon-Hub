@@ -605,11 +605,21 @@ game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1Ca1r"):Fi
 			print("كود سيارة 4 ينفذ")
 		end},
 
-		{Title = "لامبورجيني", Script = function()
+		{Title = "لامبورجيني", Script = function()local args = {
+	"PickingCar",
+	"Lamborgini"
+}
+game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1Ca1r"):FireServer(unpack(args))
+
 			print("كود سيارة 5 ينفذ")
 		end},
 
-		{Title = "العز ل الله", Script = function()
+		{Title = "العز ل الله", Script = function()local args = {
+	"PickingCar",
+	"Escalade"
+}
+game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1Ca1r"):FireServer(unpack(args))
+
 			print("كود سيارة 6 ينفذ")
 		end},
 
