@@ -156,7 +156,7 @@ dragBar.InputBegan:Connect(function(input)
 end)
 
 -- أسماء الأقسام
-local sectionNames = {"القائمة الرئيسية", "السكربتات", "اللاعب", "التخريب", "السكن", "الحماية", "السيارات"}
+local sectionNames = {"القائمة الرئيسية", "السكربتات", "اللاعب", "التخريب", "السكن", "الحماية", "السيارات", "السيرفر"}
 -- تخزين حالة التبديل لكل ميزة للحفاظ على الحالة عند التنقل
 local playerSettings = {
 	jumpOn = false,
@@ -699,7 +699,92 @@ game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1Ca1r"):Fi
 		end)
 	end
 end
+sectionContents["السيرفر"] = function()
+	contentFrame:ClearAllChildren()
 
+	local TeleportService = game:GetService("TeleportService")
+	local Players = game:GetService("Players")
+	local player = Players.LocalPlayer
+	local placeId = game.PlaceId
+
+	-- زر إعادة الدخول لنفس السيرفر
+	local rejoinBtn = Instance.new("TextButton")
+	rejoinBtn.Text = "إعادة الدخول"
+	rejoinBtn.Size = UDim2.new(0, 260, 0, 40)
+	rejoinBtn.Position = UDim2.new(0, 10, 0, 10)
+	rejoinBtn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+	rejoinBtn.TextColor3 = Color3.new(1,1,1)
+	rejoinBtn.Font = Enum.Font.SourceSansBold
+	rejoinBtn.TextSize = 20
+	rejoinBtn.Parent = contentFrame
+
+	rejoinBtn.MouseButton1Click:Connect(function()
+		TeleportService:Teleport(placeId)
+	end)
+
+	-- زر دخول سيرفر آخر
+	local newServerBtn = Instance.new("TextButton")
+	newServerBtn.Text = "سيرفر عشوائي"
+	newServerBtn.Size = UDim2.new(0, 260, 0, 40)
+	newServerBtn.Position = UDim2.new(0, 10, 0, 60)
+	newServerBtn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+	newServerBtn.TextColor3 = Color3.new(1,1,1)
+	newServerBtn.Font = Enum.Font.SourceSansBold
+	newServerBtn.TextSize = 20
+	newServerBtn.Parent = contentFrame
+
+	newServerBtn.MouseButton1Click:Connect(function()
+		TeleportService:Teleport(placeId, player)
+	end)
+
+	-- زر نسخ كود السيرفر الحالي
+	local copyCodeBtn = Instance.new("TextButton")
+	copyCodeBtn.Text = "نسخ كود السيرفر"
+	copyCodeBtn.Size = UDim2.new(0, 260, 0, 40)
+	copyCodeBtn.Position = UDim2.new(0, 10, 0, 110)
+	copyCodeBtn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+	copyCodeBtn.TextColor3 = Color3.new(1,1,1)
+	copyCodeBtn.Font = Enum.Font.SourceSansBold
+	copyCodeBtn.TextSize = 20
+	copyCodeBtn.Parent = contentFrame
+
+	copyCodeBtn.MouseButton1Click:Connect(function()
+		if setclipboard then
+			setclipboard(game.JobId)
+		end
+	end)
+
+	-- TextBox لكتابة كود السيرفر
+	local serverCodeInput = Instance.new("TextBox")
+	serverCodeInput.PlaceholderText = "كود السيرفر"
+	serverCodeInput.Text = ""
+	serverCodeInput.Size = UDim2.new(0, 260, 0, 35)
+	serverCodeInput.Position = UDim2.new(0, 10, 0, 160)
+	serverCodeInput.BackgroundColor3 = Color3.new(1,1,1)
+	serverCodeInput.TextColor3 = Color3.new(0,0,0)
+	serverCodeInput.Font = Enum.Font.SourceSans
+	serverCodeInput.TextSize = 18
+	serverCodeInput.ClearTextOnFocus = false
+	serverCodeInput.Parent = contentFrame
+
+	-- زر الانتقال لسيرفر بالكود
+	local joinByCodeBtn = Instance.new("TextButton")
+	joinByCodeBtn.Text = "دخول بالكود"
+	joinByCodeBtn.Size = UDim2.new(0, 260, 0, 40)
+	joinByCodeBtn.Position = UDim2.new(0, 10, 0, 205)
+	joinByCodeBtn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+	joinByCodeBtn.TextColor3 = Color3.new(1,1,1)
+	joinByCodeBtn.Font = Enum.Font.SourceSansBold
+	joinByCodeBtn.TextSize = 20
+	joinByCodeBtn.Parent = contentFrame
+
+	joinByCodeBtn.MouseButton1Click:Connect(function()
+		local code = serverCodeInput.Text
+		if code ~= "" then
+			TeleportService:TeleportToPlaceInstance(placeId, code)
+		end
+	end)
+end
 -- إنشاء أزرار الأقسام
 for i, name in ipairs(sectionNames) do
 	local button = Instance.new("TextButton")
