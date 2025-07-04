@@ -682,7 +682,7 @@ game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("1Ca1r"):Fi
 				task.spawn(function()
 					while toggles[i] do
 						car.Script()
-						task.wait(0.9)
+						task.wait(0.6)
 					end
 				end)
 			end
