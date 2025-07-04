@@ -370,16 +370,152 @@ end
 -- القسم: التخريب
 sectionContents["التخريب"] = function()
 	contentFrame:ClearAllChildren()
-	local maintenanceLabel = Instance.new("TextLabel")
-	maintenanceLabel.Text = "قيد الصيانة"
-	maintenanceLabel.Size = UDim2.new(1, 0, 0, 50)
-	maintenanceLabel.Position = UDim2.new(0, 0, 0, 10)
-	maintenanceLabel.BackgroundColor3 = Color3.fromRGB(120, 0, 0)
-	maintenanceLabel.TextColor3 = Color3.new(1, 1, 1)
-	maintenanceLabel.Font = Enum.Font.SourceSansBold
-	maintenanceLabel.TextSize = 30
-	maintenanceLabel.Parent = contentFrame
-end
+
+	local player = game.Players.LocalPlayer
+	local runService = game:GetService("RunService")
+
+	local targetName = ""
+	local frontFollowConnection = nil
+	local backFollowConnection = nil
+	local watchConnection = nil
+	local toggles = {followFront = false, followBack = false, watching = false}
+
+	-- دالة إيجاد لاعب حسب أول 3 حروف
+	local function findPlayerByPartialName(part)
+		if #part < 3 then return nil end
+		for _, p in ipairs(game.Players:GetPlayers()) do
+			if p.Name:lower():sub(1, #part) == part:lower() then
+				return p
+			end
+		end
+		return nil
+	end
+
+	-- مربع كتابة اسم اللاعب
+	local targetBox = Instance.new("TextBox")
+	targetBox.PlaceholderText = "اكتب اسم اللاعب (3 حروف)"
+	targetBox.Size = UDim2.new(0, 280, 0, 35)
+	targetBox.Position = UDim2.new(0, 10, 0, 10)
+	targetBox.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+	targetBox.TextColor3 = Color3.new(1, 1, 1)
+	targetBox.Font = Enum.Font.SourceSansBold
+	targetBox.TextSize = 18
+	targetBox.Parent = contentFrame
+
+	-- زر مشاهدة
+	local watchBtn = Instance.new("TextButton")
+	watchBtn.Text = "مشاهدة (OFF)"
+	watchBtn.Size = UDim2.new(0, 280, 0, 35)
+	watchBtn.Position = UDim2.new(0, 10, 0, 55)
+	watchBtn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+	watchBtn.TextColor3 = Color3.new(1, 1, 1)
+	watchBtn.Font = Enum.Font.SourceSansBold
+	watchBtn.TextSize = 18
+	watchBtn.Parent = contentFrame
+
+	watchBtn.MouseButton1Click:Connect(function()
+		toggles.watching = not toggles.watching
+		watchBtn.Text = toggles.watching and "مشاهدة (ON)" or "مشاهدة (OFF)"
+		watchBtn.BackgroundColor3 = toggles.watching and Color3.fromRGB(0, 170, 0) or Color3.fromRGB(0, 0, 0)
+
+		if toggles.watching then
+			local target = findPlayerByPartialName(targetBox.Text)
+			if not target then warn("لم يتم العثور على لاعب") return end
+			watchConnection = runService.Heartbeat:Connect(function()
+				if target.Character and target.Character:FindFirstChild("HumanoidRootPart") then
+					game.Workspace.CurrentCamera.CFrame = target.Character.HumanoidRootPart.CFrame + Vector3.new(0, 5, 10)
+				end
+			end)
+		else
+			if watchConnection then watchConnection:Disconnect() watchConnection = nil end
+		end
+	end)
+
+	-- زر تتبع أمامي
+	local frontBtn = Instance.new("TextButton")
+	frontBtn.Text = "تتبع أمامي (OFF)"
+	frontBtn.Size = UDim2.new(0, 280, 0, 35)
+	frontBtn.Position = UDim2.new(0, 10, 0, 100)
+	frontBtn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+	frontBtn.TextColor3 = Color3.new(1, 1, 1)
+	frontBtn.Font = Enum.Font.SourceSansBold
+	frontBtn.TextSize = 18
+	frontBtn.Parent = contentFrame
+
+	frontBtn.MouseButton1Click:Connect(function()
+		toggles.followFront = not toggles.followFront
+		frontBtn.Text = toggles.followFront and "تتبع أمامي (ON)" or "تتبع أمامي (OFF)"
+		frontBtn.BackgroundColor3 = toggles.followFront and Color3.fromRGB(0, 170, 0) or Color3.fromRGB(0, 0, 0)
+
+		if toggles.followFront then
+			local target = findPlayerByPartialName(targetBox.Text)
+			if not target then warn("لم يتم العثور على لاعب") return end
+			frontFollowConnection = runService.Heartbeat:Connect(function()
+				if player.Character and player.Character:FindFirstChild("HumanoidRootPart") and target.Character and target.Character:FindFirstChild("HumanoidRootPart") then
+					local hrp = player.Character.HumanoidRootPart
+					local targetHRP = target.Character.HumanoidRootPart
+					hrp.CFrame = CFrame.new(targetHRP.Position + (targetHRP.CFrame.LookVector * 2)) * CFrame.Angles(0, math.rad(targetHRP.Orientation.Y + 180), 0)
+					task.wait(0.01)
+				end
+			end)
+		else
+			if frontFollowConnection then frontFollowConnection:Disconnect() frontFollowConnection = nil end
+		end
+	end)
+
+	-- زر تتبع خلفي
+	local backBtn = Instance.new("TextButton")
+	backBtn.Text = "تتبع خلفي (OFF)"
+	backBtn.Size = UDim2.new(0, 280, 0, 35)
+	backBtn.Position = UDim2.new(0, 10, 0, 145)
+	backBtn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+	backBtn.TextColor3 = Color3.new(1, 1, 1)
+	backBtn.Font = Enum.Font.SourceSansBold
+	backBtn.TextSize = 18
+	backBtn.Parent = contentFrame
+
+	backBtn.MouseButton1Click:Connect(function()
+		toggles.followBack = not toggles.followBack
+		backBtn.Text = toggles.followBack and "تتبع خلفي (ON)" or "تتبع خلفي (OFF)"
+		backBtn.BackgroundColor3 = toggles.followBack and Color3.fromRGB(0, 170, 0) or Color3.fromRGB(0, 0, 0)
+
+		if toggles.followBack then
+			local target = findPlayerByPartialName(targetBox.Text)
+			if not target then warn("لم يتم العثور على لاعب") return end
+			backFollowConnection = runService.Heartbeat:Connect(function()
+				if player.Character and player.Character:FindFirstChild("HumanoidRootPart") and target.Character and target.Character:FindFirstChild("HumanoidRootPart") then
+					local hrp = player.Character.HumanoidRootPart
+					local targetHRP = target.Character.HumanoidRootPart
+					hrp.CFrame = targetHRP.CFrame
+					task.wait(0.01)
+					hrp.CFrame = targetHRP.CFrame * CFrame.new(0, 0, 3)
+					task.wait(0.01)
+				end
+			end)
+		else
+			if backFollowConnection then backFollowConnection:Disconnect() backFollowConnection = nil end
+		end
+	end)
+
+	-- زر انتقال مباشر
+	local tpBtn = Instance.new("TextButton")
+	tpBtn.Text = "انتقال"
+	tpBtn.Size = UDim2.new(0, 280, 0, 35)
+	tpBtn.Position = UDim2.new(0, 10, 0, 190)
+	tpBtn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+	tpBtn.TextColor3 = Color3.new(1, 1, 1)
+	tpBtn.Font = Enum.Font.SourceSansBold
+	tpBtn.TextSize = 18
+	tpBtn.Parent = contentFrame
+
+	tpBtn.MouseButton1Click:Connect(function()
+		local target = findPlayerByPartialName(targetBox.Text)
+		if not target then warn("لم يتم العثور على لاعب") return end
+		if player.Character and player.Character:FindFirstChild("HumanoidRootPart") and target.Character and target.Character:FindFirstChild("HumanoidRootPart") then
+			player.Character.HumanoidRootPart.CFrame = target.Character.HumanoidRootPart.CFrame * CFrame.new(0, 0, 3)
+		end
+	end)
+end 
 
 -- القسم: السكن
 sectionContents["السكن"] = function()
