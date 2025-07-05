@@ -892,182 +892,173 @@ end
 sectionContents["الأسماء"] = function()
 	contentFrame:ClearAllChildren()
 
-	local RunService = game:GetService("RunService")
-	local ReplicatedStorage = game:GetService("ReplicatedStorage")
+	local toggles = {}
+	local spamToggles = {}
+	local spamSpeeds = {}
 
-	-- متغيرات مشتركة
-	if not shared.nameToggles then shared.nameToggles = {} end
-	if not shared.nameConnections then shared.nameConnections = {} end
-	if not shared.nameDelays then shared.nameDelays = {} end
+	-- اسم ملون
+	local colorToggle = false
+	local colorBtn = Instance.new("TextButton")
+	colorBtn.Text = "اسم ملون (OFF)"
+	colorBtn.Size = UDim2.new(0, 260, 0, 35)
+	colorBtn.Position = UDim2.new(0, 10, 0, 10)
+	colorBtn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+	colorBtn.TextColor3 = Color3.new(1, 1, 1)
+	colorBtn.Font = Enum.Font.SourceSansBold
+	colorBtn.TextSize = 18
+	colorBtn.Parent = contentFrame
 
-	-- اسم ملون متدرج
-	if not shared.colorNameRunning then shared.colorNameRunning = false end
-	local colorNameBtn = Instance.new("TextButton")
-	colorNameBtn.Text = shared.colorNameRunning and "ON" or "OFF"
-	colorNameBtn.Size = UDim2.new(0, 100, 0, 30)
-	colorNameBtn.Position = UDim2.new(0, 10, 0, 10)
-	colorNameBtn.BackgroundColor3 = shared.colorNameRunning and Color3.fromRGB(0, 170, 0) or Color3.fromRGB(0, 0, 0)
-	colorNameBtn.TextColor3 = Color3.new(1,1,1)
-	colorNameBtn.Font = Enum.Font.SourceSansBold
-	colorNameBtn.TextSize = 18
-	colorNameBtn.Parent = contentFrame
+	colorBtn.MouseButton1Click:Connect(function()
+		colorToggle = not colorToggle
+		colorBtn.Text = colorToggle and "اسم ملون (ON)" or "اسم ملون (OFF)"
+		colorBtn.BackgroundColor3 = colorToggle and Color3.fromRGB(0,170,0) or Color3.fromRGB(0,0,0)
 
-	local function startColorName()
-	if shared.colorNameConn then return end
-	shared.colorNameConn = RunService.Heartbeat:Connect(function()
-		local t = tick()
-		local r = (math.sin(t*2)+1)/2
-		local g = (math.sin(t*2 + 2)+1)/2
-		local b = (math.sin(t*2 + 4)+1)/2
-		local args = {
-			"PickingRPNameColor",
-			Color3.new(r,g,b)
-		}
-		ReplicatedStorage:WaitForChild("RE"):WaitForChild("1RPNam1eColo1r"):FireServer(unpack(args))
-		task.wait(0.3)
-	end)
-	end
-
-	local function stopColorName()
-		if shared.colorNameConn then
-			shared.colorNameConn:Disconnect()
-			shared.colorNameConn = nil
-		end
-	end
-
-	colorNameBtn.MouseButton1Click:Connect(function()
-		shared.colorNameRunning = not shared.colorNameRunning
-		colorNameBtn.Text = shared.colorNameRunning and "ON" or "OFF"
-		colorNameBtn.BackgroundColor3 = shared.colorNameRunning and Color3.fromRGB(0, 170, 0) or Color3.fromRGB(0, 0, 0)
-		if shared.colorNameRunning then
-			startColorName()
-		else
-			stopColorName()
-		end
-	end)
-
-	if shared.colorNameRunning then startColorName() end
-
-	-- بايو ملون متدرج
-	if not shared.colorBioRunning then shared.colorBioRunning = false end
-	local colorBioBtn = Instance.new("TextButton")
-	colorBioBtn.Text = shared.colorBioRunning and "ON" or "OFF"
-	colorBioBtn.Size = UDim2.new(0, 100, 0, 30)
-	colorBioBtn.Position = UDim2.new(0, 120, 0, 10)
-	colorBioBtn.BackgroundColor3 = shared.colorBioRunning and Color3.fromRGB(0, 170, 0) or Color3.fromRGB(0, 0, 0)
-	colorBioBtn.TextColor3 = Color3.new(1,1,1)
-	colorBioBtn.Font = Enum.Font.SourceSansBold
-	colorBioBtn.TextSize = 18
-	colorBioBtn.Parent = contentFrame
-
-	local function startColorBio()
-	if shared.colorBioConn then return end
-	shared.colorBioConn = RunService.Heartbeat:Connect(function()
-		local t = tick()
-		local r = (math.sin(t*2)+1)/2
-		local g = (math.sin(t*2 + 2)+1)/2
-		local b = (math.sin(t*2 + 4)+1)/2
-		local args = {
-			"PickingRPBioColor",
-			Color3.new(r,g,b)
-		}
-		ReplicatedStorage:WaitForChild("RE"):WaitForChild("1RPNam1eColo1r"):FireServer(unpack(args))
-		task.wait(0.3)
-	end)
-	end
-
-	local function stopColorBio()
-		if shared.colorBioConn then
-			shared.colorBioConn:Disconnect()
-			shared.colorBioConn = nil
-		end
-	end
-
-	colorBioBtn.MouseButton1Click:Connect(function()
-		shared.colorBioRunning = not shared.colorBioRunning
-		colorBioBtn.Text = shared.colorBioRunning and "ON" or "OFF"
-		colorBioBtn.BackgroundColor3 = shared.colorBioRunning and Color3.fromRGB(0, 170, 0) or Color3.fromRGB(0, 0, 0)
-		if shared.colorBioRunning then
-			startColorBio()
-		else
-			stopColorBio()
-		end
-	end)
-
-	if shared.colorBioRunning then startColorBio() end
-
-	-- 3 TextBox + أزرار + سرعات
-	for i = 1, 3 do
-		local yPos = 50 + (i-1)*60
-
-		local nameBox = Instance.new("TextBox")
-		nameBox.PlaceholderText = "اكتب الاسم"
-		nameBox.Size = UDim2.new(0, 200, 0, 30)
-		nameBox.Position = UDim2.new(0, 10, 0, yPos)
-		nameBox.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-		nameBox.TextColor3 = Color3.new(1, 1, 1)
-		nameBox.Font = Enum.Font.SourceSans
-		nameBox.TextSize = 18
-		nameBox.Parent = contentFrame
-
-		local delayBox = Instance.new("TextBox")
-		delayBox.Text = tostring(shared.nameDelays[i] or 0.3)
-		delayBox.Size = UDim2.new(0, 50, 0, 30)
-		delayBox.Position = UDim2.new(0, 220, 0, yPos)
-		delayBox.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-		delayBox.TextColor3 = Color3.new(1, 1, 1)
-		delayBox.Font = Enum.Font.SourceSans
-		delayBox.TextSize = 18
-		delayBox.Parent = contentFrame
-
-		delayBox.FocusLost:Connect(function()
-			shared.nameDelays[i] = tonumber(delayBox.Text) or 0.3
-		end)
-
-		local toggleBtn = Instance.new("TextButton")
-		toggleBtn.Text = shared.nameToggles[i] and "ON" or "OFF"
-		toggleBtn.Size = UDim2.new(0, 50, 0, 30)
-		toggleBtn.Position = UDim2.new(0, 280, 0, yPos)
-		toggleBtn.BackgroundColor3 = shared.nameToggles[i] and Color3.fromRGB(0, 170, 0) or Color3.fromRGB(0, 0, 0)
-		toggleBtn.TextColor3 = Color3.new(1, 1, 1)
-		toggleBtn.Font = Enum.Font.SourceSansBold
-		toggleBtn.TextSize = 18
-		toggleBtn.Parent = contentFrame
-
-		local function startLoop()
-			if shared.nameConnections[i] then return end
-			shared.nameConnections[i] = RunService.Heartbeat:Connect(function()
-				local args = {
-					"RolePlayName",
-					nameBox.Text
-				}
-				ReplicatedStorage:WaitForChild("RE"):WaitForChild("1RPNam1eTex1t"):FireServer(unpack(args))
-				task.wait((shared.nameDelays[i] or 0.3) + ((i-1)*0.4))
+		if colorToggle then
+			task.spawn(function()
+				while colorToggle do
+					local color = Color3.fromHSV(tick()%5/5,1,1)
+					local args = {"PickingRPNameColor", color}
+					game.ReplicatedStorage.RE["1RPNam1eColo1r"]:FireServer(unpack(args))
+					task.wait(0.5)
+				end
 			end)
 		end
+	end)
 
-		local function stopLoop()
-			if shared.nameConnections[i] then
-				shared.nameConnections[i]:Disconnect()
-				shared.nameConnections[i] = nil
-			end
+	-- بايو ملون
+	local bioToggle = false
+	local bioBtn = Instance.new("TextButton")
+	bioBtn.Text = "بايو ملون (OFF)"
+	bioBtn.Size = UDim2.new(0, 260, 0, 35)
+	bioBtn.Position = UDim2.new(0, 10, 0, 55)
+	bioBtn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+	bioBtn.TextColor3 = Color3.new(1, 1, 1)
+	bioBtn.Font = Enum.Font.SourceSansBold
+	bioBtn.TextSize = 18
+	bioBtn.Parent = contentFrame
+
+	bioBtn.MouseButton1Click:Connect(function()
+		bioToggle = not bioToggle
+		bioBtn.Text = bioToggle and "بايو ملون (ON)" or "بايو ملون (OFF)"
+		bioBtn.BackgroundColor3 = bioToggle and Color3.fromRGB(0,170,0) or Color3.fromRGB(0,0,0)
+
+		if bioToggle then
+			task.spawn(function()
+				while bioToggle do
+					local color = Color3.fromHSV(tick()%5/5,1,1)
+					local args = {"PickingRPBioColor", color}
+					game.ReplicatedStorage.RE["1RPNam1eColo1r"]:FireServer(unpack(args))
+					task.wait(0.5)
+				end
+			end)
 		end
+	end)
 
-		toggleBtn.MouseButton1Click:Connect(function()
-			shared.nameToggles[i] = not shared.nameToggles[i]
-			toggleBtn.Text = shared.nameToggles[i] and "ON" or "OFF"
-			toggleBtn.BackgroundColor3 = shared.nameToggles[i] and Color3.fromRGB(0, 170, 0) or Color3.fromRGB(0, 0, 0)
+	-- سبام أسماء (3)
+	for i=1,3 do
+		local textBox = Instance.new("TextBox")
+		textBox.PlaceholderText = "سبام اسم "..i
+		textBox.Size = UDim2.new(0, 150, 0, 30)
+		textBox.Position = UDim2.new(0, 10, 0, 100+(i-1)*40)
+		textBox.BackgroundColor3 = Color3.fromRGB(30,30,30)
+		textBox.TextColor3 = Color3.new(1,1,1)
+		textBox.Font = Enum.Font.SourceSansBold
+		textBox.TextSize = 16
+		textBox.Parent = contentFrame
 
-			if shared.nameToggles[i] then
-				startLoop()
-			else
-				stopLoop()
+		local toggle = Instance.new("TextButton")
+		toggle.Text = "OFF"
+		toggle.Size = UDim2.new(0, 50, 0, 30)
+		toggle.Position = UDim2.new(0, 170, 0, 100+(i-1)*40)
+		toggle.BackgroundColor3 = Color3.fromRGB(0,0,0)
+		toggle.TextColor3 = Color3.new(1,1,1)
+		toggle.Font = Enum.Font.SourceSansBold
+		toggle.TextSize = 16
+		toggle.Parent = contentFrame
+
+		local speedBox = Instance.new("TextBox")
+		speedBox.Text = "0.4"
+		speedBox.Size = UDim2.new(0, 40, 0, 30)
+		speedBox.Position = UDim2.new(0, 230, 0, 100+(i-1)*40)
+		speedBox.BackgroundColor3 = Color3.fromRGB(20,20,20)
+		speedBox.TextColor3 = Color3.new(1,1,1)
+		speedBox.Font = Enum.Font.SourceSansBold
+		speedBox.TextSize = 14
+		speedBox.Parent = contentFrame
+
+		toggles[i] = false
+
+		toggle.MouseButton1Click:Connect(function()
+			toggles[i] = not toggles[i]
+			toggle.Text = toggles[i] and "ON" or "OFF"
+			toggle.BackgroundColor3 = toggles[i] and Color3.fromRGB(0,170,0) or Color3.fromRGB(0,0,0)
+
+			if toggles[i] then
+				task.spawn(function()
+					while toggles[i] do
+						local nameText = textBox.Text
+						local speed = tonumber(speedBox.Text) or 0.4
+						if nameText and nameText~="" then
+							local args = {"RolePlayName", nameText}
+							game.ReplicatedStorage.RE["1RPNam1eTex1t"]:FireServer(unpack(args))
+						end
+						task.wait(speed)
+					end
+				end)
 			end
 		end)
+	end
 
-		if shared.nameToggles[i] then startLoop() end
+	-- أزرار أسماء أولاد
+	local boys = {"DemonHub", "رامي", "حسن", "علي", "جاسم", "محمد", "Eν̃̾ịĿ", "ADMIN", "خالد", "عمر"}
+	for i, name in ipairs(boys) do
+		local btn = Instance.new("TextButton")
+		btn.Text = name
+		btn.Size = UDim2.new(0, 125, 0, 25)
+		btn.Position = UDim2.new(0, 10, 0, 250+(i-1)*28)
+		btn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+		btn.TextColor3 = Color3.new(1,1,1)
+		btn.Font = Enum.Font.SourceSansBold
+		btn.TextSize = 14
+		btn.Parent = contentFrame
+
+		btn.MouseButton1Click:Connect(function()
+			local args = {"RolePlayName", name}
+			game.ReplicatedStorage.RE["1RPNam1eTex1t"]:FireServer(unpack(args))
+		end)
+	end
+
+	-- عنوان أسماء بنات
+	local label = Instance.new("TextLabel")
+	label.Text = "أسماء بنات"
+	label.Size = UDim2.new(0, 260, 0, 25)
+	label.Position = UDim2.new(0, 10, 0, 540)
+	label.BackgroundTransparency = 1
+	label.TextColor3 = Color3.new(1, 1, 1)
+	label.Font = Enum.Font.SourceSansBold
+	label.TextSize = 18
+	label.Parent = contentFrame
+
+	-- أزرار أسماء بنات
+	local girls = {"مريم", "حوراء", "ياسمين", "سرا", "ميار", "نور", "شيماء", "زهراء", "فاطمة", "هدى"}
+	for i, name in ipairs(girls) do
+		local btn = Instance.new("TextButton")
+		btn.Text = name
+		btn.Size = UDim2.new(0, 125, 0, 25)
+		btn.Position = UDim2.new(0, 10, 0, 570+(i-1)*28)
+		btn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+		btn.TextColor3 = Color3.new(1,1,1)
+		btn.Font = Enum.Font.SourceSansBold
+		btn.TextSize = 14
+		btn.Parent = contentFrame
+
+		btn.MouseButton1Click:Connect(function()
+			local args = {"RolePlayName", name}
+			game.ReplicatedStorage.RE["1RPNam1eTex1t"]:FireServer(unpack(args))
+		end)
 	end
 end
+
 -- إنشاء أزرار الأقسام
 for i, name in ipairs(sectionNames) do
 	local button = Instance.new("TextButton")
